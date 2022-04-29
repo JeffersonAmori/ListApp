@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ListApp.Views.HomePage"
+             xmlns:vm="clr-namespace:ListApp.ViewModels"
+             xmlns:behaviors="clr-namespace:ListApp.Behaviors"
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:HomeViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Accent">#96d1ff</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout>
+        <ListView x:Name="ListListView"
+                  ItemsSource="{Binding ListCollection}"
+                  IsPullToRefreshEnabled="True"
+                  IsRefreshing="{Binding IsBusy}"
+                  RefreshCommand="{Binding LoadListsCommand}"
+                  SelectedItem="{Binding SelectedList}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Name}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+                <StackLayout>
+                    <Entry x:Name="NewList"
+                           Text="{Binding NewListText}">
+                        <Entry.Behaviors>
+                            <behaviors:EventToCommandBehavior EventName="Unfocused" 
+                                                              Command="{Binding AddListCommand}"/>
+                        </Entry.Behaviors>
+                    </Entry>
+                </StackLayout>
+            </ListView.Footer>
+        </ListView>
+    </StackLayout>
+</ContentPage>
