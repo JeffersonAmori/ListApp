@@ -16,8 +16,10 @@ namespace ListApp.ViewModels
         private string _newItemText;
         private string _listId;
         private ListItem _selectedItem;
+        private List _currentList;
 
-        public IDataStore<ListItem> DataStore => DependencyService.Get<IDataStore<ListItem>>();
+        //public IDataStore<ListItem> DataStore => DependencyService.Get<IDataStore<ListItem>>();
+        public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
         public ObservableCollection<ListItem> Items { get; }
         public Command LoadItemsCommand { get; }
         public Command AddItemCommand { get; }
@@ -34,6 +36,7 @@ namespace ListApp.ViewModels
             {
                 _listId = value;
                 Task.Run(ExecuteLoadItemsCommand);
+                _currentList = DataStore.GetItemAsync(value).Result;
             }
         }
 
@@ -56,9 +59,11 @@ namespace ListApp.ViewModels
 
             try
             {
+                if (_currentList is null)
+                    return;
+
                 Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
-                foreach (var item in items)
+                foreach (var item in _currentList.ListItems)
                 {
                     Items.Add(item);
                 }
@@ -101,18 +106,25 @@ namespace ListApp.ViewModels
 
         private async void OnAddItem()
         {
-            if (string.IsNullOrEmpty(NewItemText))
-                return;
-
-            Items.Add(new ListItem()
+            await Device.InvokeOnMainThreadAsync(async () =>
             {
-                Id = Guid.NewGuid().ToString(),
-                Text = NewItemText
+                if (string.IsNullOrEmpty(NewItemText))
+                    return;
+
+                ListItem listITem = new ListItem()
+                {
+                    ListId = _currentList.ListId,
+                    Id = Guid.NewGuid().ToString(),
+                    Text = NewItemText
+                };
+
+                Items.Add(listITem);
+
+                _currentList.ListItems.Add(listITem);
+                await DataStore.UpdateItemAsync(_currentList);
+
+                NewItemText = string.Empty;
             });
-
-            NewItemText = string.Empty;
-
-            await Task.FromResult(true);
         }
 
         async void OnItemSelected(ListItem item)

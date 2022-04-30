@@ -6,7 +6,8 @@ namespace ListApp.Models
 {
     public class List
     {
-        public string Id { get; set; }
+        public string ListId { get; set; }
         public string Name { get; set; }
+        public List<ListItem> ListItems { get; set; } = new List<ListItem>();
     }
 }

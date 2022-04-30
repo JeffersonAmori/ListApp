@@ -10,8 +10,10 @@ namespace ListApp
         {
             InitializeComponent();
 
-            DependencyService.Register<MockListDataStore>();
-            DependencyService.Register<MockListItemDataStore>();
+            //DependencyService.Register<MockListDataStore>();
+            //DependencyService.Register<MockListItemDataStore>();
+            DependencyService.Register<EfListDataStore>();
+            DependencyService.Register<EfListItemDataStore>();
 
             MainPage = new AppShell();
         }

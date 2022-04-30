@@ -14,12 +14,12 @@ namespace ListApp.Services
         {
             lists = new List<List>()
             {
-                new List { Id = Guid.NewGuid().ToString(), Name = "First item" },
-                new List { Id = Guid.NewGuid().ToString(), Name = "Second item" },
-                new List { Id = Guid.NewGuid().ToString(), Name = "Third item" },
-                new List { Id = Guid.NewGuid().ToString(), Name = "Fourth item" },
-                new List { Id = Guid.NewGuid().ToString(), Name = "Fifth item" },
-                new List { Id = Guid.NewGuid().ToString(), Name = "Sixth item" }
+                new List { ListId = Guid.NewGuid().ToString(), Name = "First item" },
+                new List { ListId = Guid.NewGuid().ToString(), Name = "Second item" },
+                new List { ListId = Guid.NewGuid().ToString(), Name = "Third item" },
+                new List { ListId = Guid.NewGuid().ToString(), Name = "Fourth item" },
+                new List { ListId = Guid.NewGuid().ToString(), Name = "Fifth item" },
+                new List { ListId = Guid.NewGuid().ToString(), Name = "Sixth item" }
             };
         }
 
@@ -32,7 +32,7 @@ namespace ListApp.Services
 
         public async Task<bool> UpdateItemAsync(List item)
         {
-            var oldItem = lists.Where((List arg) => arg.Id == item.Id).FirstOrDefault();
+            var oldItem = lists.Where((List arg) => arg.ListId == item.ListId).FirstOrDefault();
             lists.Remove(oldItem);
             lists.Add(item);
 
@@ -41,7 +41,7 @@ namespace ListApp.Services
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var oldItem = lists.Where((List arg) => arg.Id == id).FirstOrDefault();
+            var oldItem = lists.Where((List arg) => arg.ListId == id).FirstOrDefault();
             lists.Remove(oldItem);
 
             return await Task.FromResult(true);
@@ -49,7 +49,7 @@ namespace ListApp.Services
 
         public async Task<List> GetItemAsync(string id)
         {
-            return await Task.FromResult(lists.FirstOrDefault(s => s.Id == id));
+            return await Task.FromResult(lists.FirstOrDefault(s => s.ListId == id));
         }
 
         public async Task<IEnumerable<List>> GetItemsAsync(bool forceRefresh = false)

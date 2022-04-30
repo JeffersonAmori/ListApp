@@ -8,5 +8,9 @@ namespace ListApp.Models
         public bool Checked { get; set; }
         public string Text { get; set; }
         public string Description { get; set; }
+
+        public string ListId { get; set; }
+        public List List { get; set; }
+
     }
 }

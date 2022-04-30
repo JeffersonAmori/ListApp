@@ -30,11 +30,12 @@ namespace ListApp.ViewModels
             }
         }
 
-        public string NewListText { 
+        public string NewListText
+        {
             get => _newListText;
-            set 
-            { 
-                _newListText = value; 
+            set
+            {
+                _newListText = value;
                 OnPropertyChanged(nameof(NewListText));
             }
         }
@@ -44,7 +45,7 @@ namespace ListApp.ViewModels
             if (list == null)
                 return;
 
-            await Shell.Current.GoToAsync($"//{nameof(ItemsPage)}?{nameof(ItemsViewModel.ListId)}={list.Id}");
+            await Shell.Current.GoToAsync($"//{nameof(ItemsPage)}?{nameof(ItemsViewModel.ListId)}={list.ListId}");
         }
 
         public HomeViewModel()
@@ -63,11 +64,15 @@ namespace ListApp.ViewModels
             if (string.IsNullOrEmpty(NewListText))
                 return;
 
-            ListCollection.Add(new List()
+            List list = new List()
             {
-                Id = Guid.NewGuid().ToString(),
+                ListId = Guid.NewGuid().ToString(),
                 Name = NewListText
-            });
+            };
+
+            await DataStore.AddItemAsync(list);
+
+            ListCollection.Add(list);
 
             NewListText = string.Empty;
 
