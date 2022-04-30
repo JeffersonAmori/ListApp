@@ -1,2 +1,6 @@
 ﻿Good transition animations plugin
  - Xamarin.Plugin.SharedTransitions
+
+
+Primary color #5d913f
+Secondary color #b2cfa1 | #efffe6

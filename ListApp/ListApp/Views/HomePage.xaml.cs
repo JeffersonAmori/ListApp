@@ -11,5 +11,10 @@ namespace ListApp.Views
         {
             InitializeComponent();
         }
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            this.ListListView.SelectedItem = null;
+        }
     }
 }

@@ -18,6 +18,7 @@
 
     <StackLayout>
         <ListView x:Name="ListListView"
+                  BackgroundColor="#efffe6"
                   ItemsSource="{Binding ListCollection}"
                   IsPullToRefreshEnabled="True"
                   IsRefreshing="{Binding IsBusy}"

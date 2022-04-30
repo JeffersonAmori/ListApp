@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace ListApp.ViewModels
@@ -21,8 +22,9 @@ namespace ListApp.ViewModels
         //public IDataStore<ListItem> DataStore => DependencyService.Get<IDataStore<ListItem>>();
         public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
         public ObservableCollection<ListItem> Items { get; }
-        public Command LoadItemsCommand { get; }
-        public Command AddItemCommand { get; }
+        public ICommand LoadItemsCommand { get; }
+        public ICommand AddItemCommand { get; }
+        public ICommand DeleteItemCommand { get; }
         public Command<ListItem> ItemTapped { get; }
         public Command<object> CompletionItemButtonCommand { get; }
 
@@ -37,20 +39,19 @@ namespace ListApp.ViewModels
                 _listId = value;
                 Task.Run(ExecuteLoadItemsCommand);
                 _currentList = DataStore.GetItemAsync(value).Result;
+                Title = _currentList.Name;
             }
         }
 
         public ItemsViewModel()
         {
-            Title = "Browse";
             Items = new ObservableCollection<ListItem>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
             ItemTapped = new Command<ListItem>(OnItemSelected);
-
             AddItemCommand = new Command(OnAddItem);
-
             CompletionItemButtonCommand = new Command<object>(OnCompletionButtonClicked);
+            DeleteItemCommand = new Command<object>(OnDeleteItem);
         }
 
         async Task ExecuteLoadItemsCommand()
@@ -76,6 +77,8 @@ namespace ListApp.ViewModels
             {
                 IsBusy = false;
             }
+
+            await Task.FromResult(Task.CompletedTask);
         }
 
         public void OnAppearing()
@@ -91,6 +94,7 @@ namespace ListApp.ViewModels
             {
                 SetProperty(ref _selectedItem, value);
                 OnItemSelected(value);
+                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 
@@ -106,25 +110,30 @@ namespace ListApp.ViewModels
 
         private async void OnAddItem()
         {
-            await Device.InvokeOnMainThreadAsync(async () =>
+            if (string.IsNullOrEmpty(NewItemText))
+                return;
+
+            ListItem listITem = new ListItem()
             {
-                if (string.IsNullOrEmpty(NewItemText))
-                    return;
+                ListId = _currentList.ListId,
+                Id = Guid.NewGuid().ToString(),
+                Text = NewItemText
+            };
 
-                ListItem listITem = new ListItem()
-                {
-                    ListId = _currentList.ListId,
-                    Id = Guid.NewGuid().ToString(),
-                    Text = NewItemText
-                };
+            Items.Add(listITem);
 
-                Items.Add(listITem);
+            _currentList.ListItems.Add(listITem);
+            await DataStore.UpdateItemAsync(_currentList);
 
-                _currentList.ListItems.Add(listITem);
-                await DataStore.UpdateItemAsync(_currentList);
+            NewItemText = string.Empty;
+        }
 
-                NewItemText = string.Empty;
-            });
+        private async void OnDeleteItem(object id)
+        {
+            ListItem listITem = _currentList.ListItems.First(x => x.Id == id.ToString());
+            _currentList.ListItems.Remove(listITem);
+            await DataStore.UpdateItemAsync(_currentList);
+            Items.Remove(Items.First(i => i.Id == id.ToString()));
         }
 
         async void OnItemSelected(ListItem item)
@@ -142,6 +151,7 @@ namespace ListApp.ViewModels
             if (item != null)
             {
                 // Move the item to the bottom of the list
+                item.Checked = !item.Checked;
                 Items.Remove(item);
                 Items.Add(item);
             }

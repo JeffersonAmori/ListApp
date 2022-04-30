@@ -1,7 +1,5 @@
-﻿using ListApp.ViewModels;
-using ListApp.Views;
+﻿using ListApp.Views;
 using System;
-using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace ListApp
@@ -11,8 +9,7 @@ namespace ListApp
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
-            Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
+            Routing.RegisterRoute(nameof(ItemsPage), typeof(ItemsPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

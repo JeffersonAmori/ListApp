@@ -1,6 +1,7 @@
 ﻿using ListApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -31,7 +32,9 @@ namespace ListApp.Services
 
         public async Task<List> GetItemAsync(string id)
         {
-            return await _context.Lists.FirstAsync(list => list.ListId == id);
+            List list = await _context.Lists.FirstAsync(l => l.ListId == id);
+            list.ListItems = _context.ListItems.Where(x => x.ListId == list.ListId).ToList();
+            return list;
         }
 
         public async Task<IEnumerable<List>> GetItemsAsync(bool forceRefresh = false)
@@ -39,9 +42,10 @@ namespace ListApp.Services
             return _context.Lists;
         }
 
-        public async Task<bool> UpdateItemAsync(List item)
+        public async Task<bool> UpdateItemAsync(List list)
         {   
-            _context.Lists.Update(item);
+            _context.Lists.Update(list);
+
             await _context.SaveChangesAsync();
 
             return true;

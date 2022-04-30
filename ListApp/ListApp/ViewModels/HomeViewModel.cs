@@ -26,6 +26,7 @@ namespace ListApp.ViewModels
             set
             {
                 SetProperty(ref _selectedList, value);
+                OnPropertyChanged(nameof(SelectedList));
                 OnListSelected(value);
             }
         }
@@ -45,7 +46,8 @@ namespace ListApp.ViewModels
             if (list == null)
                 return;
 
-            await Shell.Current.GoToAsync($"//{nameof(ItemsPage)}?{nameof(ItemsViewModel.ListId)}={list.ListId}");
+            SelectedList = null;
+            await Shell.Current.GoToAsync($"{nameof(ItemsPage)}?{nameof(ItemsViewModel.ListId)}={list.ListId}");
         }
 
         public HomeViewModel()
