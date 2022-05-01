@@ -18,8 +18,6 @@ namespace ListApp.ViewModels
         private string _listId;
         private ListItem _selectedItem;
         private List _currentList;
-
-        //public IDataStore<ListItem> DataStore => DependencyService.Get<IDataStore<ListItem>>();
         public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
         public ObservableCollection<ListItem> Items { get; }
         public ICommand LoadItemsCommand { get; }
@@ -47,8 +45,6 @@ namespace ListApp.ViewModels
         {
             Items = new ObservableCollection<ListItem>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
-            ItemTapped = new Command<ListItem>(OnItemSelected);
             AddItemCommand = new Command(OnAddItem);
             CompletionItemButtonCommand = new Command<object>(OnCompletionButtonClicked);
             DeleteItemCommand = new Command<object>(OnDeleteItem);
@@ -93,8 +89,6 @@ namespace ListApp.ViewModels
             set
             {
                 SetProperty(ref _selectedItem, value);
-                OnItemSelected(value);
-                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 
@@ -136,15 +130,6 @@ namespace ListApp.ViewModels
             Items.Remove(Items.First(i => i.Id == id.ToString()));
         }
 
-        async void OnItemSelected(ListItem item)
-        {
-            if (item == null)
-                return;
-
-            // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
-        }
-
         private async void OnCompletionButtonClicked(object Id)
         {
             var item = Items.FirstOrDefault(x => x.Id == Id.ToString());
@@ -155,6 +140,8 @@ namespace ListApp.ViewModels
                 Items.Remove(item);
                 Items.Add(item);
             }
+
+            await Task.FromResult(Task.CompletedTask);
         }
     }
 }
