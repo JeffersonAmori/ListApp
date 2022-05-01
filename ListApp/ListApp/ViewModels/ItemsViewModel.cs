@@ -1,6 +1,5 @@
 ﻿using ListApp.Models;
 using ListApp.Services;
-using ListApp.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -23,6 +22,7 @@ namespace ListApp.ViewModels
         public ICommand LoadItemsCommand { get; }
         public ICommand AddItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
+        public ICommand DeleteListCommand { get; }
         public Command<ListItem> ItemTapped { get; }
         public Command<object> CompletionItemButtonCommand { get; }
 
@@ -48,6 +48,7 @@ namespace ListApp.ViewModels
             AddItemCommand = new Command(OnAddItem);
             CompletionItemButtonCommand = new Command<object>(OnCompletionButtonClicked);
             DeleteItemCommand = new Command<object>(OnDeleteItem);
+            DeleteListCommand = new Command(OnDeleteList);
         }
 
         async Task ExecuteLoadItemsCommand()
@@ -130,15 +131,32 @@ namespace ListApp.ViewModels
             Items.Remove(Items.First(i => i.Id == id.ToString()));
         }
 
+        private async void OnDeleteList()
+        {
+            bool deleteList = await Application.Current.MainPage.DisplayAlert($"Delete list {_currentList.Name}?", "This action cannot be undone.", "Yes", "No");
+
+            if (deleteList)
+            {
+                await DataStore.DeleteItemAsync(_currentList.ListId);
+                await Shell.Current.GoToAsync($"..?{nameof(HomeViewModel.ShouldRefresh)}={true}");
+            }
+        }
+
         private async void OnCompletionButtonClicked(object Id)
         {
             var item = Items.FirstOrDefault(x => x.Id == Id.ToString());
             if (item != null)
             {
-                // Move the item to the bottom of the list
                 item.Checked = !item.Checked;
-                Items.Remove(item);
-                Items.Add(item);
+                // Move the item to the bottom of the list
+                if (item.Checked)
+                {
+                    Items.Remove(item);
+                    Items.Add(item);
+                    return;
+                }
+
+                OnPropertyChanged(nameof(Items));
             }
 
             await Task.FromResult(Task.CompletedTask);

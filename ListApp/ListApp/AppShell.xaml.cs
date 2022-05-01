@@ -11,10 +11,5 @@ namespace ListApp
             InitializeComponent();
             Routing.RegisterRoute(nameof(ItemsPage), typeof(ItemsPage));
         }
-
-        private async void OnMenuItemClicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("//LoginPage");
-        }
     }
 }

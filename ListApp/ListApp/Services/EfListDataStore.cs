@@ -39,7 +39,7 @@ namespace ListApp.Services
 
         public async Task<IEnumerable<List>> GetItemsAsync(bool forceRefresh = false)
         {
-            return _context.Lists;
+            return await _context.Lists.ToListAsync();
         }
 
         public async Task<bool> UpdateItemAsync(List list)

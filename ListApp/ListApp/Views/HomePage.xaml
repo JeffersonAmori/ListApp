@@ -23,7 +23,7 @@
 
     <StackLayout>
         <ListView x:Name="ListListView"
-                  BackgroundColor="#efffe6"
+                  BackgroundColor="#b2cfa1"
                   IsPullToRefreshEnabled="True"
                   ItemsSource="{Binding ListCollection}"
                   IsRefreshing="{Binding IsBusy}"
@@ -31,7 +31,8 @@
                   SelectedItem="{Binding SelectedList}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding Name}" />
+                    <TextCell Text="{Binding Name}" 
+                              TextColor="Black"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

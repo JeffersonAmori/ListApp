@@ -10,10 +10,13 @@ using Xamarin.Forms;
 
 namespace ListApp.ViewModels
 {
+    [QueryProperty(nameof(ShouldRefresh), nameof(ShouldRefresh))]
     public class HomeViewModel : BaseViewModel
     {
         private string _newListText;
         private List _selectedList;
+        private bool _shouldRefresh;
+
         public ObservableCollection<List> ListCollection { get; }
         public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
         public ICommand LoadListsCommand { get; }
@@ -41,12 +44,22 @@ namespace ListApp.ViewModels
             }
         }
 
+        public bool ShouldRefresh
+        {
+            get => _shouldRefresh;
+            set
+            {
+                _shouldRefresh = value;
+                if (_shouldRefresh)
+                    Task.Run(ExecuteLoadListsCommand);
+            }
+        }
+
         async private void OnListSelected(List list)
         {
             if (list == null)
                 return;
 
-            SelectedList = null;
             await Shell.Current.GoToAsync($"{nameof(ItemsPage)}?{nameof(ItemsViewModel.ListId)}={list.ListId}");
         }
 
@@ -63,7 +76,7 @@ namespace ListApp.ViewModels
 
         private async Task AddToListCollection()
         {
-            string newListName = await Application.Current.MainPage.DisplayPromptAsync("New list", "New list");
+            string newListName = await Application.Current.MainPage.DisplayPromptAsync("New list", String.Empty);
 
             if (string.IsNullOrEmpty(newListName))
                 return;
