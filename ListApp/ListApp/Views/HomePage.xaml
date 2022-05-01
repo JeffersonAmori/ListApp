@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ListApp.Views.HomePage"
              xmlns:vm="clr-namespace:ListApp.ViewModels"
-             xmlns:behaviors="clr-namespace:ListApp.Behaviors"
              Title="{Binding Title}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+"
+                     Order="Primary"
+                     Command="{Binding AddListCommand}"/>
+    </ContentPage.ToolbarItems>
 
     <ContentPage.BindingContext>
         <vm:HomeViewModel />
@@ -19,8 +24,8 @@
     <StackLayout>
         <ListView x:Name="ListListView"
                   BackgroundColor="#efffe6"
-                  ItemsSource="{Binding ListCollection}"
                   IsPullToRefreshEnabled="True"
+                  ItemsSource="{Binding ListCollection}"
                   IsRefreshing="{Binding IsBusy}"
                   RefreshCommand="{Binding LoadListsCommand}"
                   SelectedItem="{Binding SelectedList}">
@@ -29,17 +34,6 @@
                     <TextCell Text="{Binding Name}" />
                 </DataTemplate>
             </ListView.ItemTemplate>
-            <ListView.Footer>
-                <StackLayout>
-                    <Entry x:Name="NewList"
-                           Text="{Binding NewListText}">
-                        <Entry.Behaviors>
-                            <behaviors:EventToCommandBehavior EventName="Unfocused" 
-                                                              Command="{Binding AddListCommand}"/>
-                        </Entry.Behaviors>
-                    </Entry>
-                </StackLayout>
-            </ListView.Footer>
         </ListView>
     </StackLayout>
 </ContentPage>

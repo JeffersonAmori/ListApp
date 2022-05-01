@@ -52,7 +52,7 @@ namespace ListApp.ViewModels
 
         public HomeViewModel()
         {
-            Title = "List";
+            Title = "Mobile notes";
 
             ListCollection = new ObservableCollection<List>();
 
@@ -63,20 +63,20 @@ namespace ListApp.ViewModels
 
         private async Task AddToListCollection()
         {
-            if (string.IsNullOrEmpty(NewListText))
+            string newListName = await Application.Current.MainPage.DisplayPromptAsync("New list", "New list");
+
+            if (string.IsNullOrEmpty(newListName))
                 return;
 
             List list = new List()
             {
                 ListId = Guid.NewGuid().ToString(),
-                Name = NewListText
+                Name = newListName
             };
 
             await DataStore.AddItemAsync(list);
 
             ListCollection.Add(list);
-
-            NewListText = string.Empty;
 
             await Task.FromResult(true);
         }
