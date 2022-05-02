@@ -80,17 +80,27 @@
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-            <CollectionView.Footer>
+            <CollectionView.Header>
                 <StackLayout>
-                    <Entry x:Name="NewList"
-                           Text="{Binding NewItemText}">
+                    <Entry 
+                            x:Name="NewList"
+                            Placeholder="Type here..."
+                            ReturnType="Done"
+                            Keyboard="Chat"
+                            ClearButtonVisibility="WhileEditing"
+                            ReturnCommand="{Binding NewItemReturnCommand}"
+                            ReturnCommandParameter="{x:Reference NewList}"
+                            Text="{Binding NewItemText}">
                         <Entry.Behaviors>
                             <behaviors:EventToCommandBehavior EventName="Unfocused" 
                                                               Command="{Binding AddItemCommand}"/>
+                            <behaviors:EventToCommandBehavior EventName="Completed" 
+                                                              Command="{Binding AddItemCompletedCommand}"
+                                                              CommandParameter="{x:Reference NewList}"/>
                         </Entry.Behaviors>
                     </Entry>
                 </StackLayout>
-            </CollectionView.Footer>
+            </CollectionView.Header>
         </CollectionView>
     </RefreshView>
 </ContentPage>

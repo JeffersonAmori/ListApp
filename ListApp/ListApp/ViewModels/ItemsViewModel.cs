@@ -23,6 +23,7 @@ namespace ListApp.ViewModels
         public ICommand AddItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
         public ICommand DeleteListCommand { get; }
+        public ICommand AddItemCompletedCommand { get; }
         public Command<ListItem> ItemTapped { get; }
         public Command<object> CompletionItemButtonCommand { get; }
 
@@ -49,6 +50,7 @@ namespace ListApp.ViewModels
             CompletionItemButtonCommand = new Command<object>(OnCompletionButtonClicked);
             DeleteItemCommand = new Command<object>(OnDeleteItem);
             DeleteListCommand = new Command(OnDeleteList);
+            AddItemCompletedCommand = new Command(OnAddItemCompletedCommand);
         }
 
         async Task ExecuteLoadItemsCommand()
@@ -125,7 +127,10 @@ namespace ListApp.ViewModels
 
         private async void OnDeleteItem(object id)
         {
-            ListItem listITem = _currentList.ListItems.First(x => x.Id == id.ToString());
+            ListItem listITem = _currentList.ListItems.FirstOrDefault(x => x.Id == id.ToString());
+
+            if (listITem == null) return;
+
             _currentList.ListItems.Remove(listITem);
             await DataStore.UpdateItemAsync(_currentList);
             Items.Remove(Items.First(i => i.Id == id.ToString()));
@@ -160,6 +165,15 @@ namespace ListApp.ViewModels
             }
 
             await Task.FromResult(Task.CompletedTask);
+        }
+
+        private void OnAddItemCompletedCommand(object obj)
+        {
+            Entry entry = obj as Entry;
+
+            if (entry == null) return;
+
+            entry.Focus();
         }
     }
 }

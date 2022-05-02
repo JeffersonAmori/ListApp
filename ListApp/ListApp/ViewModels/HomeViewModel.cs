@@ -65,7 +65,7 @@ namespace ListApp.ViewModels
 
         public HomeViewModel()
         {
-            Title = "Mobile notes";
+            Title = "Notes Freak";
 
             ListCollection = new ObservableCollection<List>();
 
