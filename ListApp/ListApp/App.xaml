@@ -15,7 +15,7 @@
             </Style>
 
             <Style TargetType="Frame">
-                <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
+                <Setter Property="BackgroundColor" Value="{DynamicResource AccentColor}" />
             </Style>
 
             <Style TargetType="Label">

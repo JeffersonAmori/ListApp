@@ -5,39 +5,45 @@
              x:Class="ListApp.Views.HomePage"
              Title="{Binding Title}">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="+"
-                     Order="Primary"
-                     Command="{Binding AddListCommand}"/>
-    </ContentPage.ToolbarItems>
-
     <ContentPage.BindingContext>
         <vm:HomeViewModel />
     </ContentPage.BindingContext>
 
-    <StackLayout>
-        <ListView x:Name="ListListView"
-                  IsPullToRefreshEnabled="True"
-                  HasUnevenRows="True"
-                  Margin="0, 3, 0, 0"
-                  ItemsSource="{Binding ListCollection}"
-                  IsRefreshing="{Binding IsBusy}"
-                  RefreshCommand="{Binding LoadListsCommand}"
-                  SelectedItem="{Binding SelectedList}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout BackgroundColor="{DynamicResource BackgroundColor}"
-                                     VerticalOptions="FillAndExpand">
-                            <Frame Margin="3"
-                                   CornerRadius="10">
-                                <Label Text="{Binding Name}"
-                                       FontAttributes="Bold"/>
-                            </Frame>
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </StackLayout>
+    <RelativeLayout>
+        <StackLayout>
+            <ListView x:Name="ListListView"
+                      IsPullToRefreshEnabled="True"
+                      HasUnevenRows="True"
+                      Margin="0, 3, 0, 0"
+                      ItemsSource="{Binding ListCollection}"
+                      IsRefreshing="{Binding IsBusy}"
+                      RefreshCommand="{Binding LoadListsCommand}"
+                      SelectedItem="{Binding SelectedList}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout BackgroundColor="{DynamicResource BackgroundColor}"
+                                         Margin="6, 0"
+                                         VerticalOptions="FillAndExpand">
+                                <Frame Margin="3"
+                                       CornerRadius="10">
+                                    <Label Text="{Binding Name}"
+                                           FontAttributes="Bold"/>
+                                </Frame>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+        <Button RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Constant=-60}"
+                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Constant=-60}"
+                Text="+"
+                FontSize="Large"
+                CornerRadius="50"
+                WidthRequest="50"
+                Command="{Binding AddListCommand}"
+                TextColor="{DynamicResource PrimaryTextColor}"
+                BackgroundColor="{DynamicResource PrimaryColor}"/>
+    </RelativeLayout>
 </ContentPage>

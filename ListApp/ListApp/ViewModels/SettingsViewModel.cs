@@ -83,7 +83,6 @@ namespace ListApp.ViewModels
                         Preferences.Set(PreferencesKeys.CurrentAppTheme, SelectedTheme.ToString());
                     }
                 }
-
             }
         }
     }
