@@ -49,17 +49,17 @@ namespace ListApp.ViewModels
                 {
                     switch (currentTheme.FullName)
                     {
-                        case var value when value == typeof(GreenTheme).FullName:
-                            SelectedTheme = Theme.Green;
+                        case var value when value == typeof(ForestTheme).FullName:
+                            SelectedTheme = Theme.Forest;
                             break;
-                        case var value when value == typeof(BlueTheme).FullName:
-                            SelectedTheme = Theme.Blue;
+                        case var value when value == typeof(RiverTheme).FullName:
+                            SelectedTheme = Theme.River;
                             break;
                         case var value when value == typeof(BeeTheme).FullName:
                             SelectedTheme = Theme.Bee;
                             break;
                         default:
-                            SelectedTheme = Theme.Green;
+                            SelectedTheme = Theme.Forest;
                             break;
                     }
                 }

@@ -4,6 +4,7 @@ using ListApp.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -24,6 +25,7 @@ namespace ListApp.ViewModels
         public ICommand LoadListsCommand { get; }
         public ICommand ListTappedCommand { get; }
         public ICommand AddListCommand { get; }
+        public ICommand DeleteList { get; }
 
         public List SelectedList
         {
@@ -73,7 +75,23 @@ namespace ListApp.ViewModels
 
             LoadListsCommand = new Command(async () => await ExecuteLoadListsCommand());
             AddListCommand = new Command(async () => await AddToListCollection());
+            DeleteList = new Command<string>(async (listId) => await OnDeleteList(listId));
             Task.Run(async () => await ExecuteLoadListsCommand());
+        }
+
+        private async Task OnDeleteList(string listId)
+        {
+            var currentList = ListCollection.FirstOrDefault(l => l.ListId == listId);
+
+            if (currentList == null) return;
+
+            bool deleteList = await DialogService.DisplayAlert($"Delete list {currentList.Name}?", "This action cannot be undone.", "Yes", "No");
+
+            if (deleteList)
+            {
+                await DataStore.DeleteItemAsync(currentList.ListId);
+                await Shell.Current.GoToAsync($"..?{nameof(HomeViewModel.ShouldRefresh)}={true}");
+            }
         }
 
         private async Task AddToListCollection()

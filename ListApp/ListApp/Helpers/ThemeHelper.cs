@@ -16,12 +16,12 @@ namespace ListApp.Helpers
 
                 switch (selectedTheme)
                 {
-                    case Theme.Green:
-                        mergedDictionaries.Add(new GreenTheme());
+                    case Theme.Forest:
+                        mergedDictionaries.Add(new ForestTheme());
                         break;
 
-                    case Theme.Blue:
-                        mergedDictionaries.Add(new BlueTheme());
+                    case Theme.River:
+                        mergedDictionaries.Add(new RiverTheme());
                         break;
 
                     case Theme.Bee:
@@ -29,7 +29,7 @@ namespace ListApp.Helpers
                         break;
 
                     default:
-                        mergedDictionaries.Add(new GreenTheme());
+                        mergedDictionaries.Add(new ForestTheme());
                         break;
                 }
 

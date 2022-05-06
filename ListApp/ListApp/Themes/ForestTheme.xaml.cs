@@ -5,9 +5,9 @@ using Xamarin.Forms.Xaml;
 namespace ListApp.Themes
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class GreenTheme : ResourceDictionary
+    public partial class ForestTheme : ResourceDictionary
     {
-        public GreenTheme()
+        public ForestTheme()
         {
             InitializeComponent();
         }

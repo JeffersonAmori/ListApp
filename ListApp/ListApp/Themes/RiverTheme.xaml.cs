@@ -4,9 +4,9 @@ using Xamarin.Forms.Xaml;
 namespace ListApp.Themes
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class BlueTheme : ResourceDictionary
+    public partial class RiverTheme : ResourceDictionary
     {
-        public BlueTheme()
+        public RiverTheme()
         {
             InitializeComponent();
         }

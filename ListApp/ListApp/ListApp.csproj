@@ -32,6 +32,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PreferencesKeys.resx</DependentUpon>
     </Compile>
+    <Compile Update="Themes\ForestTheme.xaml.cs">
+      <DependentUpon>ForestTheme.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Themes\RiverTheme.xaml.cs">
+      <DependentUpon>RiverTheme.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -52,10 +58,10 @@
     <EmbeddedResource Update="Themes\BeeTheme.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Themes\BlueTheme.xaml">
+    <EmbeddedResource Update="Themes\RiverTheme.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Themes\GreenTheme.xaml">
+    <EmbeddedResource Update="Themes\ForestTheme.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\AboutPage.xaml">

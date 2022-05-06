@@ -2,8 +2,8 @@
 {
     public enum Theme
     {
-        Green = 0,
-        Blue,
+        Forest = 0,
+        River,
         Bee
     }
 }

@@ -7,7 +7,7 @@
              x:Class="ListApp.App">
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary Source="Themes/GreenTheme.xaml" />
+            <ResourceDictionary Source="Themes/ForestTheme.xaml" />
 
             <Style x:Key="ButtonStyle" TargetType="Button">
                 <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
