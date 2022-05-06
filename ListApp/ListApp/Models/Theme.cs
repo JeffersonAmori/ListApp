@@ -3,6 +3,7 @@
     public enum Theme
     {
         Green = 0,
-        Blue
+        Blue,
+        Bee
     }
 }

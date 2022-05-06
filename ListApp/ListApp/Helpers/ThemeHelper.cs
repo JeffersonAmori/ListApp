@@ -24,6 +24,10 @@ namespace ListApp.Helpers
                         mergedDictionaries.Add(new BlueTheme());
                         break;
 
+                    case Theme.Bee:
+                        mergedDictionaries.Add(new BeeTheme());
+                        break;
+
                     default:
                         mergedDictionaries.Add(new GreenTheme());
                         break;

@@ -54,7 +54,11 @@ namespace ListApp.ViewModels
                         case var value when value == typeof(BlueTheme).FullName:
                             SelectedTheme = Theme.Blue;
                             break;
+                        case var value when value == typeof(BeeTheme).FullName:
+                            SelectedTheme = Theme.Bee;
+                            break;
                         default:
+                            SelectedTheme = Theme.Green;
                             break;
                     }
                 }

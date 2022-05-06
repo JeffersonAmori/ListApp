@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ListApp.Themes.BeeTheme">
+
+    <Color x:Key="PrimaryColor">#FCD615</Color>
+    <Color x:Key="AccentColor">#FCB43A</Color>
+    <Color x:Key="SecondaryColor">#F3C622</Color>
+
+    <Color x:Key="PageBackgroundColor">Yellow</Color>
+    <Color x:Key="NavigationBarColor">#FCD615</Color>
+
+    <Color x:Key="PrimaryTextColor">Black</Color>
+    <Color x:Key="SecondaryTextColor">#992409</Color>
+    <Color x:Key="DisabledTextColor">#7d7d7d</Color>
+
+</ResourceDictionary>
