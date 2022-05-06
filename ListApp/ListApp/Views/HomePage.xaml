@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ListApp.Views.HomePage"
              xmlns:vm="clr-namespace:ListApp.ViewModels"
+             x:Class="ListApp.Views.HomePage"
              Title="{Binding Title}">
 
     <ContentPage.ToolbarItems>
@@ -15,24 +15,27 @@
         <vm:HomeViewModel />
     </ContentPage.BindingContext>
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Color x:Key="Accent">#96d1ff</Color>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-
     <StackLayout>
         <ListView x:Name="ListListView"
-                  BackgroundColor="#b2cfa1"
                   IsPullToRefreshEnabled="True"
+                  HasUnevenRows="True"
+                  Margin="0, 3, 0, 0"
                   ItemsSource="{Binding ListCollection}"
                   IsRefreshing="{Binding IsBusy}"
                   RefreshCommand="{Binding LoadListsCommand}"
                   SelectedItem="{Binding SelectedList}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding Name}" 
-                              TextColor="Black"/>
+                    <ViewCell>
+                        <StackLayout BackgroundColor="{DynamicResource BackgroundColor}"
+                                     VerticalOptions="FillAndExpand">
+                            <Frame Margin="3"
+                                   CornerRadius="10">
+                                <Label Text="{Binding Name}"
+                                       FontAttributes="Bold"/>
+                            </Frame>
+                        </StackLayout>
+                    </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

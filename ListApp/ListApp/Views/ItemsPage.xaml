@@ -27,8 +27,28 @@
     <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
         <CollectionView x:Name="ItemsListView"
                 ItemsSource="{Binding Items}"
-                        BackgroundColor="#efffe6"
                 SelectionMode="None">
+            <CollectionView.Header>
+                <StackLayout>
+                    <Entry 
+                            x:Name="NewList"
+                            Placeholder="Type here..."
+                            ReturnType="Done"
+                            Keyboard="Chat"
+                            ClearButtonVisibility="WhileEditing"
+                            ReturnCommandParameter="{x:Reference NewList}"
+                            Text="{Binding NewItemText}"
+                            TextColor="{DynamicResource SecondaryTextColor}">
+                        <Entry.Behaviors>
+                            <behaviors:EventToCommandBehavior EventName="Unfocused" 
+                                                              Command="{Binding AddItemCommand}"/>
+                            <behaviors:EventToCommandBehavior EventName="Completed" 
+                                                              Command="{Binding AddItemCompletedCommand}"
+                                                              CommandParameter="{x:Reference NewList}"/>
+                        </Entry.Behaviors>
+                    </Entry>
+                </StackLayout>
+            </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid 
@@ -57,12 +77,13 @@
                         <Entry 
                                 Grid.Column="1"
                                 Margin="0"
-                                Text="{Binding Text}">
+                                Text="{Binding Text}"
+                                TextColor="{DynamicResource SecondaryTextColor}">
                             <Entry.Triggers>
                                 <DataTrigger TargetType="Entry"
                                              Binding="{Binding Checked}"
                                              Value="True">
-                                    <Setter Property="TextColor" Value="LightGray"/>
+                                    <Setter Property="TextColor" Value="{DynamicResource DisabledTextColor}"/>
                                 </DataTrigger>
                             </Entry.Triggers>
                         </Entry>
@@ -80,26 +101,6 @@
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-            <CollectionView.Header>
-                <StackLayout>
-                    <Entry 
-                            x:Name="NewList"
-                            Placeholder="Type here..."
-                            ReturnType="Done"
-                            Keyboard="Chat"
-                            ClearButtonVisibility="WhileEditing"
-                            ReturnCommandParameter="{x:Reference NewList}"
-                            Text="{Binding NewItemText}">
-                        <Entry.Behaviors>
-                            <behaviors:EventToCommandBehavior EventName="Unfocused" 
-                                                              Command="{Binding AddItemCommand}"/>
-                            <behaviors:EventToCommandBehavior EventName="Completed" 
-                                                              Command="{Binding AddItemCompletedCommand}"
-                                                              CommandParameter="{x:Reference NewList}"/>
-                        </Entry.Behaviors>
-                    </Entry>
-                </StackLayout>
-            </CollectionView.Header>
         </CollectionView>
     </RefreshView>
 </ContentPage>

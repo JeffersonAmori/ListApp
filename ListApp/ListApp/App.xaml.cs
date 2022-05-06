@@ -1,4 +1,8 @@
-﻿using ListApp.Services;
+﻿using ListApp.Helpers;
+using ListApp.Models;
+using ListApp.Services;
+using System;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ListApp
@@ -16,6 +20,8 @@ namespace ListApp
             DependencyService.Register<EfListItemDataStore>();
 
             MainPage = new AppShell();
+
+            SetupCurrentTheme();
         }
 
         protected override void OnStart()
@@ -28,6 +34,21 @@ namespace ListApp
 
         protected override void OnResume()
         {
+        }
+
+        /// <summary>
+        /// Set up current theme from app settings
+        /// </summary>
+        public void SetupCurrentTheme()
+        {
+            var currentTheme = Preferences.Get("CurrentAppTheme", null);
+            if (currentTheme != null)
+            {
+                if (Enum.TryParse(currentTheme, out Theme currentThemeEnum))
+                {
+                    ThemeHelper.SetAppTheme(currentThemeEnum);
+                }
+            }
         }
     }
 }

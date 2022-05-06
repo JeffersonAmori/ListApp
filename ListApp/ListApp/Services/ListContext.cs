@@ -1,5 +1,6 @@
 ﻿using ListApp.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.IO;
 using Xamarin.Essentials;
 
@@ -14,7 +15,11 @@ namespace ListApp.Services
         {
             SQLitePCL.Batteries_V2.Init();
 
-            this.Database.EnsureCreated();
+            try
+            {
+                this.Database.EnsureCreated();
+            }
+            catch (Exception) { }
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

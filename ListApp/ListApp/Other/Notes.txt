@@ -4,3 +4,6 @@
 
 Primary color #5d913f
 Secondary color #b2cfa1 | #efffe6
+
+Icons by
+ - https://icons8.com

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ListApp.ViewModels"
+             x:Class="ListApp.Views.SettingsPage"
+             Title="Settings">
+
+    <ContentPage.BindingContext>
+        <vm:SettingsViewModel></vm:SettingsViewModel>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content
+                     BackgroundColor="{DynamicResource PageBackgroundColor}">
+        <StackLayout HorizontalOptions="FillAndExpand"
+                     BackgroundColor="{DynamicResource PageBackgroundColor}">
+                <Label Text="Theme"
+                       VerticalOptions="Center"/>
+                <Picker Title="Theme"
+                        HorizontalOptions="FillAndExpand"
+                        ItemsSource="{Binding Themes}"
+                        SelectedItem="{Binding SelectedTheme}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

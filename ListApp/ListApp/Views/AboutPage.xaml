@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ListApp.Views.AboutPage">
+             x:Class="ListApp.Views.AboutPage"
+             Title="About">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Made with ♥ by Jefferson Rocha &amp; Carla Marcondes"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+                   Style="{StaticResource SecondaryLabel}"
+                   VerticalOptions="CenterAndExpand" 
+                   HorizontalOptions="CenterAndExpand" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
