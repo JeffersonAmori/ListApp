@@ -18,6 +18,7 @@ namespace ListApp.ViewModels
         private ListItem _selectedItem;
         private List _currentList;
         public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
+        public IDialogService DialogService => DependencyService.Get<IDialogService>();
         public ObservableCollection<ListItem> Items { get; }
         public ICommand LoadItemsCommand { get; }
         public ICommand AddItemCommand { get; }
@@ -138,7 +139,7 @@ namespace ListApp.ViewModels
 
         private async void OnDeleteList()
         {
-            bool deleteList = await Application.Current.MainPage.DisplayAlert($"Delete list {_currentList.Name}?", "This action cannot be undone.", "Yes", "No");
+            bool deleteList = await DialogService.DisplayAlert($"Delete list {_currentList.Name}?", "This action cannot be undone.", "Yes", "No");
 
             if (deleteList)
             {

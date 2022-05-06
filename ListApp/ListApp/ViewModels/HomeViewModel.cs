@@ -19,6 +19,8 @@ namespace ListApp.ViewModels
 
         public ObservableCollection<List> ListCollection { get; }
         public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
+        public IDialogService DialogService => DependencyService.Get<IDialogService>();
+        
         public ICommand LoadListsCommand { get; }
         public ICommand ListTappedCommand { get; }
         public ICommand AddListCommand { get; }
@@ -76,7 +78,7 @@ namespace ListApp.ViewModels
 
         private async Task AddToListCollection()
         {
-            string newListName = await Application.Current.MainPage.DisplayPromptAsync("New list", String.Empty);
+            string newListName = await DialogService.DisplayPromptAsync("New list", String.Empty);
 
             if (string.IsNullOrEmpty(newListName))
                 return;
