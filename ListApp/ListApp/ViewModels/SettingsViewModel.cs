@@ -1,5 +1,6 @@
 ﻿using ListApp.Helpers;
 using ListApp.Models;
+using ListApp.Resources;
 using ListApp.Themes;
 using System;
 using System.Collections.Generic;
@@ -79,7 +80,7 @@ namespace ListApp.ViewModels
                     if (ThemeHelper.SetAppTheme(currentThemeEnum))
                     {
                         // Theme setting successful
-                        Preferences.Set("CurrentAppTheme", SelectedTheme.ToString());
+                        Preferences.Set(PreferencesKeys.CurrentAppTheme, SelectedTheme.ToString());
                     }
                 }
 

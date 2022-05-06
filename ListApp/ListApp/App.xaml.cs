@@ -1,5 +1,6 @@
 ﻿using ListApp.Helpers;
 using ListApp.Models;
+using ListApp.Resources;
 using ListApp.Services;
 using System;
 using Xamarin.Essentials;
@@ -42,7 +43,7 @@ namespace ListApp
         /// </summary>
         public void SetupCurrentTheme()
         {
-            var currentTheme = Preferences.Get("CurrentAppTheme", null);
+            var currentTheme = Preferences.Get(PreferencesKeys.CurrentAppTheme, null);
             if (currentTheme != null)
             {
                 if (Enum.TryParse(currentTheme, out Theme currentThemeEnum))
