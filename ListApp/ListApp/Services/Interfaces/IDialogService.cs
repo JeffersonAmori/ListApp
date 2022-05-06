@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace ListApp.Services
+namespace ListApp.Services.Interfaces
 {
     public interface IDialogService
     {

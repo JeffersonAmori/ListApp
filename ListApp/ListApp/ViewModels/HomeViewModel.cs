@@ -1,5 +1,5 @@
 ﻿using ListApp.Models;
-using ListApp.Services;
+using ListApp.Services.Interfaces;
 using ListApp.Views;
 using System;
 using System.Collections.ObjectModel;
@@ -20,7 +20,7 @@ namespace ListApp.ViewModels
         public ObservableCollection<List> ListCollection { get; }
         public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
         public IDialogService DialogService => DependencyService.Get<IDialogService>();
-        
+
         public ICommand LoadListsCommand { get; }
         public ICommand ListTappedCommand { get; }
         public ICommand AddListCommand { get; }

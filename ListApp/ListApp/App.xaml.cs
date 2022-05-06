@@ -18,6 +18,7 @@ namespace ListApp
             //DependencyService.Register<MockListItemDataStore>();
             DependencyService.Register<EfListDataStore>();
             DependencyService.Register<EfListItemDataStore>();
+            DependencyService.Register<DialogService>();
 
             MainPage = new AppShell();
 
