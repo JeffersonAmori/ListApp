@@ -14,7 +14,8 @@
         <StackLayout HorizontalOptions="FillAndExpand"
                      BackgroundColor="{DynamicResource PageBackgroundColor}">
                 <Label Text="Theme"
-                       VerticalOptions="Center"/>
+                       VerticalOptions="Center"
+                       Style="{StaticResource SecondaryLabel}"/>
                 <Picker Title="Theme"
                         HorizontalOptions="FillAndExpand"
                         ItemsSource="{Binding Themes}"

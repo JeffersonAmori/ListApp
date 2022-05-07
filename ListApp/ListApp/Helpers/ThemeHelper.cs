@@ -19,15 +19,18 @@ namespace ListApp.Helpers
                     case Theme.Forest:
                         mergedDictionaries.Add(new ForestTheme());
                         break;
-
                     case Theme.River:
                         mergedDictionaries.Add(new RiverTheme());
                         break;
-
                     case Theme.Bee:
                         mergedDictionaries.Add(new BeeTheme());
                         break;
-
+                    case Theme.Quartzo:
+                        mergedDictionaries.Add(new QuartzoTheme());
+                        break;
+                    case Theme.Night:
+                        mergedDictionaries.Add(new NightTheme());
+                        break;
                     default:
                         mergedDictionaries.Add(new ForestTheme());
                         break;

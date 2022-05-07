@@ -4,6 +4,8 @@
     {
         Forest = 0,
         River,
-        Bee
+        Bee,
+        Quartzo,
+        Night
     }
 }

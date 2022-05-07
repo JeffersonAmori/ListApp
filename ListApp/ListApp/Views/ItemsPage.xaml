@@ -7,7 +7,7 @@
              xmlns:converters="clr-namespace:ListApp.Converters"
              x:Class="ListApp.Views.ItemsPage"
              Title="{Binding Title}"
-             BackgroundColor="{DynamicResource PageBackgroundColorLight}"
+             BackgroundColor="{DynamicResource PageBackgroundColor}"
              x:Name="BrowseItemsPage">
     <!--
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
@@ -75,11 +75,10 @@
                                 Padding="0"
                                 Margin="2">
                         </Button>
-                        <Entry 
-                                Grid.Column="1"
-                                Margin="0"
-                                Text="{Binding Text}"
-                                TextColor="{DynamicResource SecondaryTextColor}">
+                        <Entry Grid.Column="1"
+                               Margin="0"
+                               Text="{Binding Text}"
+                               TextColor="{DynamicResource SecondaryTextColor}">
                             <Entry.Triggers>
                                 <DataTrigger TargetType="Entry"
                                              Binding="{Binding Checked}"

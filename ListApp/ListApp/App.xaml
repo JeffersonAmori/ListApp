@@ -26,10 +26,10 @@
             <Style x:Key="SecondaryLabel" TargetType="Label">
                 <Setter Property="TextColor" Value="{DynamicResource SecondaryTextColor}" />
                 <Setter Property="FontSize" Value="15" />
-            </Style>
+            </Style>\\\\\\\\\\\\\\\
 
             <Style TargetType="Picker">
-                <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+                <Setter Property="TextColor" Value="{DynamicResource SecondaryTextColor}" />
             </Style>
 
             <Style x:Key="BaseStyle" TargetType="Element">

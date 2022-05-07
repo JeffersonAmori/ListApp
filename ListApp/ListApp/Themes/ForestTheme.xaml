@@ -9,7 +9,6 @@
     <Color x:Key="SecondaryColor">#b2cfa1</Color>
 
     <Color x:Key="PageBackgroundColor">#E1EDBD</Color>
-    <Color x:Key="PageBackgroundColorLight">#E1EDBD</Color>
     <Color x:Key="NavigationBarColor">#5A8559</Color>
 
     <Color x:Key="PrimaryTextColor">Black</Color>

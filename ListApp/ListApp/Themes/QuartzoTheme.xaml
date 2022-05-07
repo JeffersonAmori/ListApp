@@ -2,14 +2,14 @@
 <ResourceDictionary
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ListApp.Themes.RiverTheme">
+    x:Class="ListApp.Themes.QuartzoTheme">
 
-    <Color x:Key="PrimaryColor">#209BBA</Color>
-    <Color x:Key="AccentColor">#86C9D6</Color>
-    <Color x:Key="SecondaryColor">White</Color>
+    <Color x:Key="PrimaryColor">#C58388</Color>
+    <Color x:Key="AccentColor">#D8ABB1</Color>
+    <Color x:Key="SecondaryColor">#F3D7D1</Color>
 
-    <Color x:Key="PageBackgroundColor">#CAE7E8</Color>
-    <Color x:Key="NavigationBarColor">#209BBA</Color>
+    <Color x:Key="PageBackgroundColor">#F7E9E9</Color>
+    <Color x:Key="NavigationBarColor">#C58388</Color>
 
     <Color x:Key="PrimaryTextColor">Black</Color>
     <Color x:Key="SecondaryTextColor">#4a4a4a</Color>
