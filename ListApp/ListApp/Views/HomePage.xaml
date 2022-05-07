@@ -23,7 +23,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <SwipeView BackgroundColor="{DynamicResource PageBackgroundColor}">
+                            <!--<SwipeView BackgroundColor="{DynamicResource PageBackgroundColor}">
                             <SwipeView.RightItems>
                                     <SwipeItems Mode="Execute">
                                         <SwipeItem IconImageSource="icon_trash.png"
@@ -32,7 +32,7 @@
                                                    Command="{Binding DeleteList}"
                                                    CommandParameter="{Binding ListId}"/>
                                     </SwipeItems>
-                            </SwipeView.RightItems>
+                            </SwipeView.RightItems>-->
                                 <StackLayout BackgroundColor="{DynamicResource PageBackgroundColor}"
                                              Margin="6, 0"
                                              VerticalOptions="FillAndExpand">
@@ -42,7 +42,7 @@
                                                FontAttributes="Bold"/>
                                     </Frame>
                                 </StackLayout>
-                            </SwipeView>
+                            <!--</SwipeView>-->
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
