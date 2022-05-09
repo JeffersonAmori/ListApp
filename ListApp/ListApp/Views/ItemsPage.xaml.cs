@@ -21,5 +21,10 @@ namespace ListApp.Views
             base.OnAppearing();
             _viewModel.OnAppearing();
         }
+
+        private void SwipeGestureRecognizer_Swiped(object sender, SwipedEventArgs e)
+        {
+
+        }
     }
 }

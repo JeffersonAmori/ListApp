@@ -4,8 +4,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ListApp.ViewModels
@@ -24,6 +26,7 @@ namespace ListApp.ViewModels
         public ICommand AddItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
         public ICommand DeleteListCommand { get; }
+        public ICommand ShareListCommand { get; }
         public ICommand AddItemCompletedCommand { get; }
         public Command<ListItem> ItemTapped { get; }
         public Command<object> CompletionItemButtonCommand { get; }
@@ -52,6 +55,25 @@ namespace ListApp.ViewModels
             DeleteItemCommand = new Command<object>(OnDeleteItem);
             DeleteListCommand = new Command(OnDeleteList);
             AddItemCompletedCommand = new Command(OnAddItemCompletedCommand);
+            ShareListCommand = new Command(OnShareListCommand);
+        }
+
+        private void OnShareListCommand(object obj)
+        {
+            if (Items.Count == 0)
+            {
+                DialogService.DisplayAlert("Nothing to share", "The current list is empty.", "OK");
+                return;
+            }
+
+            StringBuilder listAsTextStringBuilder = new StringBuilder();
+            listAsTextStringBuilder.Append(_currentList.Name);
+            foreach (var item in Items)
+            {
+                listAsTextStringBuilder.Append($"\n - {item.Text}");
+            }
+
+            Share.RequestAsync(listAsTextStringBuilder.ToString(), _currentList.Name);
         }
 
         async Task ExecuteLoadItemsCommand()

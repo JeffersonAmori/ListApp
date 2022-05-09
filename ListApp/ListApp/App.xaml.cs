@@ -2,6 +2,8 @@
 using ListApp.Models;
 using ListApp.Resources;
 using ListApp.Services;
+using ListApp.Services.Interfaces;
+using ListApp.Services.Mocks;
 using System;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -17,6 +19,7 @@ namespace ListApp
 
             //DependencyService.Register<MockListDataStore>();
             //DependencyService.Register<MockListItemDataStore>();
+
             DependencyService.Register<EfListDataStore>();
             DependencyService.Register<EfListItemDataStore>();
             DependencyService.Register<DialogService>();

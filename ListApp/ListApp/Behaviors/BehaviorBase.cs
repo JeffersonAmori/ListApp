@@ -1,41 +1,80 @@
-﻿using System;
+﻿using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using Xamarin.Forms;
 
 namespace ListApp.Behaviors
 {
-    public class BehaviorBase<T> : Behavior<T> where T : BindableObject
-    {
-        public T AssociatedObject { get; private set; }
+	/// <summary>
+	/// Abstract class for our behaviors to inherit.
+	/// </summary>
+	/// <typeparam name="TView">The <see cref="VisualElement"/> that the behavior can be applied to</typeparam>
+	public abstract class BaseBehavior<TView> : Behavior<TView> where TView : VisualElement
+	{
+		static readonly MethodInfo? getContextMethod
+			= typeof(BindableObject).GetRuntimeMethods()?.FirstOrDefault(m => m.Name == "GetContext");
 
-        protected override void OnAttachedTo(T bindable)
-        {
-            base.OnAttachedTo(bindable);
-            AssociatedObject = bindable;
+		static readonly FieldInfo? bindingField
+			= getContextMethod?.ReturnType.GetRuntimeField("Binding");
 
-            if (bindable.BindingContext != null)
-            {
-                BindingContext = bindable.BindingContext;
-            }
+		BindingBase? defaultBindingContextBinding;
 
-            bindable.BindingContextChanged += OnBindingContextChanged;
-        }
+		protected TView View { get; private set; }
 
-        protected override void OnDetachingFrom(T bindable)
-        {
-            base.OnDetachingFrom(bindable);
-            bindable.BindingContextChanged -= OnBindingContextChanged;
-            AssociatedObject = null;
-        }
+		internal bool TrySetBindingContext(Binding binding)
+		{
+			if (!IsBound(BindingContextProperty))
+			{
+				SetBinding(BindingContextProperty, defaultBindingContextBinding = binding);
+				return true;
+			}
 
-        void OnBindingContextChanged(object sender, EventArgs e)
-        {
-            OnBindingContextChanged();
-        }
+			return false;
+		}
 
-        protected override void OnBindingContextChanged()
-        {
-            base.OnBindingContextChanged();
-            BindingContext = AssociatedObject.BindingContext;
-        }
-    }
+		internal bool TryRemoveBindingContext()
+		{
+			if (defaultBindingContextBinding != null)
+			{
+				RemoveBinding(BindingContextProperty);
+				defaultBindingContextBinding = null;
+
+				return true;
+			}
+
+			return false;
+		}
+
+		protected virtual void OnViewPropertyChanged(object? sender, PropertyChangedEventArgs e)
+		{
+		}
+
+		protected override void OnAttachedTo(TView bindable)
+		{
+			base.OnAttachedTo(bindable);
+			View = bindable;
+			bindable.PropertyChanged += OnViewPropertyChanged;
+			TrySetBindingContext(new Binding
+			{
+				Path = BindingContextProperty.PropertyName,
+				Source = bindable
+			});
+		}
+
+		protected override void OnDetachingFrom(TView bindable)
+		{
+			base.OnDetachingFrom(bindable);
+			TryRemoveBindingContext();
+			bindable.PropertyChanged -= OnViewPropertyChanged;
+			View = null;
+		}
+
+		protected bool IsBound(BindableProperty property, BindingBase? defaultBinding = null)
+		{
+			var context = getContextMethod?.Invoke(this, new object[] { property });
+			return context != null
+				&& bindingField?.GetValue(context) is BindingBase binding
+				&& binding != defaultBinding;
+		}
+	}
 }
