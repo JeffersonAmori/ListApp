@@ -44,7 +44,8 @@
                             ClearButtonVisibility="WhileEditing"
                             ReturnCommandParameter="{x:Reference NewList}"
                             Text="{Binding NewItemText}"
-                            TextColor="{DynamicResource SecondaryTextColor}">
+                            TextColor="{DynamicResource SecondaryTextColor}"
+                            PlaceholderColor="{DynamicResource SecondaryTextColor}">
                         <Entry.Behaviors>
                             <behaviors:EventToCommandBehavior EventName="Unfocused" 
                                                               Command="{Binding AddItemCommand}"/>
