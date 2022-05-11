@@ -28,8 +28,9 @@ namespace ListApp.ViewModels
         public ICommand DeleteListCommand { get; }
         public ICommand ShareListCommand { get; }
         public ICommand AddItemCompletedCommand { get; }
-        public Command<ListItem> ItemTapped { get; }
-        public Command<object> CompletionItemButtonCommand { get; }
+        public ICommand ItemDragAndDropFinishedCommand { get; }
+        public ICommand ItemTapped { get; }
+        public ICommand CompletionItemButtonCommand { get; }
 
         public string ListId
         {
@@ -51,29 +52,12 @@ namespace ListApp.ViewModels
             Items = new ObservableCollection<ListItem>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             AddItemCommand = new Command(OnAddItem);
-            CompletionItemButtonCommand = new Command<object>(OnCompletionButtonClicked);
+            CompletionItemButtonCommand = new Command<string>(OnCompletionButtonClicked);
             DeleteItemCommand = new Command<object>(OnDeleteItem);
             DeleteListCommand = new Command(OnDeleteList);
             AddItemCompletedCommand = new Command(OnAddItemCompletedCommand);
             ShareListCommand = new Command(OnShareListCommand);
-        }
-
-        private void OnShareListCommand(object obj)
-        {
-            if (Items.Count == 0)
-            {
-                DialogService.DisplayAlert("Nothing to share", "The current list is empty.", "OK");
-                return;
-            }
-
-            StringBuilder listAsTextStringBuilder = new StringBuilder();
-            listAsTextStringBuilder.Append(_currentList.Name);
-            foreach (var item in Items)
-            {
-                listAsTextStringBuilder.Append($"\n - {item.Text}");
-            }
-
-            Share.RequestAsync(listAsTextStringBuilder.ToString(), _currentList.Name);
+            ItemDragAndDropFinishedCommand = new Command(OnItemDragAndDropFinishedCommand);
         }
 
         async Task ExecuteLoadItemsCommand()
@@ -82,11 +66,10 @@ namespace ListApp.ViewModels
 
             try
             {
-                if (_currentList is null)
-                    return;
+                if (_currentList is null) return;
 
                 Items.Clear();
-                foreach (var item in _currentList.ListItems)
+                foreach (var item in _currentList.ListItems.OrderBy(li => li.Index))
                 {
                     Items.Add(item);
                 }
@@ -128,16 +111,28 @@ namespace ListApp.ViewModels
             }
         }
 
+
+        private void UpdateListItemsIndexes()
+        {
+            for (int i = 0; i < Items.Count; i++)
+                Items[i].Index = i;
+        }
+
         private async void OnAddItem()
         {
             if (string.IsNullOrEmpty(NewItemText))
                 return;
 
+            int nextIndex = Items.Any() 
+                            ? Items.Max(i => i.Index) + 1 
+                            : 1;
+
             ListItem listITem = new ListItem()
             {
                 ListId = _currentList.ListId,
                 Id = Guid.NewGuid().ToString(),
-                Text = NewItemText
+                Text = NewItemText,
+                Index = nextIndex
             };
 
             Items.Add(listITem);
@@ -170,9 +165,9 @@ namespace ListApp.ViewModels
             }
         }
 
-        private async void OnCompletionButtonClicked(object Id)
+        private async void OnCompletionButtonClicked(string Id)
         {
-            var item = Items.FirstOrDefault(x => x.Id == Id.ToString());
+            var item = Items.FirstOrDefault(x => x.Id == Id);
             if (item != null)
             {
                 item.Checked = !item.Checked;
@@ -181,13 +176,13 @@ namespace ListApp.ViewModels
                 {
                     Items.Remove(item);
                     Items.Add(item);
-                    return;
                 }
 
                 OnPropertyChanged(nameof(Items));
-            }
 
-            await Task.FromResult(Task.CompletedTask);
+                UpdateListItemsIndexes();
+                await DataStore.UpdateItemAsync(_currentList);
+            }
         }
 
         private void OnAddItemCompletedCommand(object obj)
@@ -197,6 +192,30 @@ namespace ListApp.ViewModels
             if (entry == null) return;
 
             entry.Focus();
+        }
+
+        private async void OnItemDragAndDropFinishedCommand()
+        {
+            UpdateListItemsIndexes();
+            await DataStore.UpdateItemAsync(_currentList);
+        }
+
+        private void OnShareListCommand(object obj)
+        {
+            if (Items.Count == 0)
+            {
+                DialogService.DisplayAlert("Nothing to share", "The current list is empty.", "OK");
+                return;
+            }
+
+            StringBuilder listAsTextStringBuilder = new StringBuilder();
+            listAsTextStringBuilder.Append(_currentList.Name);
+            foreach (var item in Items)
+            {
+                listAsTextStringBuilder.Append($"\n - {item.Text}");
+            }
+
+            Share.RequestAsync(listAsTextStringBuilder.ToString(), _currentList.Name);
         }
     }
 }

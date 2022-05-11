@@ -17,14 +17,22 @@ namespace ListApp.Services
 
             try
             {
-                this.Database.EnsureCreated();
+                string dbPath = Path.Combine(FileSystem.AppDataDirectory, "listApp.db3");
+                if (!File.Exists(dbPath))
+                    File.Create(dbPath);
+
+                this.Database.Migrate();
             }
             catch (Exception) { }
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "listApp.db3");
+            string dbPath;
+            if (DeviceInfo.Platform == DevicePlatform.Unknown)
+                dbPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            else
+                dbPath = Path.Combine(FileSystem.AppDataDirectory, "listApp.db3");
 
             optionsBuilder
                 .UseSqlite($"Filename={dbPath}");

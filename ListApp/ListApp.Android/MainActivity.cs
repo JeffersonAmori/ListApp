@@ -12,6 +12,8 @@ namespace ListApp.Droid
         {
             base.OnCreate(savedInstanceState);
 
+            Sharpnado.CollectionView.Droid.Initializer.Initialize();
+
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());

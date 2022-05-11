@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:ListApp.ViewModels"  
              xmlns:model="clr-namespace:ListApp.Models" 
              xmlns:behaviors="clr-namespace:ListApp.Behaviors"
-             xmlns:converters="clr-namespace:ListApp.Converters"
+             xmlns:converters="clr-namespace:ListApp.Converters" 
+             xmlns:sho="http://sharpnado.com"
              x:Class="ListApp.Views.ItemsPage"
              Title="{Binding Title}"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
@@ -27,85 +28,87 @@
             <converters:CheckedTextConverter x:Key="checkedTextConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-
-    <RefreshView x:DataType="local:ItemsViewModel" 
-                 Command="{Binding LoadItemsCommand}" 
-                 IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-        <CollectionView x:Name="ItemsListView"
-                        ItemsSource="{Binding Items}"
-                        SelectionMode="None">
-            <CollectionView.Header>
-                <StackLayout>
-                    <Entry 
-                            x:Name="NewList"
-                            Placeholder="Type here..."
-                            ReturnType="Done"
-                            Keyboard="Chat"
-                            ClearButtonVisibility="WhileEditing"
-                            ReturnCommandParameter="{x:Reference NewList}"
-                            Text="{Binding NewItemText}"
-                            TextColor="{DynamicResource SecondaryTextColor}"
-                            PlaceholderColor="{DynamicResource SecondaryTextColor}">
-                        <Entry.Behaviors>
-                            <behaviors:EventToCommandBehavior EventName="Unfocused" 
+    <StackLayout>
+        <StackLayout VerticalOptions="FillAndExpand">
+            <Entry 
+                x:Name="NewList"
+                Placeholder="Type here..."
+                ReturnType="Done"
+                Keyboard="Chat"
+                ClearButtonVisibility="WhileEditing"
+                ReturnCommandParameter="{x:Reference NewList}"
+                Text="{Binding NewItemText}"
+                TextColor="{DynamicResource SecondaryTextColor}"
+                PlaceholderColor="{DynamicResource SecondaryTextColor}">
+                <Entry.Behaviors>
+                    <behaviors:EventToCommandBehavior EventName="Unfocused" 
                                                               Command="{Binding AddItemCommand}"/>
-                            <behaviors:EventToCommandBehavior EventName="Completed" 
+                    <behaviors:EventToCommandBehavior EventName="Completed" 
                                                               Command="{Binding AddItemCompletedCommand}"
                                                               CommandParameter="{x:Reference NewList}"/>
-                        </Entry.Behaviors>
-                    </Entry>
-                </StackLayout>
-            </CollectionView.Header>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid 
-                            x:Name="ItemsGrid"
-                            x:DataType="model:ListItem"
-                            ColumnDefinitions="10*,80*,10*"
-                            HorizontalOptions="FillAndExpand"
-                            Padding="2"
-                            Margin="0,0,0,-5">
-                        <Button 
-                                Grid.Column="0"
-                                BackgroundColor="Transparent"
-                                TextColor="Black"
-                                BorderColor="Black"
-                                BorderWidth="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=CompletionItemButtonCommand}"
-                                CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
-                                Text="{Binding Checked, Converter={StaticResource checkedTextConverter}}"
-                                Padding="0"
-                                Margin="2">
-                        </Button>
-                        <Entry Grid.Column="1"
-                               Margin="0"
-                               Text="{Binding Text}"
-                               TextColor="{DynamicResource SecondaryTextColor}">
-                            <Entry.Triggers>
-                                <DataTrigger TargetType="Entry"
+                </Entry.Behaviors>
+            </Entry>
+            <RefreshView x:DataType="local:ItemsViewModel" 
+                         Command="{Binding LoadItemsCommand}" 
+                         IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <sho:CollectionView x:Name="ItemsListView"
+                                    DragAndDropEndedCommand="{Binding ItemDragAndDropFinishedCommand}"
+                                    EnableDragAndDrop="True"
+                                    ItemHeight="50"
+                                    ItemsSource="{Binding Items, Mode=TwoWay}">
+                    <sho:CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <sho:DraggableViewCell>
+                                <Grid x:Name="ItemsGrid"
+                                      x:DataType="model:ListItem"
+                                      ColumnDefinitions="10*,80*,10*"
+                                      HorizontalOptions="FillAndExpand"
+                                      Padding="2"
+                                      Margin="0,0,0,-5">
+                                    <Button Grid.Column="0"
+                                            BackgroundColor="Transparent"
+                                            TextColor="Black"
+                                            BorderColor="Black"
+                                            BorderWidth="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=CompletionItemButtonCommand}"
+                                            CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
+                                            Text="{Binding Checked, Converter={StaticResource checkedTextConverter}}"
+                                            Padding="0"
+                                            Margin="2">
+                                    </Button>
+                                    <Entry Grid.Column="1"
+                                           Margin="0"
+                                           Text="{Binding Text}"
+                                           TextColor="{DynamicResource SecondaryTextColor}">
+                                        <Entry.Triggers>
+                                            <DataTrigger TargetType="Entry"
                                              Binding="{Binding Checked}"
                                              Value="True">
-                                    <Setter Property="TextColor" Value="{DynamicResource DisabledTextColor}"/>
-                                </DataTrigger>
-                            </Entry.Triggers>
-                        </Entry>
-                        <Button 
+                                                <Setter Property="TextColor" Value="{DynamicResource DisabledTextColor}"/>
+                                            </DataTrigger>
+                                        </Entry.Triggers>
+                                    </Entry>
+                                    <Button 
                                 Grid.Column="2"
                                 BackgroundColor="Transparent"
                                 Text="🗑"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=DeleteItemCommand}"
                                 CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
                                 Margin="0"/>
-                        <Label 
+                                    <Label 
                                 x:Name="LabelId" 
                                 Text="{Binding Id}"
                                 IsVisible="False"/>
-                        <Grid.GestureRecognizers>
-                            <SwipeGestureRecognizer Direction="Right" Swiped="SwipeGestureRecognizer_Swiped" />
-                        </Grid.GestureRecognizers>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </RefreshView>
+                                    <Grid.GestureRecognizers>
+                                        <SwipeGestureRecognizer Direction="Right" Swiped="SwipeGestureRecognizer_Swiped" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </sho:DraggableViewCell>
+                        </DataTemplate>
+                    </sho:CollectionView.ItemTemplate>
+                </sho:CollectionView>
+            </RefreshView>
+        </StackLayout>
+    </StackLayout>
+
 </ContentPage>

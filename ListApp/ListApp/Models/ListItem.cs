@@ -22,6 +22,7 @@ namespace ListApp.Models
         public string Description { get; set; }
 
         public string ListId { get; set; }
+        public int Index { get; set; }
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

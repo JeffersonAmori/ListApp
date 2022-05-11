@@ -2,8 +2,6 @@
 using ListApp.Models;
 using ListApp.Resources;
 using ListApp.Services;
-using ListApp.Services.Interfaces;
-using ListApp.Services.Mocks;
 using System;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -17,8 +15,7 @@ namespace ListApp
         {
             InitializeComponent();
 
-            //DependencyService.Register<MockListDataStore>();
-            //DependencyService.Register<MockListItemDataStore>();
+            Sharpnado.CollectionView.Initializer.Initialize(true, false);
 
             DependencyService.Register<EfListDataStore>();
             DependencyService.Register<EfListItemDataStore>();
@@ -47,12 +44,13 @@ namespace ListApp
         public void SetupCurrentTheme()
         {
             var currentTheme = Preferences.Get(PreferencesKeys.CurrentAppTheme, null);
-            if (currentTheme != null)
+
+            if (currentTheme == null)
+                return;
+
+            if (Enum.TryParse(currentTheme, out Theme currentThemeEnum))
             {
-                if (Enum.TryParse(currentTheme, out Theme currentThemeEnum))
-                {
-                    ThemeHelper.SetAppTheme(currentThemeEnum);
-                }
+                ThemeHelper.SetAppTheme(currentThemeEnum);
             }
         }
     }
