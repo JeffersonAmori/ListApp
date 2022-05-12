@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:ListApp.ViewModels"  
+             xmlns:local="clr-namespace:ListApp.ViewModels"
              xmlns:model="clr-namespace:ListApp.Models" 
              xmlns:behaviors="clr-namespace:ListApp.Behaviors"
-             xmlns:converters="clr-namespace:ListApp.Converters" 
+             xmlns:converters="clr-namespace:ListApp.Converters"
              xmlns:sho="http://sharpnado.com"
              x:Class="ListApp.Views.ItemsPage"
              Title="{Binding Title}"
@@ -42,10 +42,10 @@
                 PlaceholderColor="{DynamicResource SecondaryTextColor}">
                 <Entry.Behaviors>
                     <behaviors:EventToCommandBehavior EventName="Unfocused" 
-                                                              Command="{Binding AddItemCommand}"/>
+                                                      Command="{Binding AddItemCommand}"/>
                     <behaviors:EventToCommandBehavior EventName="Completed" 
-                                                              Command="{Binding AddItemCompletedCommand}"
-                                                              CommandParameter="{x:Reference NewList}"/>
+                                                      Command="{Binding AddItemCompletedCommand}"
+                                                      CommandParameter="{x:Reference NewList}"/>
                 </Entry.Behaviors>
             </Entry>
             <RefreshView x:DataType="local:ItemsViewModel" 

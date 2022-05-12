@@ -2,6 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ListApp.ViewModels"
+             xmlns:model="clr-namespace:ListApp.Models" 
+             xmlns:sho="http://sharpnado.com"
              x:Class="ListApp.Views.HomePage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              Title="{Binding Title}">
@@ -11,43 +13,34 @@
     </ContentPage.BindingContext>
 
     <RelativeLayout>
-        <StackLayout>
-            <ListView x:Name="ListListView"
-                      IsPullToRefreshEnabled="True"
-                      HasUnevenRows="True"
-                      Margin="0, 3, 0, 0"
-                      ItemsSource="{Binding ListCollection}"
-                      IsRefreshing="{Binding IsBusy}"
-                      RefreshCommand="{Binding LoadListsCommand}"
-                      SelectedItem="{Binding SelectedList}">
-                <ListView.ItemTemplate>
+        <!--<RefreshView x:DataType="vm:HomeViewModel" 
+                     Command="{Binding LoadListsCommand}" 
+                     IsRefreshing="{Binding IsBusy, Mode=TwoWay}">-->
+            <sho:CollectionView x:Name="ListCollectionView"
+                                EnableDragAndDrop="True"
+                                ItemHeight="65"
+                                Margin="6, 3, 6, 0"
+                                ItemsSource="{Binding ListCollection, Mode=TwoWay}"
+                                DragAndDropEndedCommand="{Binding ListDragAndDropFinishedCommand}"
+                                TapCommand="{Binding ListTappedCommand}">
+                <sho:CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <!--<SwipeView BackgroundColor="{DynamicResource PageBackgroundColor}">
-                            <SwipeView.RightItems>
-                                    <SwipeItems Mode="Execute">
-                                        <SwipeItem IconImageSource="icon_trash.png"
-                                                   Text="Delete"
-                                                   BackgroundColor="Red"
-                                                   Command="{Binding DeleteList}"
-                                                   CommandParameter="{Binding ListId}"/>
-                                    </SwipeItems>
-                            </SwipeView.RightItems>-->
-                                <StackLayout BackgroundColor="{DynamicResource PageBackgroundColor}"
-                                             Margin="6, 0"
-                                             VerticalOptions="FillAndExpand">
-                                    <Frame Margin="3"
-                                           CornerRadius="10">
-                                        <Label Text="{Binding Name}"
-                                               FontAttributes="Bold"/>
-                                    </Frame>
-                                </StackLayout>
-                            <!--</SwipeView>-->
-                        </ViewCell>
+                        <sho:DraggableViewCell>
+                            <StackLayout BackgroundColor="{DynamicResource PageBackgroundColor}"
+                                         Margin="6, 0"
+                                         VerticalOptions="FillAndExpand"
+                                         x:DataType="model:List">
+                                <Frame Margin="3"
+                                       CornerRadius="10">
+                                    <Label Text="{Binding Name}"
+                                           FontAttributes="Bold"/>
+                                </Frame>
+                            </StackLayout>
+                        </sho:DraggableViewCell>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
+                </sho:CollectionView.ItemTemplate>
+            </sho:CollectionView>
+        <!--</RefreshView>-->
         <Button RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Constant=-60}"
                 RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Constant=-60}"
                 Text="+"

@@ -26,6 +26,7 @@ namespace ListApp.ViewModels
         public ICommand ListTappedCommand { get; }
         public ICommand AddListCommand { get; }
         public ICommand DeleteList { get; }
+        public ICommand ListDragAndDropFinishedCommand { get; }
 
         public List SelectedList
         {
@@ -59,14 +60,6 @@ namespace ListApp.ViewModels
             }
         }
 
-        async private void OnListSelected(List list)
-        {
-            if (list == null)
-                return;
-
-            await Shell.Current.GoToAsync($"{nameof(ItemsPage)}?{nameof(ItemsViewModel.ListId)}={list.ListId}");
-        }
-
         public HomeViewModel()
         {
             Title = "List Freak";
@@ -74,9 +67,20 @@ namespace ListApp.ViewModels
             ListCollection = new ObservableCollection<List>();
 
             LoadListsCommand = new Command(async () => await ExecuteLoadListsCommand());
+            ListTappedCommand = new Command<List>(async (list) => await OnListSelected(list));
             AddListCommand = new Command(async () => await AddToListCollection());
             DeleteList = new Command<string>(async (listId) => await OnDeleteList(listId));
-            Task.Run(async () => await ExecuteLoadListsCommand());
+            ListDragAndDropFinishedCommand = new Command(async () => await OnListDragAndDropFinishedCommand());
+
+            new Action(async () => await ExecuteLoadListsCommand())();
+        }
+
+        async private Task OnListSelected(List list)
+        {
+            if (list == null)
+                return;
+
+            await Shell.Current.GoToAsync($"{nameof(ItemsPage)}?{nameof(ItemsViewModel.ListId)}={list.ListId}");
         }
 
         private async Task OnDeleteList(string listId)
@@ -101,17 +105,20 @@ namespace ListApp.ViewModels
             if (string.IsNullOrEmpty(newListName))
                 return;
 
+            int nextIndex = ListCollection.Any()
+                            ? ListCollection.Max(l => l.Index) + 1
+                            : 1;
+
             List list = new List()
             {
                 ListId = Guid.NewGuid().ToString(),
-                Name = newListName
+                Name = newListName,
+                Index = nextIndex
             };
 
             await DataStore.AddItemAsync(list);
 
             ListCollection.Add(list);
-
-            await Task.FromResult(true);
         }
 
         private async Task ExecuteLoadListsCommand()
@@ -122,7 +129,7 @@ namespace ListApp.ViewModels
             {
                 ListCollection.Clear();
                 var items = await DataStore.GetItemsAsync(true);
-                foreach (var item in items)
+                foreach (var item in items.OrderBy(list => list.Index))
                 {
                     ListCollection.Add(item);
                 }
@@ -135,6 +142,21 @@ namespace ListApp.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        private async Task OnListDragAndDropFinishedCommand()
+        {
+            UpdateListIndexes();
+            foreach (var list in ListCollection)
+            {
+                await DataStore.UpdateItemAsync(list);
+            }
+        }
+
+        private void UpdateListIndexes()
+        {
+            for (int i = 0; i < ListCollection.Count; i++)
+                ListCollection[i].Index = i;
         }
     }
 }

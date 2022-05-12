@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms;
 
 namespace ListApp.Views
 {
@@ -14,7 +11,6 @@ namespace ListApp.Views
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            this.ListListView.SelectedItem = null;
         }
     }
 }

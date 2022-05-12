@@ -41,7 +41,7 @@ namespace ListApp.ViewModels
             set
             {
                 _listId = value;
-                Task.Run(ExecuteLoadItemsCommand);
+                Task.Run(async () => await ExecuteLoadItemsCommand());
                 _currentList = DataStore.GetItemAsync(value).Result;
                 Title = _currentList.Name;
             }

@@ -19,7 +19,7 @@ namespace ListApp
 
             DependencyService.Register<EfListDataStore>();
             DependencyService.Register<EfListItemDataStore>();
-            DependencyService.Register<DialogService>();
+            DependencyService.RegisterSingleton(new DialogService());
 
             MainPage = new AppShell();
 
