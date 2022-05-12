@@ -17,6 +17,8 @@
                      Command="{Binding LoadListsCommand}" 
                      IsRefreshing="{Binding IsBusy, Mode=TwoWay}">-->
             <sho:CollectionView x:Name="ListCollectionView"
+                                RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}"
+                                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
                                 EnableDragAndDrop="True"
                                 ItemHeight="65"
                                 Margin="6, 3, 6, 0"

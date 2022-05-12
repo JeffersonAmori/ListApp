@@ -11,11 +11,6 @@
              Title="{Binding Title}"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              x:Name="BrowseItemsPage">
-    <!--
-      x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
-      https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
-    -->
-
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="⠪"
                      Order="Primary"
@@ -30,7 +25,7 @@
                      Command="{Binding DeleteListCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="FA"
-                                 Glyph="{StaticResource Trash}" 
+                                 Glyph="{StaticResource Trash}"
                                  Size="Medium"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
@@ -103,13 +98,10 @@
                                             BackgroundColor="Transparent"
                                             FontFamily="FA"
                                             Text="{StaticResource Trash}"
+                                            TextColor="{DynamicResource PrimaryTextColor}"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=DeleteItemCommand}"
                                             CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
                                             Margin="0">
-                                        <!--<Button.ImageSource>
-                                            <FontImageSource FontFamily="FA"
-                                                             Glyph="{StaticResource Trash}"/>
-                                        </Button.ImageSource>-->
                                     </Button>
                                     <Label x:Name="LabelId" 
                                            Text="{Binding Id}"
