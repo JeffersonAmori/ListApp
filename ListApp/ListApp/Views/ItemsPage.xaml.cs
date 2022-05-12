@@ -1,7 +1,4 @@
 ﻿using ListApp.ViewModels;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace ListApp.Views
@@ -20,11 +17,6 @@ namespace ListApp.Views
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
-        }
-
-        private void SwipeGestureRecognizer_Swiped(object sender, SwipedEventArgs e)
-        {
-
         }
     }
 }

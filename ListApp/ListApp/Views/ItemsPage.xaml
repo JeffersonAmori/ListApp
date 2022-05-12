@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:ListApp.ViewModels"
+             xmlns:vm="clr-namespace:ListApp.ViewModels"
              xmlns:model="clr-namespace:ListApp.Models" 
              xmlns:behaviors="clr-namespace:ListApp.Behaviors"
              xmlns:converters="clr-namespace:ListApp.Converters"
              xmlns:sho="http://sharpnado.com"
              x:Class="ListApp.Views.ItemsPage"
+             x:DataType="vm:ItemsViewModel"
              Title="{Binding Title}"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              x:Name="BrowseItemsPage">
@@ -18,10 +19,21 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="⠪"
                      Order="Primary"
-                     Command="{Binding ShareListCommand}"/>
-        <ToolbarItem Text="🗑"
-                     Order="Primary"
-                     Command="{Binding DeleteListCommand}"/>
+                     Command="{Binding ShareListCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FA"
+                                 Glyph="{StaticResource Share}"
+                                 Size="Medium"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Order="Primary"
+                     Command="{Binding DeleteListCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FA"
+                                 Glyph="{StaticResource Trash}" 
+                                 Size="Medium"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -30,16 +42,15 @@
     </ContentPage.Resources>
     <StackLayout>
         <StackLayout VerticalOptions="FillAndExpand">
-            <Entry 
-                x:Name="NewList"
-                Placeholder="Type here..."
-                ReturnType="Done"
-                Keyboard="Chat"
-                ClearButtonVisibility="WhileEditing"
-                ReturnCommandParameter="{x:Reference NewList}"
-                Text="{Binding NewItemText}"
-                TextColor="{DynamicResource SecondaryTextColor}"
-                PlaceholderColor="{DynamicResource SecondaryTextColor}">
+            <Entry x:Name="NewList"
+                   Placeholder="Type here..."
+                   ReturnType="Done"
+                   Keyboard="Chat"
+                   ClearButtonVisibility="WhileEditing"
+                   ReturnCommandParameter="{x:Reference NewList}"
+                   Text="{Binding NewItemText}"
+                   TextColor="{DynamicResource SecondaryTextColor}"
+                   PlaceholderColor="{DynamicResource SecondaryTextColor}">
                 <Entry.Behaviors>
                     <behaviors:EventToCommandBehavior EventName="Unfocused" 
                                                       Command="{Binding AddItemCommand}"/>
@@ -48,7 +59,7 @@
                                                       CommandParameter="{x:Reference NewList}"/>
                 </Entry.Behaviors>
             </Entry>
-            <RefreshView x:DataType="local:ItemsViewModel" 
+            <RefreshView x:DataType="vm:ItemsViewModel" 
                          Command="{Binding LoadItemsCommand}" 
                          IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
                 <sho:CollectionView x:Name="ItemsListView"
@@ -70,7 +81,7 @@
                                             TextColor="Black"
                                             BorderColor="Black"
                                             BorderWidth="1"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=CompletionItemButtonCommand}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=CompletionItemButtonCommand}"
                                             CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
                                             Text="{Binding Checked, Converter={StaticResource checkedTextConverter}}"
                                             Padding="0"
@@ -82,26 +93,27 @@
                                            TextColor="{DynamicResource SecondaryTextColor}">
                                         <Entry.Triggers>
                                             <DataTrigger TargetType="Entry"
-                                             Binding="{Binding Checked}"
-                                             Value="True">
+                                                         Binding="{Binding Checked}"
+                                                         Value="True">
                                                 <Setter Property="TextColor" Value="{DynamicResource DisabledTextColor}"/>
                                             </DataTrigger>
                                         </Entry.Triggers>
                                     </Entry>
-                                    <Button 
-                                Grid.Column="2"
-                                BackgroundColor="Transparent"
-                                Text="🗑"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=DeleteItemCommand}"
-                                CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
-                                Margin="0"/>
-                                    <Label 
-                                x:Name="LabelId" 
-                                Text="{Binding Id}"
-                                IsVisible="False"/>
-                                    <Grid.GestureRecognizers>
-                                        <SwipeGestureRecognizer Direction="Right" Swiped="SwipeGestureRecognizer_Swiped" />
-                                    </Grid.GestureRecognizers>
+                                    <Button Grid.Column="2"
+                                            BackgroundColor="Transparent"
+                                            FontFamily="FA"
+                                            Text="{StaticResource Trash}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=DeleteItemCommand}"
+                                            CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
+                                            Margin="0">
+                                        <!--<Button.ImageSource>
+                                            <FontImageSource FontFamily="FA"
+                                                             Glyph="{StaticResource Trash}"/>
+                                        </Button.ImageSource>-->
+                                    </Button>
+                                    <Label x:Name="LabelId" 
+                                           Text="{Binding Id}"
+                                           IsVisible="False"/>
                                 </Grid>
                             </sho:DraggableViewCell>
                         </DataTemplate>

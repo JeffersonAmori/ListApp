@@ -56,7 +56,7 @@ namespace ListApp.ViewModels
             {
                 _shouldRefresh = value;
                 if (_shouldRefresh)
-                    Task.Run(ExecuteLoadListsCommand);
+                    new Action(async () => ExecuteLoadListsCommand())();
             }
         }
 

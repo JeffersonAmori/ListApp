@@ -1,5 +1,4 @@
 ﻿using ListApp.Views;
-using System;
 using Xamarin.Forms;
 
 namespace ListApp

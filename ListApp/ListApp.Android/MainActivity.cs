@@ -13,6 +13,7 @@ namespace ListApp.Droid
             base.OnCreate(savedInstanceState);
 
             Sharpnado.CollectionView.Droid.Initializer.Initialize();
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
