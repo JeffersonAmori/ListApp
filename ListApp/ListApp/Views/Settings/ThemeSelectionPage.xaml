@@ -4,9 +4,32 @@
              xmlns:vm="clr-namespace:ListApp.ViewModels.Settings" 
              xmlns:models="clr-namespace:ListApp.Models"
              x:Class="ListApp.Views.Settings.ThemeSelectionPage">
+    
     <ContentPage.BindingContext>
         <vm:ThemeSelectionViewModel/>
     </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style TargetType="StackLayout" ApplyToDerivedTypes="True">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{DynamicResource SecondaryColor}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+    
     <ContentPage.Content>
         <StackLayout>
             <CollectionView x:DataType="vm:ThemeSelectionViewModel" 

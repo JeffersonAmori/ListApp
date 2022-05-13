@@ -6,6 +6,7 @@
         River,
         Bee,
         Quartzo,
-        Night
+        Night,
+        Inferno
     }
 }

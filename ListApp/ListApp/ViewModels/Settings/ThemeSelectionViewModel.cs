@@ -64,6 +64,9 @@ namespace ListApp.ViewModels.Settings
                         case var value when value == typeof(NightTheme).FullName:
                             SelectedTheme = Theme.Night;
                             break;
+                        case var value when value == typeof(InfernoTheme).FullName:
+                            SelectedTheme = Theme.Inferno;
+                            break;
                         default:
                             SelectedTheme = Theme.Forest;
                             break;

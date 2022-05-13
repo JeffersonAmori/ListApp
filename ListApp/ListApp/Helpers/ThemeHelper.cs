@@ -31,6 +31,9 @@ namespace ListApp.Helpers
                     case Theme.Night:
                         mergedDictionaries.Add(new NightTheme());
                         break;
+                    case Theme.Inferno:
+                        mergedDictionaries.Add(new InfernoTheme());
+                        break;
                     default:
                         mergedDictionaries.Add(new ForestTheme());
                         break;
