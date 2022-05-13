@@ -31,6 +31,7 @@ namespace ListApp.ViewModels
         public ICommand ItemDragAndDropFinishedCommand { get; }
         public ICommand ItemTapped { get; }
         public ICommand CompletionItemButtonCommand { get; }
+        public ICommand CompletedListItemEntryCommand { get; }
 
         public string ListId
         {
@@ -58,6 +59,7 @@ namespace ListApp.ViewModels
             AddItemCompletedCommand = new Command(OnAddItemCompletedCommand);
             ShareListCommand = new Command(OnShareListCommand);
             ItemDragAndDropFinishedCommand = new Command(OnItemDragAndDropFinishedCommand);
+            CompletedListItemEntryCommand = new Command<ListItem>(OnCompletedListItemEntryCommand);
         }
 
         async Task ExecuteLoadItemsCommand()
@@ -116,6 +118,9 @@ namespace ListApp.ViewModels
         {
             for (int i = 0; i < Items.Count; i++)
                 Items[i].Index = i;
+
+            //for (int i = 0; i < _currentList.ListItems.Count; i++)
+            //    _currentList.ListItems[i].Index = i;
         }
 
         private async void OnAddItem()
@@ -123,11 +128,11 @@ namespace ListApp.ViewModels
             if (string.IsNullOrEmpty(NewItemText))
                 return;
 
-            int nextIndex = Items.Any() 
-                            ? Items.Max(i => i.Index) + 1 
+            int nextIndex = Items.Any()
+                            ? Items.Max(i => i.Index) + 1
                             : 1;
 
-            ListItem listITem = new ListItem()
+            ListItem listItem = new ListItem()
             {
                 ListId = _currentList.ListId,
                 Id = Guid.NewGuid().ToString(),
@@ -135,9 +140,9 @@ namespace ListApp.ViewModels
                 Index = nextIndex
             };
 
-            Items.Add(listITem);
+            Items.Add(listItem);
 
-            _currentList.ListItems.Add(listITem);
+            _currentList.ListItems.Add(listItem);
             await DataStore.UpdateItemAsync(_currentList);
 
             NewItemText = string.Empty;
@@ -152,6 +157,7 @@ namespace ListApp.ViewModels
             _currentList.ListItems.Remove(listITem);
             await DataStore.UpdateItemAsync(_currentList);
             Items.Remove(Items.First(i => i.Id == id.ToString()));
+            UpdateListItemsIndexes();
         }
 
         private async void OnDeleteList()
@@ -200,11 +206,11 @@ namespace ListApp.ViewModels
             await DataStore.UpdateItemAsync(_currentList);
         }
 
-        private void OnShareListCommand(object obj)
+        private async void OnShareListCommand(object obj)
         {
             if (Items.Count == 0)
             {
-                DialogService.DisplayAlert("Nothing to share", "The current list is empty.", "OK");
+                await DialogService.DisplayAlert("Nothing to share", "The current list is empty.", "OK");
                 return;
             }
 
@@ -215,7 +221,29 @@ namespace ListApp.ViewModels
                 listAsTextStringBuilder.Append($"\n - {item.Text}");
             }
 
-            Share.RequestAsync(listAsTextStringBuilder.ToString(), _currentList.Name);
+            await Share.RequestAsync(listAsTextStringBuilder.ToString(), _currentList.Name);
+        }
+
+        private async void OnCompletedListItemEntryCommand(ListItem listItem)
+        {
+            ListItem newListItem = new ListItem()
+            {
+                ListId = _currentList.ListId,
+                Id = Guid.NewGuid().ToString(),
+                Text = listItem.Text
+            };
+
+            if (Items.Count == listItem.Index)
+                Items.Add(newListItem);
+            else
+                Items.Insert(listItem.Index, newListItem);
+
+            listItem.Text = string.Empty;
+
+            UpdateListItemsIndexes();
+
+            _currentList.ListItems.Add(newListItem);
+            await DataStore.UpdateItemAsync(_currentList);
         }
     }
 }

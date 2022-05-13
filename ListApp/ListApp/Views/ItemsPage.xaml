@@ -83,8 +83,10 @@
                                             Padding="0"
                                             Margin="2">
                                     </Button>
-                                    <Entry Grid.Column="1"
+                                    <Entry x:Name="ListItemDescriptionEntry" 
+                                           Grid.Column="1"
                                            Margin="0"
+                                           Completed="ListItemDescriptionEntry_Completed"
                                            Text="{Binding Text}"
                                            TextColor="{DynamicResource SecondaryTextColor}">
                                         <Entry.Triggers>
