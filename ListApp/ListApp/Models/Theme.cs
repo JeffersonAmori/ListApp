@@ -7,6 +7,7 @@
         Bee,
         Quartzo,
         Night,
-        Inferno
+        Inferno,
+        London
     }
 }

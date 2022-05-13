@@ -34,6 +34,9 @@ namespace ListApp.Helpers
                     case Theme.Inferno:
                         mergedDictionaries.Add(new InfernoTheme());
                         break;
+                    case Theme.London:
+                        mergedDictionaries.Add(new LondonTheme());
+                        break;
                     default:
                         mergedDictionaries.Add(new ForestTheme());
                         break;
