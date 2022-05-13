@@ -62,32 +62,6 @@ namespace ListApp.ViewModels
             CompletedListItemEntryCommand = new Command<ListItem>(OnCompletedListItemEntryCommand);
         }
 
-        async Task ExecuteLoadItemsCommand()
-        {
-            IsBusy = true;
-
-            try
-            {
-                if (_currentList is null) return;
-
-                Items.Clear();
-                foreach (var item in _currentList.ListItems.OrderBy(li => li.Index))
-                {
-                    Items.Add(item);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-
-            await Task.FromResult(Task.CompletedTask);
-        }
-
         public void OnAppearing()
         {
             IsBusy = true;
@@ -113,6 +87,31 @@ namespace ListApp.ViewModels
             }
         }
 
+        private async Task ExecuteLoadItemsCommand()
+        {
+            IsBusy = true;
+
+            try
+            {
+                if (_currentList is null) return;
+
+                Items.Clear();
+                foreach (var item in _currentList.ListItems.OrderBy(li => li.Index))
+                {
+                    Items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+            await Task.FromResult(Task.CompletedTask);
+        }
 
         private void UpdateListItemsIndexes()
         {
