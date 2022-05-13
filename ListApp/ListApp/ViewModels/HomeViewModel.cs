@@ -2,6 +2,7 @@
 using ListApp.Services.Interfaces;
 using ListApp.Views;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -17,11 +18,21 @@ namespace ListApp.ViewModels
         private string _newListText;
         private List _selectedList;
         private bool _shouldRefresh;
+        private List<IListVisualItem> _listVisualItemCollection;
 
         public ObservableCollection<List> ListCollection { get; }
+        public List<IListVisualItem> ListVisualItemCollection
+        {
+            get => _listVisualItemCollection;
+            set
+            {
+                _listVisualItemCollection = value;
+                OnPropertyChanged();
+            }
+        }
+
         public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
         public IDialogService DialogService => DependencyService.Get<IDialogService>();
-
         public ICommand LoadListsCommand { get; }
         public ICommand ListTappedCommand { get; }
         public ICommand AddListCommand { get; }
@@ -56,7 +67,7 @@ namespace ListApp.ViewModels
             {
                 _shouldRefresh = value;
                 if (_shouldRefresh)
-                    new Action(async () => ExecuteLoadListsCommand())();
+                    new Action(async () => await ExecuteLoadListsCommand())();
             }
         }
 
@@ -65,6 +76,7 @@ namespace ListApp.ViewModels
             Title = "List Freak";
 
             ListCollection = new ObservableCollection<List>();
+            ListVisualItemCollection = new List<IListVisualItem>();
 
             LoadListsCommand = new Command(async () => await ExecuteLoadListsCommand());
             ListTappedCommand = new Command<List>(async (list) => await OnListSelected(list));
@@ -133,6 +145,17 @@ namespace ListApp.ViewModels
                 {
                     ListCollection.Add(item);
                 }
+
+                var result = new List<IListVisualItem>() /*{ new ListHeader() }*/;
+
+                foreach (var group in ListCollection.OrderBy(list => list.IsDeleted).GroupBy(list => list.IsDeleted))
+                {
+                    result.Add(new ListGroupHeader() { Name = group.Key ? "Deleted" : "Active" });
+                    result.AddRange(group.Select(list => list));
+                }
+
+                //result.Add(new ListFooter());
+                ListVisualItemCollection = result;
             }
             catch (Exception ex)
             {

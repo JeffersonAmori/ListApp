@@ -161,13 +161,9 @@ namespace ListApp.ViewModels
 
         private async void OnDeleteList()
         {
-            bool deleteList = await DialogService.DisplayAlert($"Delete list {_currentList.Name}?", "This action cannot be undone.", "Yes", "No");
-
-            if (deleteList)
-            {
-                await DataStore.DeleteItemAsync(_currentList.ListId);
-                await Shell.Current.GoToAsync($"..?{nameof(HomeViewModel.ShouldRefresh)}={true}");
-            }
+            _currentList.IsDeleted = true;
+            await DataStore.UpdateItemAsync(_currentList);
+            await Shell.Current.GoToAsync($"..?{nameof(HomeViewModel.ShouldRefresh)}={true}");
         }
 
         private async void OnCompletionButtonClicked(string Id)

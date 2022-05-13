@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ListApp.ViewModels"
              xmlns:model="clr-namespace:ListApp.Models" 
-             xmlns:sho="http://sharpnado.com"
+             xmlns:sho="http://sharpnado.com" 
+             xmlns:templateselectors="clr-namespace:ListApp.Views.TemplateSelectors"
              x:Class="ListApp.Views.HomePage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              Title="{Binding Title}">
@@ -12,37 +13,61 @@
         <vm:HomeViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.Resources>
+        <DataTemplate x:Key="HeaderTemplate">
+            <sho:DraggableViewCell x:Name="DraggableViewCell" IsDraggable="False">
+                <Label Text="Header" />
+            </sho:DraggableViewCell>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FooterTemplate">
+            <sho:DraggableViewCell x:Name="DraggableViewCell" IsDraggable="False">
+                <Label Text="Footer" />
+            </sho:DraggableViewCell>
+        </DataTemplate>
+
+        <DataTemplate x:Key="GroupHeaderTemplate" x:DataType="model:ListGroupHeader">
+            <sho:DraggableViewCell x:Name="DraggableViewCell" IsDraggable="False">
+                <Label Text="{Binding Name}"
+                       TextColor="{DynamicResource PrimaryColor}"/>
+            </sho:DraggableViewCell>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ListTemplate">
+            <sho:DraggableViewCell x:Name="DraggableViewCell">
+                <StackLayout BackgroundColor="{DynamicResource PageBackgroundColor}"
+                             Margin="6, 0"
+                             VerticalOptions="FillAndExpand"
+                             x:DataType="model:List">
+                    <Frame Margin="3"
+                           CornerRadius="10">
+                        <Label Text="{Binding Name}"
+                               FontAttributes="Bold"/>
+                    </Frame>
+                </StackLayout>
+            </sho:DraggableViewCell>
+        </DataTemplate>
+
+        <templateselectors:ListVisualElementHeaderFooterGroupingTemplateSelector 
+            x:Key="HeaderFooterGroupingTemplateSelector"
+            ListTemplate="{StaticResource ListTemplate}"
+            FooterTemplate="{sho:SizedDataTemplate Template={StaticResource FooterTemplate}, Size=60}"
+            GroupHeaderTemplate="{sho:SizedDataTemplate Template={StaticResource GroupHeaderTemplate}, Size=30}"
+            HeaderTemplate="{sho:SizedDataTemplate Template={StaticResource HeaderTemplate}, Size=40}" />
+    </ContentPage.Resources>
+
     <RelativeLayout>
-        <!--<RefreshView x:DataType="vm:HomeViewModel" 
-                     Command="{Binding LoadListsCommand}" 
-                     IsRefreshing="{Binding IsBusy, Mode=TwoWay}">-->
-            <sho:CollectionView x:Name="ListCollectionView"
-                                RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}"
-                                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
-                                EnableDragAndDrop="True"
-                                ItemHeight="65"
-                                Margin="6, 3, 6, 0"
-                                ItemsSource="{Binding ListCollection, Mode=TwoWay}"
-                                DragAndDropEndedCommand="{Binding ListDragAndDropFinishedCommand}"
-                                TapCommand="{Binding ListTappedCommand}">
-                <sho:CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <sho:DraggableViewCell>
-                            <StackLayout BackgroundColor="{DynamicResource PageBackgroundColor}"
-                                         Margin="6, 0"
-                                         VerticalOptions="FillAndExpand"
-                                         x:DataType="model:List">
-                                <Frame Margin="3"
-                                       CornerRadius="10">
-                                    <Label Text="{Binding Name}"
-                                           FontAttributes="Bold"/>
-                                </Frame>
-                            </StackLayout>
-                        </sho:DraggableViewCell>
-                    </DataTemplate>
-                </sho:CollectionView.ItemTemplate>
-            </sho:CollectionView>
-        <!--</RefreshView>-->
+        <sho:CollectionView x:Name="ListCollectionView"
+                            RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}"
+                            RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                            EnableDragAndDrop="True"
+                            ItemHeight="65"
+                            Margin="6, 3, 6, 0"
+                            ItemTemplate="{StaticResource HeaderFooterGroupingTemplateSelector}"
+                            ItemsSource="{Binding ListVisualItemCollection, Mode=TwoWay}"
+                            DragAndDropEndedCommand="{Binding ListDragAndDropFinishedCommand}"
+                            TapCommand="{Binding ListTappedCommand}">
+        </sho:CollectionView>
         <Button RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Constant=-60}"
                 RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Constant=-60}"
                 Text="+"

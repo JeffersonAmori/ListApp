@@ -44,7 +44,7 @@ namespace ListApp.Services
         }
 
         public async Task<bool> UpdateItemAsync(List list)
-        {   
+        {
             _context.Lists.Update(list);
 
             await _context.SaveChangesAsync();
