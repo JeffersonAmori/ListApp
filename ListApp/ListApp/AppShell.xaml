@@ -16,7 +16,7 @@
                              Glyph="{x:Static fonts:FontAwesome6SolidIcons.HouseChimney}"
                              Color="{DynamicResource PrimaryTextColor}" />
         </FlyoutItem.Icon>
-        <ShellContent Route="HomePage" ContentTemplate="{DataTemplate views:HomePage}" />
+        <ShellContent Route="ListPage" ContentTemplate="{DataTemplate views:ListPage}" />
     </FlyoutItem>
     <FlyoutItem Title="Settings">
         <FlyoutItem.Icon>

@@ -2,9 +2,9 @@
 
 namespace ListApp.Views
 {
-    public partial class HomePage : ContentPage
+    public partial class ListPage : ContentPage
     {
-        public HomePage()
+        public ListPage()
         {
             InitializeComponent();
         }

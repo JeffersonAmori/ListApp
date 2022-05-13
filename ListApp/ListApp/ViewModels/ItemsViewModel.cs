@@ -163,7 +163,7 @@ namespace ListApp.ViewModels
         {
             _currentList.IsDeleted = true;
             await DataStore.UpdateItemAsync(_currentList);
-            await Shell.Current.GoToAsync($"..?{nameof(HomeViewModel.ShouldRefresh)}={true}");
+            await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
         }
 
         private async void OnCompletionButtonClicked(string Id)

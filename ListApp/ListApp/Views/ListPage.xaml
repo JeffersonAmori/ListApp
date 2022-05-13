@@ -5,12 +5,12 @@
              xmlns:model="clr-namespace:ListApp.Models" 
              xmlns:sho="http://sharpnado.com" 
              xmlns:templateselectors="clr-namespace:ListApp.Views.TemplateSelectors"
-             x:Class="ListApp.Views.HomePage"
+             x:Class="ListApp.Views.ListPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              Title="{Binding Title}">
 
     <ContentPage.BindingContext>
-        <vm:HomeViewModel />
+        <vm:ListViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Resources>

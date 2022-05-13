@@ -13,7 +13,7 @@ using Xamarin.Forms;
 namespace ListApp.ViewModels
 {
     [QueryProperty(nameof(ShouldRefresh), nameof(ShouldRefresh))]
-    public class HomeViewModel : BaseViewModel
+    public class ListViewModel : BaseViewModel
     {
         private string _newListText;
         private List _selectedList;
@@ -71,7 +71,7 @@ namespace ListApp.ViewModels
             }
         }
 
-        public HomeViewModel()
+        public ListViewModel()
         {
             Title = "List Freak";
 
@@ -106,7 +106,7 @@ namespace ListApp.ViewModels
             if (deleteList)
             {
                 await DataStore.DeleteItemAsync(currentList.ListId);
-                await Shell.Current.GoToAsync($"..?{nameof(HomeViewModel.ShouldRefresh)}={true}");
+                await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
             }
         }
 
