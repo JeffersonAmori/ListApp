@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:local="clr-namespace:ListApp.Views" 
+       xmlns:views="clr-namespace:ListApp.Views" 
+       xmlns:fonts="clr-namespace:ListApp.Resources.Fonts"
        x:Class="ListApp.AppShell"
        TitleColor="{DynamicResource PrimaryTextColor}"
        BackgroundColor="{DynamicResource PrimaryColor}"
@@ -12,26 +13,26 @@
     <FlyoutItem Title="Home">
         <FlyoutItem.Icon>
             <FontImageSource FontFamily="FA"
-                             Glyph="{StaticResource Home}"
+                             Glyph="{x:Static fonts:FontAwesome6SolidIcons.HouseChimney}"
                              Color="{DynamicResource PrimaryTextColor}" />
         </FlyoutItem.Icon>
-        <ShellContent Route="HomePage" ContentTemplate="{DataTemplate local:HomePage}" />
+        <ShellContent Route="HomePage" ContentTemplate="{DataTemplate views:HomePage}" />
     </FlyoutItem>
     <FlyoutItem Title="Settings">
         <FlyoutItem.Icon>
             <FontImageSource FontFamily="FA"
-                             Glyph="{StaticResource Gear}"
+                             Glyph="{x:Static fonts:FontAwesome6SolidIcons.Gear}"
                              Color="{DynamicResource PrimaryTextColor}" />
         </FlyoutItem.Icon>
-        <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate local:SettingsPage}" />
+        <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate views:SettingsPage}" />
     </FlyoutItem>
     <FlyoutItem Title="About">
         <FlyoutItem.Icon>
             <FontImageSource FontFamily="FA"
-                             Glyph="{StaticResource CircleInfo}"
+                             Glyph="{x:Static fonts:FontAwesome6SolidIcons.CircleInfo}"
                              Color="{DynamicResource PrimaryTextColor}" />
         </FlyoutItem.Icon>
-        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
+        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate views:AboutPage}" />
     </FlyoutItem>
     
 </Shell>

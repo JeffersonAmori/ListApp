@@ -9,12 +9,6 @@
         <ResourceDictionary>
             <ResourceDictionary Source="Themes/ForestTheme.xaml" />
 
-            <x:String x:Key="Home">&#xe3af;</x:String>
-            <x:String x:Key="Gear">&#x2699;</x:String>
-            <x:String x:Key="CircleInfo">&#xf05a;</x:String>
-            <x:String x:Key="Trash">&#xf1f8;</x:String>
-            <x:String x:Key="Share">&#xf1e0;</x:String>
-
             <Style x:Key="ButtonStyle" TargetType="Button">
                 <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
                 <Setter Property="TextColor" Value="{DynamicResource SecondaryColor}" />

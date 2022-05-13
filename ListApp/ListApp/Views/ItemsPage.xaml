@@ -6,6 +6,7 @@
              xmlns:behaviors="clr-namespace:ListApp.Behaviors"
              xmlns:converters="clr-namespace:ListApp.Converters"
              xmlns:sho="http://sharpnado.com"
+             xmlns:fonts="clr-namespace:ListApp.Resources.Fonts"
              x:Class="ListApp.Views.ItemsPage"
              x:DataType="vm:ItemsViewModel"
              Title="{Binding Title}"
@@ -17,7 +18,7 @@
                      Command="{Binding ShareListCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="FA"
-                                 Glyph="{StaticResource Share}"
+                                 Glyph="{x:Static fonts:FontAwesome6SolidIcons.ShareNodes}"
                                  Size="Medium"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
@@ -25,7 +26,7 @@
                      Command="{Binding DeleteListCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="FA"
-                                 Glyph="{StaticResource Trash}"
+                                 Glyph="{x:Static fonts:FontAwesome6SolidIcons.Trash}"
                                  Size="Medium"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
@@ -97,7 +98,7 @@
                                     <Button Grid.Column="2"
                                             BackgroundColor="Transparent"
                                             FontFamily="FA"
-                                            Text="{StaticResource Trash}"
+                                            Text="{x:Static fonts:FontAwesome6SolidIcons.Trash}"
                                             TextColor="{DynamicResource PrimaryTextColor}"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=DeleteItemCommand}"
                                             CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
