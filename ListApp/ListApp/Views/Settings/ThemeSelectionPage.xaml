@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:vm="clr-namespace:ListApp.ViewModels.Settings" 
+             xmlns:models="clr-namespace:ListApp.Models"
+             x:Class="ListApp.Views.Settings.ThemeSelectionPage">
+    <ContentPage.BindingContext>
+        <vm:ThemeSelectionViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout>
+            <CollectionView x:DataType="vm:ThemeSelectionViewModel" 
+                            VerticalOptions="FillAndExpand"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedTheme}"
+                            ItemsSource="{Binding Themes}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="10"
+                                       Orientation="Vertical"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Theme">
+                        <StackLayout>
+                            <Label Text="{Binding .}"
+                                   FontSize="Large"
+                                   HorizontalTextAlignment="Center"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

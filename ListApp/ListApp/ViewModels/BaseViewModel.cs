@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace ListApp.ViewModels
@@ -48,5 +49,7 @@ namespace ListApp.ViewModels
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
+
+        public ICommand NavigateToCommand { get; set; } = new Command<string>(async (target) => await Shell.Current.GoToAsync(target));
     }
 }

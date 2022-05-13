@@ -1,4 +1,5 @@
 ﻿using ListApp.Views;
+using ListApp.Views.Settings;
 using Xamarin.Forms;
 
 namespace ListApp
@@ -9,6 +10,7 @@ namespace ListApp
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(ItemsPage), typeof(ItemsPage));
+            Routing.RegisterRoute(nameof(ThemeSelectionPage), typeof(ThemeSelectionPage));
         }
     }
 }

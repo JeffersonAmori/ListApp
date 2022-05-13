@@ -2,24 +2,54 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ListApp.ViewModels"
+             xmlns:fonts="clr-namespace:ListApp.Resources.Fonts" 
              x:Class="ListApp.Views.SettingsPage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}"
              Title="Settings">
 
     <ContentPage.BindingContext>
         <vm:SettingsViewModel></vm:SettingsViewModel>
     </ContentPage.BindingContext>
 
-    <ContentPage.Content
-                     BackgroundColor="{DynamicResource PageBackgroundColor}">
-        <StackLayout HorizontalOptions="FillAndExpand"
-                     BackgroundColor="{DynamicResource PageBackgroundColor}">
-                <Label Text="Theme"
-                       VerticalOptions="Center"
-                       Style="{StaticResource SecondaryLabel}"/>
-                <Picker Title="Theme"
-                        HorizontalOptions="FillAndExpand"
-                        ItemsSource="{Binding Themes}"
-                        SelectedItem="{Binding SelectedTheme}"/>
-        </StackLayout>
+    <ContentPage.Content>
+        <TableView VerticalOptions="FillAndExpand"
+                   Intent="Settings"
+                   HasUnevenRows="True"
+                   Margin="10">
+            <TableRoot>
+                <TableSection>
+                    <ViewCell>
+                        <Grid RowDefinitions="Auto, *"
+                              ColumnDefinitions="Auto, *">
+                            <Image Grid.Row="0"
+                                   Grid.Column="0"
+                                   Grid.RowSpan="2">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="FA"
+                                                     Glyph="{x:Static fonts:FontAwesome6SolidIcons.Palette}"
+                                                     Color="{DynamicResource PrimaryColor}"/>
+                                </Image.Source>
+                            </Image>
+                            <Label Grid.Row="0"
+                                   Grid.Column="1"
+                                   Text="Themes"
+                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                   FontSize="Title"
+                                   FontAttributes="Bold"/>
+                            <Label Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="Pick an awesome new theme for the app."
+                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                   FontSize="Subtitle"/>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                      Command="{Binding NavigateToCommand}"
+                                                      CommandParameter="ThemeSelectionPage"/>
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </ViewCell>
+                </TableSection>
+            </TableRoot>
+        </TableView>
     </ContentPage.Content>
 </ContentPage>
