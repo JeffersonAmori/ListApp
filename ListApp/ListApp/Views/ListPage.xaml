@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:model="clr-namespace:ListApp.Models" 
+             xmlns:vm="clr-namespace:ListApp.ViewModels" 
              xmlns:sho="http://sharpnado.com" 
              xmlns:templateselectors="clr-namespace:ListApp.Views.TemplateSelectors"
              x:Class="ListApp.Views.ListPage"
@@ -51,7 +52,7 @@
             HeaderTemplate="{sho:SizedDataTemplate Template={StaticResource HeaderTemplate}, Size=40}" />
     </ContentPage.Resources>
 
-    <RelativeLayout>
+    <RelativeLayout x:DataType="vm:ListViewModel">
         <sho:CollectionView x:Name="ListCollectionView"
                             RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}"
                             RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
@@ -69,6 +70,7 @@
                 FontSize="Large"
                 CornerRadius="50"
                 WidthRequest="50"
+                IsVisible="{Binding IsDeleted, Converter={StaticResource InvertedBoolConverter}}"
                 Command="{Binding AddListCommand}"
                 TextColor="{DynamicResource PrimaryTextColor}"
                 BackgroundColor="{DynamicResource PrimaryColor}"/>

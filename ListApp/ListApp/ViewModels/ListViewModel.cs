@@ -80,8 +80,6 @@ namespace ListApp.ViewModels
 
         public ListViewModel()
         {
-            Title = "List Freak";
-
             ListCollection = new ObservableCollection<List>();
             ListVisualItemCollection = new List<IListVisualItem>();
 
@@ -92,6 +90,7 @@ namespace ListApp.ViewModels
             ListDragAndDropFinishedCommand = new Command(async () => await OnListDragAndDropFinishedCommand());
 
             IsDeleted = Shell.Current.CurrentItem.CurrentItem.Route == "IMPL_RecycleBin";
+            Title = IsDeleted ? "Recycle bin" : "List Freak";
         }
 
         public void OnAppearing()
