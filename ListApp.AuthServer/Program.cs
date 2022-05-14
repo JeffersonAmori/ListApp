@@ -6,7 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var config = builder.Configuration;
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -16,14 +15,13 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 
-//builder.Services.AddAuthentication()
-//    .AddCookie()
-//    .AddGoogle(options =>
-//    {
-//        IConfigurationSection googleAuthNSection = config.GetSection("Authentication:Google");
-//        options.ClientId = googleAuthNSection["ClientId"];
-//        options.ClientSecret = googleAuthNSection["ClientSecret"];
-//    });
+builder.Services.AddAuthentication()
+    .AddCookie()
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+        googleOptions.ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+    });
 
 var app = builder.Build();
 
