@@ -163,6 +163,7 @@ namespace ListApp.ViewModels
 
         private async void OnDeleteList()
         {
+            Task dialogTask = Task.FromResult(true);
             if (_currentList.IsDeleted)
             {
                 bool deleteList = await DialogService.DisplayAlert($"Delete list {_currentList.Name}?", "This action cannot be undone.", "Yes", "No");
@@ -170,15 +171,18 @@ namespace ListApp.ViewModels
                 if (deleteList)
                 {
                     await DataStore.DeleteItemAsync(_currentList.ListId);
+                    dialogTask =DialogService.DisplayToastAsync("List deleted.");
                 }
             }
             else
             {
                 _currentList.IsDeleted = true;
                 await DataStore.UpdateItemAsync(_currentList);
+                dialogTask = DialogService.DisplayToastAsync("List moved to trash.");
             }
 
             await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+            await dialogTask;
         }
 
         private async void OnCompletionButtonClicked(string Id)

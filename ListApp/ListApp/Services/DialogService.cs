@@ -1,6 +1,7 @@
 ﻿using ListApp.Services.Interfaces;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.CommunityToolkit.Extensions;
 
 namespace ListApp.Services
 {
@@ -19,6 +20,11 @@ namespace ListApp.Services
         public async Task<string> DisplayPromptAsync(string title, string message, string accept = "OK", string cancel = "Cancel", string placeholder = null, int maxLength = -1, Keyboard keyboard = null, string initialValue = "")
         {
             return await Application.Current.MainPage.DisplayPromptAsync(title, message, accept, cancel, placeholder, maxLength, keyboard, initialValue);
+        }
+
+        public async Task DisplayToastAsync(string message)
+        {
+            await Application.Current.MainPage.DisplayToastAsync(message);
         }
     }
 }
