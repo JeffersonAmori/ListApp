@@ -37,26 +37,27 @@
     </ContentPage.Resources>
     <StackLayout VerticalOptions="FillAndExpand">
         <Entry x:Name="NewList"
-                   Placeholder="Type here..."
-                   ReturnType="Done"
-                   Keyboard="Chat"
-                   ClearButtonVisibility="WhileEditing"
-                   ReturnCommandParameter="{x:Reference NewList}"
-                   Text="{Binding NewItemText}"
-                   TextColor="{DynamicResource SecondaryTextColor}"
-                   PlaceholderColor="{DynamicResource SecondaryTextColor}">
+               Placeholder="Type here..."
+               ReturnType="Done"
+               Keyboard="Chat"
+               IsEnabled="{Binding IsDeletedList, Converter={StaticResource InvertedBoolConverter}}"
+               ClearButtonVisibility="WhileEditing"
+               ReturnCommandParameter="{x:Reference NewList}"
+               Text="{Binding NewItemText}"
+               TextColor="{DynamicResource SecondaryTextColor}"
+               PlaceholderColor="{DynamicResource SecondaryTextColor}">
             <Entry.Behaviors>
                 <behaviors:EventToCommandBehavior EventName="Unfocused" 
-                                                      Command="{Binding AddItemCommand}"/>
+                                                  Command="{Binding AddItemCommand}"/>
                 <behaviors:EventToCommandBehavior EventName="Completed" 
-                                                      Command="{Binding AddItemCompletedCommand}"
-                                                      CommandParameter="{x:Reference NewList}"/>
+                                                  Command="{Binding AddItemCompletedCommand}"
+                                                  CommandParameter="{x:Reference NewList}"/>
             </Entry.Behaviors>
         </Entry>
-        <ScrollView>
+        <ScrollView VerticalOptions="FillAndExpand">
             <sho:CollectionView x:Name="ItemsListView"
                                 DragAndDropEndedCommand="{Binding ItemDragAndDropFinishedCommand}"
-                                EnableDragAndDrop="True"
+                                EnableDragAndDrop="{Binding IsDeletedList, Converter={StaticResource InvertedBoolConverter}}"
                                 DisableScroll="False"
                                 ItemHeight="50"
                                 VerticalOptions="FillAndExpand"
@@ -77,6 +78,7 @@
                                         BorderWidth="1"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=CompletionItemButtonCommand}"
                                         CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
+                                        IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=IsDeletedList, Converter={StaticResource InvertedBoolConverter}}"
                                         Text="{Binding Checked, Converter={StaticResource checkedTextConverter}}"
                                         Padding="0"
                                         Margin="2">
@@ -84,6 +86,7 @@
                                 <Entry x:Name="ListItemDescriptionEntry" 
                                        Grid.Column="1"
                                        Margin="0"
+                                       IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=IsDeletedList, Converter={StaticResource InvertedBoolConverter}}"
                                        Completed="ListItemDescriptionEntry_Completed"
                                        Text="{Binding Text}"
                                        TextColor="{DynamicResource SecondaryTextColor}">
@@ -97,6 +100,7 @@
                                 </Entry>
                                 <Button Grid.Column="2"
                                         BackgroundColor="Transparent"
+                                        IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=IsDeletedList, Converter={StaticResource InvertedBoolConverter}}"
                                         FontFamily="FA"
                                         Text="{x:Static fonts:FontAwesome6SolidIcons.Trash}"
                                         TextColor="{DynamicResource PrimaryTextColor}"
