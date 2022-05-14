@@ -18,6 +18,7 @@ namespace ListApp.ViewModels
         private string _newListText;
         private List _selectedList;
         private bool _shouldRefresh;
+        private bool _isDeleted;
         private List<IListVisualItem> _listVisualItemCollection;
 
         public ObservableCollection<List> ListCollection { get; }
@@ -71,6 +72,12 @@ namespace ListApp.ViewModels
             }
         }
 
+        public bool IsDeleted
+        {
+            get { return _isDeleted; }
+            set { _isDeleted = value; }
+        }
+
         public ListViewModel()
         {
             Title = "List Freak";
@@ -84,6 +91,11 @@ namespace ListApp.ViewModels
             DeleteList = new Command<string>(async (listId) => await OnDeleteList(listId));
             ListDragAndDropFinishedCommand = new Command(async () => await OnListDragAndDropFinishedCommand());
 
+            IsDeleted = Shell.Current.CurrentItem.CurrentItem.Route == "IMPL_RecycleBin";
+        }
+
+        public void OnAppearing()
+        {
             new Action(async () => await ExecuteLoadListsCommand())();
         }
 
@@ -140,7 +152,7 @@ namespace ListApp.ViewModels
             try
             {
                 ListCollection.Clear();
-                var items = await DataStore.GetItemsAsync(true);
+                var items = (await DataStore.GetItemsAsync(true)).Where(list => list.IsDeleted == IsDeleted);
                 foreach (var item in items.OrderBy(list => list.Index))
                 {
                     ListCollection.Add(item);

@@ -6,18 +6,13 @@ namespace ListApp.Views
 {
     public partial class ItemsPage : ContentPage
     {
+        private const int RestoreListFromTrashBinToolItemIndex = 0;
         ItemsViewModel _viewModel;
 
         public ItemsPage()
         {
             InitializeComponent();
             BindingContext = _viewModel = new ItemsViewModel();
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            _viewModel.OnAppearing();
         }
 
         private void ListItemDescriptionEntry_Completed(object sender, System.EventArgs e)

@@ -18,6 +18,14 @@
         </FlyoutItem.Icon>
         <ShellContent Route="ListPage" ContentTemplate="{DataTemplate views:ListPage}" />
     </FlyoutItem>
+    <FlyoutItem Title="Recycle bin">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FA"
+                             Glyph="{x:Static fonts:FontAwesome6SolidIcons.Recycle}"
+                             Color="{DynamicResource PrimaryTextColor}" />
+        </FlyoutItem.Icon>
+        <ShellContent Route="RecycleBin" ContentTemplate="{DataTemplate views:ListPage}" />
+    </FlyoutItem>
     <FlyoutItem Title="Settings">
         <FlyoutItem.Icon>
             <FontImageSource FontFamily="FA"

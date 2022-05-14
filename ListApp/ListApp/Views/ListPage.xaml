@@ -1,17 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:ListApp.ViewModels"
              xmlns:model="clr-namespace:ListApp.Models" 
              xmlns:sho="http://sharpnado.com" 
              xmlns:templateselectors="clr-namespace:ListApp.Views.TemplateSelectors"
              x:Class="ListApp.Views.ListPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              Title="{Binding Title}">
-
-    <ContentPage.BindingContext>
-        <vm:ListViewModel />
-    </ContentPage.BindingContext>
 
     <ContentPage.Resources>
         <DataTemplate x:Key="HeaderTemplate">
@@ -64,7 +59,7 @@
                             ItemHeight="65"
                             Margin="6, 3, 6, 0"
                             ItemTemplate="{StaticResource HeaderFooterGroupingTemplateSelector}"
-                            ItemsSource="{Binding ListVisualItemCollection, Mode=TwoWay}"
+                            ItemsSource="{Binding ListCollection, Mode=TwoWay}"
                             DragAndDropEndedCommand="{Binding ListDragAndDropFinishedCommand}"
                             TapCommand="{Binding ListTappedCommand}">
         </sho:CollectionView>

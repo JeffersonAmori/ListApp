@@ -32,6 +32,7 @@ namespace ListApp.ViewModels
         public ICommand ItemTapped { get; }
         public ICommand CompletionItemButtonCommand { get; }
         public ICommand CompletedListItemEntryCommand { get; }
+        public ICommand RestoreListFromTrashBin { get; }
 
         public string ListId
         {
@@ -42,10 +43,16 @@ namespace ListApp.ViewModels
             set
             {
                 _listId = value;
-                Task.Run(async () => await ExecuteLoadItemsCommand());
                 _currentList = DataStore.GetItemAsync(value).Result;
+                Task.Run(async () => await ExecuteLoadItemsCommand());
+                OnPropertyChanged(nameof(IsDeletedList));
                 Title = _currentList.Name;
             }
+        }
+
+        public bool IsDeletedList
+        {
+            get => _currentList?.IsDeleted ?? false;
         }
 
         public ItemsViewModel()
@@ -60,12 +67,7 @@ namespace ListApp.ViewModels
             ShareListCommand = new Command(OnShareListCommand);
             ItemDragAndDropFinishedCommand = new Command(OnItemDragAndDropFinishedCommand);
             CompletedListItemEntryCommand = new Command<ListItem>(OnCompletedListItemEntryCommand);
-        }
-
-        public void OnAppearing()
-        {
-            IsBusy = true;
-            SelectedItem = null;
+            RestoreListFromTrashBin = new Command(OnRestoreListFromTrashBin);
         }
 
         public ListItem SelectedItem
@@ -161,8 +163,21 @@ namespace ListApp.ViewModels
 
         private async void OnDeleteList()
         {
-            _currentList.IsDeleted = true;
-            await DataStore.UpdateItemAsync(_currentList);
+            if (_currentList.IsDeleted)
+            {
+                bool deleteList = await DialogService.DisplayAlert($"Delete list {_currentList.Name}?", "This action cannot be undone.", "Yes", "No");
+
+                if (deleteList)
+                {
+                    await DataStore.DeleteItemAsync(_currentList.ListId);
+                }
+            }
+            else
+            {
+                _currentList.IsDeleted = true;
+                await DataStore.UpdateItemAsync(_currentList);
+            }
+
             await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
         }
 
@@ -239,6 +254,13 @@ namespace ListApp.ViewModels
 
             _currentList.ListItems.Add(newListItem);
             await DataStore.UpdateItemAsync(_currentList);
+        }
+
+        private async void OnRestoreListFromTrashBin()
+        {
+            _currentList.IsDeleted = false;
+            await DataStore.UpdateItemAsync(_currentList);
+            await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
         }
     }
 }
