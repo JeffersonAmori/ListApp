@@ -13,16 +13,6 @@
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              x:Name="BrowseItemsPage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="RestoreListFromTrashBinToolItem"
-                     Order="Primary"
-                     IsEnabled="{Binding IsDeletedList}"
-                     Command="{Binding RestoreListFromTrashBin}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FA"
-                                 Glyph="{x:Static fonts:FontAwesome6SolidIcons.ArrowRotateLeft}"
-                                 Size="Medium"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
         <ToolbarItem Order="Primary"
                      Command="{Binding ShareListCommand}">
             <ToolbarItem.IconImageSource>
@@ -45,9 +35,8 @@
             <converters:CheckedTextConverter x:Key="checkedTextConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <StackLayout>
-        <StackLayout VerticalOptions="FillAndExpand">
-            <Entry x:Name="NewList"
+    <StackLayout VerticalOptions="FillAndExpand">
+        <Entry x:Name="NewList"
                    Placeholder="Type here..."
                    ReturnType="Done"
                    Keyboard="Chat"
@@ -56,89 +45,87 @@
                    Text="{Binding NewItemText}"
                    TextColor="{DynamicResource SecondaryTextColor}"
                    PlaceholderColor="{DynamicResource SecondaryTextColor}">
-                <Entry.Behaviors>
-                    <behaviors:EventToCommandBehavior EventName="Unfocused" 
+            <Entry.Behaviors>
+                <behaviors:EventToCommandBehavior EventName="Unfocused" 
                                                       Command="{Binding AddItemCommand}"/>
-                    <behaviors:EventToCommandBehavior EventName="Completed" 
+                <behaviors:EventToCommandBehavior EventName="Completed" 
                                                       Command="{Binding AddItemCompletedCommand}"
                                                       CommandParameter="{x:Reference NewList}"/>
-                </Entry.Behaviors>
-            </Entry>
-            <RefreshView x:DataType="vm:ItemsViewModel" 
-                         Command="{Binding LoadItemsCommand}" 
-                         IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-                <sho:CollectionView x:Name="ItemsListView"
-                                    DragAndDropEndedCommand="{Binding ItemDragAndDropFinishedCommand}"
-                                    EnableDragAndDrop="True"
-                                    ItemHeight="50"
-                                    ItemsSource="{Binding Items, Mode=TwoWay}">
-                    <sho:CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <sho:DraggableViewCell>
-                                <Grid x:Name="ItemsGrid"
-                                      x:DataType="model:ListItem"
-                                      ColumnDefinitions="10*,80*,10*"
-                                      HorizontalOptions="FillAndExpand"
-                                      Padding="2"
-                                      Margin="0,0,0,-5">
-                                    <Button Grid.Column="0"
-                                            BackgroundColor="Transparent"
-                                            TextColor="Black"
-                                            BorderColor="Black"
-                                            BorderWidth="1"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=CompletionItemButtonCommand}"
-                                            CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
-                                            Text="{Binding Checked, Converter={StaticResource checkedTextConverter}}"
-                                            Padding="0"
-                                            Margin="2">
-                                    </Button>
-                                    <Entry x:Name="ListItemDescriptionEntry" 
-                                           Grid.Column="1"
-                                           Margin="0"
-                                           Completed="ListItemDescriptionEntry_Completed"
-                                           Text="{Binding Text}"
-                                           TextColor="{DynamicResource SecondaryTextColor}">
-                                        <Entry.Triggers>
-                                            <DataTrigger TargetType="Entry"
-                                                         Binding="{Binding Checked}"
-                                                         Value="True">
-                                                <Setter Property="TextColor" Value="{DynamicResource DisabledTextColor}"/>
-                                            </DataTrigger>
-                                        </Entry.Triggers>
-                                    </Entry>
-                                    <Button Grid.Column="2"
-                                            BackgroundColor="Transparent"
-                                            FontFamily="FA"
-                                            Text="{x:Static fonts:FontAwesome6SolidIcons.Trash}"
-                                            TextColor="{DynamicResource PrimaryTextColor}"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=DeleteItemCommand}"
-                                            CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
-                                            Margin="0">
-                                    </Button>
-                                    <Label x:Name="LabelId" 
-                                           Text="{Binding Id}"
-                                           IsVisible="False"/>
-                                </Grid>
-                            </sho:DraggableViewCell>
-                        </DataTemplate>
-                    </sho:CollectionView.ItemTemplate>
-                </sho:CollectionView>
-            </RefreshView>
-            <Button Text="Restore list"
-                    TextColor="{DynamicResource PrimaryTextColor}"
-                    IsVisible="{Binding IsDeletedList}"
-                    Margin="20"
-                    CornerRadius="50"
-                    BackgroundColor="{DynamicResource SecondaryColor}"
-                    Command="{Binding RestoreListFromTrashBin}" >
-                <Button.ImageSource>
-                    <FontImageSource FontFamily="FA"
-                                     Glyph="{x:Static fonts:FontAwesome6SolidIcons.ArrowRotateLeft}"
-                                     Size="Medium"/>
-                </Button.ImageSource>
-            </Button>
+            </Entry.Behaviors>
+        </Entry>
+        <ScrollView>
+            <sho:CollectionView x:Name="ItemsListView"
+                                DragAndDropEndedCommand="{Binding ItemDragAndDropFinishedCommand}"
+                                EnableDragAndDrop="True"
+                                DisableScroll="False"
+                                ItemHeight="50"
+                                VerticalOptions="FillAndExpand"
+                                ItemsSource="{Binding Items, Mode=TwoWay}">
+                <sho:CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <sho:DraggableViewCell>
+                            <Grid x:Name="ItemsGrid"
+                                  x:DataType="model:ListItem"
+                                  ColumnDefinitions="10*,80*,10*"
+                                  HorizontalOptions="FillAndExpand"
+                                  Padding="2"
+                                  Margin="0,0,0,-5">
+                                <Button Grid.Column="0"
+                                        BackgroundColor="Transparent"
+                                        TextColor="Black"
+                                        BorderColor="Black"
+                                        BorderWidth="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=CompletionItemButtonCommand}"
+                                        CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
+                                        Text="{Binding Checked, Converter={StaticResource checkedTextConverter}}"
+                                        Padding="0"
+                                        Margin="2">
+                                </Button>
+                                <Entry x:Name="ListItemDescriptionEntry" 
+                                       Grid.Column="1"
+                                       Margin="0"
+                                       Completed="ListItemDescriptionEntry_Completed"
+                                       Text="{Binding Text}"
+                                       TextColor="{DynamicResource SecondaryTextColor}">
+                                    <Entry.Triggers>
+                                        <DataTrigger TargetType="Entry"
+                                                     Binding="{Binding Checked}"
+                                                     Value="True">
+                                            <Setter Property="TextColor" Value="{DynamicResource DisabledTextColor}"/>
+                                        </DataTrigger>
+                                    </Entry.Triggers>
+                                </Entry>
+                                <Button Grid.Column="2"
+                                        BackgroundColor="Transparent"
+                                        FontFamily="FA"
+                                        Text="{x:Static fonts:FontAwesome6SolidIcons.Trash}"
+                                        TextColor="{DynamicResource PrimaryTextColor}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=DeleteItemCommand}"
+                                        CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
+                                        Margin="0">
+                                </Button>
+                                <Label x:Name="LabelId" 
+                                       Text="{Binding Id}"
+                                       IsVisible="False"/>
+                            </Grid>
+                        </sho:DraggableViewCell>
+                    </DataTemplate>
+                </sho:CollectionView.ItemTemplate>
+            </sho:CollectionView>
+        </ScrollView>
+        <Button Text="Restore list"
+                TextColor="{DynamicResource PrimaryTextColor}"
+                IsVisible="{Binding IsDeletedList}"
+                Margin="20"
+                CornerRadius="50"
+                BackgroundColor="{DynamicResource SecondaryColor}"
+                Command="{Binding RestoreListFromTrashBin}" >
+            <Button.ImageSource>
+                <FontImageSource FontFamily="FA"
+                                 Glyph="{x:Static fonts:FontAwesome6SolidIcons.ArrowRotateLeft}"
+                                 Size="Medium"/>
+            </Button.ImageSource>
+        </Button>
 
-        </StackLayout>
     </StackLayout>
-
 </ContentPage>

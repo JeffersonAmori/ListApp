@@ -6,7 +6,6 @@ namespace ListApp.Views
 {
     public partial class ItemsPage : ContentPage
     {
-        private const int RestoreListFromTrashBinToolItemIndex = 0;
         ItemsViewModel _viewModel;
 
         public ItemsPage()
