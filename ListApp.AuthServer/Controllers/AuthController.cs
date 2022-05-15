@@ -38,7 +38,7 @@ namespace ListApp.AuthServer.Controllers
                     { "refresh_token", auth.Properties.GetTokenValue("refresh_token") ?? string.Empty },
                     { "expires", (auth.Properties.ExpiresUtc?.ToUnixTimeSeconds() ?? -1).ToString() },
                     { "email", email },
-                    { "email", name }
+                    { "name", name }
                 };
 
                 // Build the result url
