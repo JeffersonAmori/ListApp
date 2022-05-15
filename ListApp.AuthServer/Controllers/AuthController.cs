@@ -26,8 +26,10 @@ namespace ListApp.AuthServer.Controllers
             else
             {
                 var claims = auth.Principal.Identities.FirstOrDefault()?.Claims;
+                var name = string.Empty;
                 var email = string.Empty;
                 email = claims?.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+                name = claims?.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value;
 
                 // Get parameters to send back to the callback
                 var qs = new Dictionary<string, string>
@@ -35,7 +37,8 @@ namespace ListApp.AuthServer.Controllers
                     { "access_token", auth.Properties.GetTokenValue("access_token") },
                     { "refresh_token", auth.Properties.GetTokenValue("refresh_token") ?? string.Empty },
                     { "expires", (auth.Properties.ExpiresUtc?.ToUnixTimeSeconds() ?? -1).ToString() },
-                    { "email", email }
+                    { "email", email },
+                    { "email", name }
                 };
 
                 // Build the result url
