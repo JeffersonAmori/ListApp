@@ -21,6 +21,7 @@ builder.Services.AddAuthentication()
     {
         googleOptions.ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
         googleOptions.ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+        googleOptions.SaveTokens = true;
     });
 
 var app = builder.Build();
