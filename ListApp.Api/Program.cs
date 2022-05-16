@@ -71,11 +71,15 @@ app.MapPost("/lists", async (ApiModel.List list, ListContext db, [FromServices] 
 
 app.MapPut("/lists/{id}", async (long id, ApiModel.List list, ListContext db, [FromServices] IMapper mapper) =>
 {
-    var localList = await db.Lists.FindAsync(id);
+    var oldList = await db.Lists.FindAsync(id);
 
-    if (localList is null) return Results.NotFound();
+    if (oldList is null) return Results.NotFound();
 
-    localList = mapper.Map<DatabaseModel.List>(list);
+    db.Remove(oldList);
+
+    var updatedList = mapper.Map<DatabaseModel.List>(list);
+
+    await db.AddAsync(updatedList);
 
     await db.SaveChangesAsync();
 

@@ -17,15 +17,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{42AD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListApp.AuthServer", "ListApp.AuthServer\ListApp.AuthServer.csproj", "{DFE42BAF-FF9F-4779-8808-6A22696478BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListApp.Api", "ListApp.Api\ListApp.Api.csproj", "{76611DFC-67E5-4F4A-979D-B782A8C3249D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListApp.Api", "ListApp.Api\ListApp.Api.csproj", "{76611DFC-67E5-4F4A-979D-B782A8C3249D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{FC3B33B9-74C9-4A0F-807C-346C4E4118DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListApp.Abstractions", "ListApp.Abstractions\ListApp.Abstractions.csproj", "{EF3C4C84-84D3-4D2D-A04E-D22B2D000E4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListApp.Abstractions", "ListApp.Abstractions\ListApp.Abstractions.csproj", "{EF3C4C84-84D3-4D2D-A04E-D22B2D000E4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListApp.Api.Database", "ListApp.Api.Database\ListApp.Api.Database.csproj", "{05986EE5-4C20-44B4-95BA-AD2FE4C13849}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListApp.Api.Database", "ListApp.Api.Database\ListApp.Api.Database.csproj", "{05986EE5-4C20-44B4-95BA-AD2FE4C13849}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListApp.Api.Models", "ListApp.Api.Models\ListApp.Api.Models.csproj", "{6666FA87-BEBF-4765-B999-A24A2F7FCC17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListApp.Api.Models", "ListApp.Api.Models\ListApp.Api.Models.csproj", "{6666FA87-BEBF-4765-B999-A24A2F7FCC17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListApp.Console.Dummy.EntityFramework", "ListApp.Console.Dummy.EntityFramework\ListApp.Console.Dummy.EntityFramework.csproj", "{9045C3EF-22A6-45FD-9946-1EB229C8A12C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +153,18 @@ Global
 		{6666FA87-BEBF-4765-B999-A24A2F7FCC17}.Release|iPhone.Build.0 = Release|Any CPU
 		{6666FA87-BEBF-4765-B999-A24A2F7FCC17}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{6666FA87-BEBF-4765-B999-A24A2F7FCC17}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Release|iPhone.Build.0 = Release|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,6 +180,7 @@ Global
 		{EF3C4C84-84D3-4D2D-A04E-D22B2D000E4E} = {FC3B33B9-74C9-4A0F-807C-346C4E4118DA}
 		{05986EE5-4C20-44B4-95BA-AD2FE4C13849} = {42ADA215-EE0E-4D50-8006-AE7EF4C90138}
 		{6666FA87-BEBF-4765-B999-A24A2F7FCC17} = {42ADA215-EE0E-4D50-8006-AE7EF4C90138}
+		{9045C3EF-22A6-45FD-9946-1EB229C8A12C} = {9B043DB7-2D9A-46D6-B37C-CE4B40F5CC27}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F373641A-E18C-465C-953B-7297591F8E38}
