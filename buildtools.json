@@ -1,0 +1,61 @@
+{
+  "$schema": "https://mobilebuildtools.com/schemas/v2/buildtools.schema.json",
+  "appConfig": {
+    "strategy": "TransformOnly"
+  },
+  "artifactCopy": {
+    "disable": false
+  },
+  "automaticVersioning": {
+    "behavior": "PreferBuildNumber",
+    "environment": "All",
+    "versionOffset": 0
+  },
+  "css": {
+    "minify": false,
+    "bundleScss": false
+  },
+  "images": {
+    "directories": [],
+    "conditionalDirectories": {
+      "Debug": [],
+      "!Debug": [],
+      "iOS": [],
+      "Android": []
+    }
+  },
+  "manifests": {
+    "token": "$",
+    "variablePrefix": "Manifest_",
+    "missingTokensAsErrors": false,
+    "disable": true
+  },
+  "releaseNotes": {
+    "maxDays": 7,
+    "maxCommit": 10,
+    "characterLimit": 250,
+    "filename": "ReleaseNotes.txt",
+    "createInRoot": false,
+    "disable": true
+  },
+  "appSettings": {
+    "ListApp": [
+      {
+        "className": "Secrets",
+        "accessibility": "Internal",
+        "namespace": "Helpers",
+        "properties": [
+          {
+            "name": "ListFreakApiEndpoint",
+            "type": "Uri"
+          },
+          {
+            "name": "ListFreakAuthServerEndpoint",
+            "type": "Uri"
+          }
+        ]
+      }
+    ]
+  },
+  "debug": true
+}

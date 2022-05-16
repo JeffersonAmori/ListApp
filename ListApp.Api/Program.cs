@@ -7,8 +7,6 @@ using DatabaseModel = ListApp.Api.Database.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -36,11 +34,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
 app.MapGet("/", () => "List Freak API");
 
 app.MapGet("/lists", async (ListContext db, [FromServices] IMapper mapper) =>
-      mapper.Map<List<ApiModel.List>>(await db.Lists.Include(x => x.ListItems).ToListAsync()));
+      mapper.Map<List<ApiModel.List>>(
+          await db.Lists
+            .Include(x => x.ListItems)
+            .ToListAsync()));
 
 app.MapGet("/lists/{id}", async (long id, ListContext db, [FromServices] IMapper mapper) =>
     await db.Lists.Include(x => x.ListItems).FirstOrDefaultAsync(x => x.Id == id)
@@ -53,6 +53,13 @@ app.MapGet("/lists/guid/{guid}", async (string guid, ListContext db, [FromServic
         is DatabaseModel.List list
             ? Results.Ok(mapper.Map<ApiModel.List>(list))
             : Results.NotFound());
+
+app.MapGet("/lists/ownerEmail/{email}", async (string email, ListContext db, [FromServices] IMapper mapper) =>
+    mapper.Map<List<ApiModel.List>>(
+        await db.Lists
+            .Include(x => x.ListItems)
+            .Where(x => x.OwnerEmail == email)
+            .ToListAsync()));
 
 app.MapPost("/lists", async (ApiModel.List list, ListContext db, [FromServices] IMapper mapper) =>
      {

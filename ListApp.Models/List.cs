@@ -9,8 +9,7 @@ namespace ListApp.Models
 
     public class List : IListVisualItem
     {
-        public long Id { get; set; }
-        public string Guid { get; set; }
+        public string Id { get; set; }
         public int Index { get; set; }
         public string Name { get; set; }
         public bool IsDeleted { get; set; }

@@ -15,8 +15,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ListApp.Models\ListApp.Models.csproj" />
-  </ItemGroup>
-
 </Project>
