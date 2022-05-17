@@ -61,6 +61,15 @@ namespace ListApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ApplicationUserInfo.
+        /// </summary>
+        internal static string ApplicationUserInfo {
+            get {
+                return ResourceManager.GetString("ApplicationUserInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CurrentAppTheme.
         /// </summary>
         internal static string CurrentAppTheme {

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using Mobile.BuildTools.Configuration;
+using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace ListApp.Models
@@ -20,9 +22,11 @@ namespace ListApp.Models
 
         public string Text { get; set; }
         public string Description { get; set; }
-
         public string ListId { get; set; }
         public int Index { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastChangedDate { get; set; }
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

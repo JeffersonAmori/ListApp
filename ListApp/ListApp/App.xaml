@@ -18,7 +18,9 @@
 
             <Style x:Key="ButtonStyle" TargetType="Button">
                 <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
-                <Setter Property="TextColor" Value="{DynamicResource SecondaryColor}" />
+                <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+                <Setter Property="Margin" Value="10" />
+                <Setter Property="CornerRadius" Value="20" />
             </Style>
 
             <Style TargetType="Frame">

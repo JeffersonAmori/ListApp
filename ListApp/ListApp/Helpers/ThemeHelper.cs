@@ -13,7 +13,7 @@ namespace ListApp.Helpers
             if (mergedDictionaries != null)
             {
                 mergedDictionaries.Clear();
-
+                
                 switch (selectedTheme)
                 {
                     case Theme.Forest:

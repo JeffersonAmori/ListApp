@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:model="clr-namespace:ListApp.Models" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:model="clr-namespace:ListApp.Models"
              xmlns:vm="clr-namespace:ListApp.ViewModels" 
              xmlns:sho="http://sharpnado.com" 
              xmlns:templateselectors="clr-namespace:ListApp.Views.TemplateSelectors"

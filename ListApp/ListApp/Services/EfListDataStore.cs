@@ -31,17 +31,11 @@ namespace ListApp.Services
             return true;
         }
 
-        public async Task<List> GetItemAsync(string id)
-        {
-            List list = await _context.Lists.FirstAsync(l => l.ListId == id);
-            list.ListItems = _context.ListItems.Where(x => x.ListId == list.ListId).ToList();
-            return list;
-        }
+        public async Task<List> GetItemAsync(string id) =>
+            await _context.Lists.Include(x => x.ListItems).FirstAsync(l => l.ListId == id);
 
-        public async Task<IEnumerable<List>> GetItemsAsync(bool forceRefresh = false)
-        {
-            return await _context.Lists.ToListAsync();
-        }
+        public async Task<IEnumerable<List>> GetItemsAsync(bool forceRefresh = false) =>
+            await _context.Lists.Include(x => x.ListItems).ToListAsync();
 
         public async Task<bool> UpdateItemAsync(List list)
         {

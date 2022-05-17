@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ListApp.ViewModels"
-             xmlns:model="clr-namespace:ListApp.Models" 
+             xmlns:model="clr-namespace:ListApp.Models"
              xmlns:behaviors="clr-namespace:ListApp.Behaviors"
              xmlns:converters="clr-namespace:ListApp.Converters"
              xmlns:sho="http://sharpnado.com"
