@@ -75,17 +75,7 @@ app.MapPut("/lists/{id}", async (long id, ApiModel.List list, ListContext db, [F
 
     if (oldList is null) return Results.NotFound();
 
-    foreach (var oldListItem in oldList.ListItems)
-        db.Remove(oldListItem);
-
-    db.Remove(oldList);
-
-    var updatedList = mapper.Map<DatabaseModel.List>(list);
-
-    await db.AddAsync(updatedList);
-
-    foreach (var listItem in updatedList.ListItems)
-        await db.ListItems.AddAsync(mapper.Map<DatabaseModel.ListItem>(listItem));
+    mapper.Map(list, oldList);
 
     await db.SaveChangesAsync();
 
