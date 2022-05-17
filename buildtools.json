@@ -52,6 +52,10 @@
           {
             "name": "ListFreakAuthServerEndpoint",
             "type": "Uri"
+          },
+          {
+            "name": "AppCenterAndroidAppSecret",
+            "type": "String"
           }
         ]
       }
