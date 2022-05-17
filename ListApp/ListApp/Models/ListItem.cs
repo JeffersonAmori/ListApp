@@ -1,5 +1,4 @@
-﻿using Mobile.BuildTools.Configuration;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
