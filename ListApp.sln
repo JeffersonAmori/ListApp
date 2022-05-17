@@ -50,6 +50,7 @@ Global
 		{E535D5A5-E307-4E7D-817B-72F999859A75}.Debug|iPhoneSimulator.Deploy.0 = Debug|Any CPU
 		{E535D5A5-E307-4E7D-817B-72F999859A75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E535D5A5-E307-4E7D-817B-72F999859A75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E535D5A5-E307-4E7D-817B-72F999859A75}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{E535D5A5-E307-4E7D-817B-72F999859A75}.Release|iPhone.ActiveCfg = Release|Any CPU
 		{E535D5A5-E307-4E7D-817B-72F999859A75}.Release|iPhone.Build.0 = Release|Any CPU
 		{E535D5A5-E307-4E7D-817B-72F999859A75}.Release|iPhone.Deploy.0 = Release|Any CPU
