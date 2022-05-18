@@ -63,14 +63,14 @@ namespace ListApp
         /// </summary>
         public void SetupCurrentTheme()
         {
-            var currentTheme = Preferences.Get(PreferencesKeys.CurrentAppTheme, null);
-
-            if (currentTheme == null)
-                return;
-
-            if (Enum.TryParse(currentTheme, out Theme currentThemeEnum))
+            try
             {
-                ThemeHelper.SetAppTheme(currentThemeEnum);
+                if (Preferences.Get(PreferencesKeys.CurrentAppTheme, null) is string currentTheme)
+                    if (Enum.TryParse(currentTheme, out Theme currentThemeEnum))
+                        ThemeHelper.SetAppTheme(currentThemeEnum);
+            }
+            catch (Exception ex)
+            {
             }
         }
 
@@ -82,8 +82,7 @@ namespace ListApp
         {
             if (Preferences.Get(PreferencesKeys.ApplicationUserInfo, null) is string user)
                 ApplicationUser.Current.Set(
-                    JsonSerializer.Deserialize<ApplicationUser>(
-                        user));
+                    JsonSerializer.Deserialize<ApplicationUser>(user));
         }
     }
 }
