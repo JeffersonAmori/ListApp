@@ -6,7 +6,7 @@ name: ListFreakAuthServer - Build and deploy ASP.Net Core app to Azure Web App
 on:
   push:
     branches:
-      - deploy/authserver
+      - deploy/AuthServer
   workflow_dispatch:
 
 jobs:

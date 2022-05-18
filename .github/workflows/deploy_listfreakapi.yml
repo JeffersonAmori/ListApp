@@ -6,7 +6,7 @@ name: ListFreakApi - Build and deploy ASP.Net Core app to Azure Web App
 on:
   push:
     branches:
-      - deploy/listapi
+      - deploy/ListApi
   workflow_dispatch:
 
 jobs:
