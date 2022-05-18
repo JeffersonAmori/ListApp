@@ -4,22 +4,23 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace ListApp.Services
 {
     public class ListContext : DbContext
     {
-        private ILogger _logger = DependencyService.Get<ILogger>();
+        private ILogger _logger;
         public DbSet<List> Lists { get; set; }
         public DbSet<ListItem> ListItems { get; set; }
 
-        public ListContext()
+        public ListContext(ILogger logger)
         {
-            SQLitePCL.Batteries_V2.Init();
+            _logger = logger;
 
             try
             {
+                SQLitePCL.Batteries_V2.Init();
+
                 string dbPath = Path.Combine(FileSystem.AppDataDirectory, "listApp.db3");
                 if (!File.Exists(dbPath))
                     File.Create(dbPath);

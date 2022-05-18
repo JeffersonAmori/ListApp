@@ -29,6 +29,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListApp.Api.Models", "ListA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListApp.Console.Dummy.EntityFramework", "ListApp.Console.Dummy.EntityFramework\ListApp.Console.Dummy.EntityFramework.csproj", "{9045C3EF-22A6-45FD-9946-1EB229C8A12C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC690784-E583-4806-AD2A-F883524E6232}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListApp.UnitTests", "ListApp.UnitTests\ListApp.UnitTests.csproj", "{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -160,6 +164,18 @@ Global
 		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Release|iPhone.Build.0 = Release|Any CPU
 		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{9045C3EF-22A6-45FD-9946-1EB229C8A12C}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Release|Any CPU.Build.0 = Release|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Release|iPhone.Build.0 = Release|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,6 +192,7 @@ Global
 		{05986EE5-4C20-44B4-95BA-AD2FE4C13849} = {42ADA215-EE0E-4D50-8006-AE7EF4C90138}
 		{6666FA87-BEBF-4765-B999-A24A2F7FCC17} = {42ADA215-EE0E-4D50-8006-AE7EF4C90138}
 		{9045C3EF-22A6-45FD-9946-1EB229C8A12C} = {9B043DB7-2D9A-46D6-B37C-CE4B40F5CC27}
+		{050F2545-6EE7-4DCF-8DC4-1AEB54B00048} = {EC690784-E583-4806-AD2A-F883524E6232}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F373641A-E18C-465C-953B-7297591F8E38}

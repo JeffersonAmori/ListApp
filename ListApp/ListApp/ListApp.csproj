@@ -37,6 +37,7 @@
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.1" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.5.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.16" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Mobile.BuildTools" Version="2.0.245" />
     <PackageReference Include="Sharpnado.CollectionView" Version="2.1.0" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.2" />

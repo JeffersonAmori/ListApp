@@ -11,7 +11,7 @@ namespace ListApp.Views
         public ItemsPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new ItemsViewModel();
+            BindingContext = _viewModel = (ItemsViewModel)App.GetViewModel<ItemsViewModel>();
         }
 
         private void ListItemDescriptionEntry_Completed(object sender, System.EventArgs e)

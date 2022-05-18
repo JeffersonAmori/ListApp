@@ -9,7 +9,7 @@ namespace ListApp.Helpers
 {
     internal static class ThemeHelper
     {
-        private static ILogger _logger = DependencyService.Get<ILogger>();
+        private static ILogger _logger;
 
         internal static bool SetAppTheme(Theme selectedTheme)
         {

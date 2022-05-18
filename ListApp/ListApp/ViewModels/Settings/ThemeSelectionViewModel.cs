@@ -13,8 +13,7 @@ namespace ListApp.ViewModels.Settings
 {
     public class ThemeSelectionViewModel : BaseViewModel
     {
-        private ILogger _logger = DependencyService.Get<ILogger>();
-
+        private ILogger _logger;
         private Array _themes;
         private Theme _selectedTheme;
 
@@ -39,8 +38,10 @@ namespace ListApp.ViewModels.Settings
             }
         }
 
-        public ThemeSelectionViewModel()
+        public ThemeSelectionViewModel(ILogger logger)
         {
+            _logger = logger;
+
             try
             {
                 Themes = Enum.GetValues(typeof(Theme));

@@ -10,7 +10,7 @@ namespace ListApp.Views
         public ListPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new ListViewModel();
+            BindingContext = _viewModel = (ListViewModel)App.GetViewModel<ListViewModel>();
         }
 
         protected override void OnAppearing()

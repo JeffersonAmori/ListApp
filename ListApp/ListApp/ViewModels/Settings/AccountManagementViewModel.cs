@@ -11,7 +11,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -21,14 +20,14 @@ namespace ListApp.ViewModels.Settings
 {
     public class AccountManagementViewModel : BaseViewModel
     {
-        private ILogger _logger = DependencyService.Get<ILogger>();
-        private IDataStore<List> _dataStore = DependencyService.Get<IDataStore<List>>();
-        private IDialogService _dialogService => DependencyService.Get<IDialogService>();
+        private ILogger _logger;
+        private IDataStore<List> _dataStore;
+        private IDialogService _dialogService;
+        private bool _isSyncing;
+
         public ICommand LoginWithGoogleCommand { get; }
         public ICommand SyncCommand { get; }
         public ICommand SignOutCommand { get; }
-        private bool _isSyncing;
-
 
         public bool IsSyncing
         {
@@ -40,12 +39,14 @@ namespace ListApp.ViewModels.Settings
             }
         }
 
-        public AccountManagementViewModel()
+        public AccountManagementViewModel(IDataStore<List> dataStore, IDialogService dialogService)
         {
             Title = "Account";
             LoginWithGoogleCommand = new Command(OnLoginWithGoogleCommand);
             SyncCommand = new Command(OnSyncCommand);
             SignOutCommand = new Command(OnSignOutCommand);
+            _dataStore = dataStore;
+            _dialogService = dialogService;
         }
 
         private async void OnLoginWithGoogleCommand()

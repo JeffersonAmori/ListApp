@@ -1,14 +1,19 @@
 ﻿using ListApp.Services.Interfaces;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-using Xamarin.CommunityToolkit.Extensions;
 using System;
+using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.Extensions;
+using Xamarin.Forms;
 
 namespace ListApp.Services
 {
     public class DialogService : IDialogService
     {
-        private ILogger _logger = DependencyService.Get<ILogger>();
+        private ILogger _logger;
+
+        public DialogService(ILogger logger)
+        {
+            _logger = logger;
+        }
 
         public async Task<bool> DisplayAlert(string title, string message, string accept, string cancel)
         {

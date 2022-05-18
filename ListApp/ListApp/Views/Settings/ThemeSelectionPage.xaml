@@ -4,10 +4,6 @@
              xmlns:vm="clr-namespace:ListApp.ViewModels.Settings" 
              xmlns:models="clr-namespace:ListApp.Models"
              x:Class="ListApp.Views.Settings.ThemeSelectionPage">
-    
-    <ContentPage.BindingContext>
-        <vm:ThemeSelectionViewModel/>
-    </ContentPage.BindingContext>
 
     <ContentPage.Resources>
         <Style TargetType="StackLayout" ApplyToDerivedTypes="True">

@@ -19,9 +19,10 @@ namespace ListApp.ViewModels
         private string _listId;
         private ListItem _selectedItem;
         private List _currentList;
-        private ILogger _logger = DependencyService.Get<ILogger>();
-        public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
-        public IDialogService DialogService => DependencyService.Get<IDialogService>();
+        private ILogger _logger;
+        private IDataStore<List> _dataStore;
+        private IDialogService _dialogService;
+
         public ObservableCollection<ListItem> Items { get; }
         public ICommand LoadItemsCommand { get; }
         public ICommand AddItemCommand { get; }
@@ -44,8 +45,8 @@ namespace ListApp.ViewModels
             set
             {
                 _listId = value;
-                _currentList = DataStore.GetItemAsync(value).Result;
-                Task.Run(async () => await ExecuteLoadItemsCommand());
+                _currentList = _dataStore.GetItemAsync(value).Result;
+                new Action(async () => await ExecuteLoadItemsCommand())();
                 OnPropertyChanged(nameof(IsDeletedList));
                 Title = _currentList.Name;
             }
@@ -56,7 +57,7 @@ namespace ListApp.ViewModels
             get => _currentList?.IsDeleted ?? false;
         }
 
-        public ItemsViewModel()
+        public ItemsViewModel(ILogger logger, IDataStore<List> dataStore, IDialogService dialogService)
         {
             Items = new ObservableCollection<ListItem>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
@@ -69,6 +70,9 @@ namespace ListApp.ViewModels
             ItemDragAndDropFinishedCommand = new Command(OnItemDragAndDropFinishedCommand);
             CompletedListItemEntryCommand = new Command<ListItem>(OnCompletedListItemEntryCommand);
             RestoreListFromTrashBin = new Command(OnRestoreListFromTrashBin);
+            _logger = logger;
+            _dataStore = dataStore;
+            _dialogService = dialogService;
         }
 
         public ListItem SelectedItem
@@ -144,7 +148,7 @@ namespace ListApp.ViewModels
                 Items.Add(listItem);
 
                 _currentList.ListItems.Add(listItem);
-                await DataStore.UpdateItemAsync(_currentList);
+                await _dataStore.UpdateItemAsync(_currentList);
 
                 NewItemText = string.Empty;
             }
@@ -161,7 +165,7 @@ namespace ListApp.ViewModels
                 try
                 {
                     _currentList.ListItems.Remove(listITem);
-                    await DataStore.UpdateItemAsync(_currentList);
+                    await _dataStore.UpdateItemAsync(_currentList);
                     Items.Remove(Items.First(i => i.Id == id.ToString()));
                     UpdateListItemsIndexes();
                 }
@@ -179,19 +183,19 @@ namespace ListApp.ViewModels
                 Task dialogTask = Task.FromResult(true);
                 if (_currentList.IsDeleted)
                 {
-                    bool deleteList = await DialogService.DisplayAlert($"Delete list {_currentList.Name}?", "This action cannot be undone.", "Yes", "No");
+                    bool deleteList = await _dialogService.DisplayAlert($"Delete list {_currentList.Name}?", "This action cannot be undone.", "Yes", "No");
 
                     if (deleteList)
                     {
-                        await DataStore.DeleteItemAsync(_currentList.ListId);
-                        dialogTask = DialogService.DisplayToastAsync("List deleted.");
+                        await _dataStore.DeleteItemAsync(_currentList.ListId);
+                        dialogTask = _dialogService.DisplayToastAsync("List deleted.");
                     }
                 }
                 else
                 {
                     _currentList.IsDeleted = true;
-                    await DataStore.UpdateItemAsync(_currentList);
-                    dialogTask = DialogService.DisplayToastAsync("List moved to trash.");
+                    await _dataStore.UpdateItemAsync(_currentList);
+                    dialogTask = _dialogService.DisplayToastAsync("List moved to trash.");
                 }
 
                 await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
@@ -221,7 +225,7 @@ namespace ListApp.ViewModels
                     OnPropertyChanged(nameof(Items));
 
                     UpdateListItemsIndexes();
-                    await DataStore.UpdateItemAsync(_currentList);
+                    await _dataStore.UpdateItemAsync(_currentList);
                 }
             }
             catch (Exception ex)
@@ -241,7 +245,7 @@ namespace ListApp.ViewModels
             try
             {
                 UpdateListItemsIndexes();
-                await DataStore.UpdateItemAsync(_currentList);
+                await _dataStore.UpdateItemAsync(_currentList);
             }
             catch (Exception ex)
             {
@@ -255,7 +259,7 @@ namespace ListApp.ViewModels
             {
                 if (Items.Count == 0)
                 {
-                    await DialogService.DisplayAlert("Nothing to share", "The current list is empty.", "OK");
+                    await _dialogService.DisplayAlert("Nothing to share", "The current list is empty.", "OK");
                     return;
                 }
 
@@ -295,7 +299,7 @@ namespace ListApp.ViewModels
                 UpdateListItemsIndexes();
 
                 _currentList.ListItems.Add(newListItem);
-                await DataStore.UpdateItemAsync(_currentList);
+                await _dataStore.UpdateItemAsync(_currentList);
             }
             catch (Exception ex)
             {
@@ -308,7 +312,7 @@ namespace ListApp.ViewModels
             try
             {
                 _currentList.IsDeleted = false;
-                await DataStore.UpdateItemAsync(_currentList);
+                await _dataStore.UpdateItemAsync(_currentList);
                 await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
             }
             catch (Exception ex)

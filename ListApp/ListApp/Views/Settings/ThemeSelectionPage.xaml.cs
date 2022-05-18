@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using ListApp.ViewModels.Settings;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace ListApp.Views.Settings
@@ -9,6 +10,7 @@ namespace ListApp.Views.Settings
 		public ThemeSelectionPage()
 		{
 			InitializeComponent();
+			BindingContext = App.GetViewModel<ThemeSelectionViewModel>();
 		}
 	}
 }

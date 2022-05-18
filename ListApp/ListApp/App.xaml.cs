@@ -10,11 +10,18 @@ using System.Text.Json;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using ListApp.Services.Interfaces;
+using ListApp.ViewModels.Settings;
+using Microsoft.Extensions.DependencyInjection;
+using ListApp.ViewModels;
 
 namespace ListApp
 {
     public partial class App : Application
     {
+        protected static IServiceProvider ServiceProvider { get; set; }
+
+        public static BaseViewModel GetViewModel<TViewModel>() where TViewModel : BaseViewModel
+            => ServiceProvider.GetService<TViewModel>();
 
         public App()
         {
@@ -22,27 +29,18 @@ namespace ListApp
             {
                 InitializeComponent();
 
-                DependencyService.RegisterSingleton(new AppCenterLogger());
-                DependencyService.RegisterSingleton(new DialogService());
-                DependencyService.Register<EfListDataStore>();
-                DependencyService.Register<EfListItemDataStore>();
-
                 Sharpnado.CollectionView.Initializer.Initialize(true, false);
-
-                ((JsonSerializerOptions)typeof(JsonSerializerOptions)
-                    .GetField("s_defaultOptions",
-                        System.Reflection.BindingFlags.Static |
-                        System.Reflection.BindingFlags.NonPublic).GetValue(null))
-                    .PropertyNameCaseInsensitive = true;
 
                 MainPage = new AppShell();
 
+                SetupServices();
+                SetupJsonSerializer();
                 SetupCurrentTheme();
                 SetupCurrentUser();
             }
             catch (Exception ex)
             {
-                var logger = DependencyService.Get<ILogger>();
+                var logger = ServiceProvider.GetRequiredService<ILogger>() ?? new AppCenterLogger();
                 logger.TrackError(ex);
             }
         }
@@ -69,24 +67,55 @@ namespace ListApp
         }
 
         /// <summary>
-        /// Set up current theme from app settings
+        /// Set up the services used by the app.
         /// </summary>
-        public void SetupCurrentTheme()
+        void SetupServices()
         {
-                if (Preferences.Get(PreferencesKeys.CurrentAppTheme, null) is string currentTheme)
-                    if (Enum.TryParse(currentTheme, out Theme currentThemeEnum))
-                        ThemeHelper.SetAppTheme(currentThemeEnum);
+            var services = new ServiceCollection();
+
+            services.AddTransient<ILogger, AppCenterLogger>();
+            services.AddTransient<IDialogService, DialogService>();
+            services.AddTransient<IDataStore<List>, EfListDataStore>();
+            services.AddTransient<IDataStore<ListItem>, EfListItemDataStore>();
+            services.AddTransient<ListContext>();
+            services.AddTransient<ItemsViewModel>();
+            services.AddTransient<ListViewModel>();
+            services.AddTransient<AccountManagementViewModel>();
+            services.AddTransient<ThemeSelectionViewModel>();
+
+            ServiceProvider = services.BuildServiceProvider();
         }
 
         /// <summary>
-        /// Load the current logged in user from app settings
+        /// Set up the options for the JSonSerializer class.
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
+        private static void SetupJsonSerializer()
+        {
+            ((JsonSerializerOptions)typeof(JsonSerializerOptions)
+                .GetField("s_defaultOptions",
+                    System.Reflection.BindingFlags.Static |
+                    System.Reflection.BindingFlags.NonPublic).GetValue(null))
+                .PropertyNameCaseInsensitive = true;
+        }
+
+        /// <summary>
+        /// Set up current theme from app settings.
+        /// </summary>
+        public void SetupCurrentTheme()
+        {
+            if (Preferences.Get(PreferencesKeys.CurrentAppTheme, null) is string currentTheme)
+                if (Enum.TryParse(currentTheme, out Theme currentThemeEnum))
+                    ThemeHelper.SetAppTheme(currentThemeEnum);
+        }
+
+        /// <summary>
+        /// Load the current logged in user from app settings.
+        /// </summary>
         private void SetupCurrentUser()
         {
-                if (Preferences.Get(PreferencesKeys.ApplicationUserInfo, null) is string user)
-                    ApplicationUser.Current.Set(
-                        JsonSerializer.Deserialize<ApplicationUser>(user));
+            if (Preferences.Get(PreferencesKeys.ApplicationUserInfo, null) is string user)
+                ApplicationUser.Current.Set(
+                    JsonSerializer.Deserialize<ApplicationUser>(user));
         }
     }
 }

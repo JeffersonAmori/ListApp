@@ -4,7 +4,6 @@ using ListApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -20,9 +19,9 @@ namespace ListApp.ViewModels
         private bool _shouldRefresh;
         private bool _isDeleted;
         private List<IListVisualItem> _listVisualItemCollection;
-        private ILogger _logger = DependencyService.Get<ILogger>();
-        public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
-        public IDialogService DialogService => DependencyService.Get<IDialogService>();
+        private ILogger _logger;
+        private IDataStore<List> _dataStore;
+        private IDialogService _dialogService;
 
         public ObservableCollection<List> ListCollection { get; }
         public List<IListVisualItem> ListVisualItemCollection
@@ -78,8 +77,10 @@ namespace ListApp.ViewModels
             set { _isDeleted = value; }
         }
 
-        public ListViewModel()
+        public ListViewModel(ILogger logger, IDataStore<List> dataStore, IDialogService dialogService)
         {
+            Title = IsDeleted ? "Recycle bin" : "List Freak";
+
             ListCollection = new ObservableCollection<List>();
             ListVisualItemCollection = new List<IListVisualItem>();
 
@@ -90,7 +91,10 @@ namespace ListApp.ViewModels
             ListDragAndDropFinishedCommand = new Command(async () => await OnListDragAndDropFinishedCommand());
 
             IsDeleted = Shell.Current.CurrentItem.CurrentItem.Route == "IMPL_RecycleBin";
-            Title = IsDeleted ? "Recycle bin" : "List Freak";
+
+            _logger = logger;
+            _dataStore = dataStore;
+            _dialogService = dialogService;
         }
 
         public void OnAppearing()
@@ -120,11 +124,11 @@ namespace ListApp.ViewModels
 
                 if (currentList == null) return;
 
-                bool deleteList = await DialogService.DisplayAlert($"Delete list {currentList.Name}?", "This action cannot be undone.", "Yes", "No");
+                bool deleteList = await _dialogService.DisplayAlert($"Delete list {currentList.Name}?", "This action cannot be undone.", "Yes", "No");
 
                 if (deleteList)
                 {
-                    await DataStore.DeleteItemAsync(currentList.ListId);
+                    await _dataStore.DeleteItemAsync(currentList.ListId);
                     await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
                 }
             }
@@ -138,7 +142,7 @@ namespace ListApp.ViewModels
         {
             try
             {
-                string newListName = await DialogService.DisplayPromptAsync("New list", String.Empty);
+                string newListName = await _dialogService.DisplayPromptAsync("New list", String.Empty);
 
                 if (string.IsNullOrEmpty(newListName))
                     return;
@@ -154,7 +158,7 @@ namespace ListApp.ViewModels
                     Index = nextIndex
                 };
 
-                await DataStore.AddItemAsync(list);
+                await _dataStore.AddItemAsync(list);
 
                 ListCollection.Add(list);
             }
@@ -171,7 +175,7 @@ namespace ListApp.ViewModels
             try
             {
                 ListCollection.Clear();
-                var items = (await DataStore.GetItemsAsync(true)).Where(list => list.IsDeleted == IsDeleted);
+                var items = (await _dataStore.GetItemsAsync(true)).Where(list => list.IsDeleted == IsDeleted);
                 foreach (var item in items.OrderBy(list => list.Index))
                 {
                     ListCollection.Add(item);
@@ -204,7 +208,7 @@ namespace ListApp.ViewModels
             {
                 UpdateListIndexes();
                 foreach (var list in ListCollection)
-                    await DataStore.UpdateItemAsync(list);
+                    await _dataStore.UpdateItemAsync(list);
             }
             catch (Exception ex)
             {

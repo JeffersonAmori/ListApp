@@ -5,14 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace ListApp.Services
 {
     public class EfListItemDataStore : IDataStore<ListItem>
     {
-        private ILogger _logger = DependencyService.Get<ILogger>();
-        ListContext _context = new ListContext();
+        private ILogger _logger;
+
+        ListContext _context;
+
+        public EfListItemDataStore(ILogger logger, ListContext context)
+        {
+            _logger = logger;
+            _context = context;
+        }
 
         public async Task<bool> AddItemAsync(ListItem listItems)
         {

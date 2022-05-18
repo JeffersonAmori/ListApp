@@ -1,18 +1,24 @@
 ﻿using ListApp.Models;
+using ListApp.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using ListApp.Services.Interfaces;
-using Xamarin.Forms;
 
 namespace ListApp.Services
 {
     public class EfListDataStore : IDataStore<List>
     {
-        private ILogger _logger = DependencyService.Get<ILogger>();
-        ListContext _context = new ListContext();
+        private ILogger _logger;
+
+        ListContext _context;
+
+        public EfListDataStore(ILogger logger, ListContext context)
+        {
+            _logger = logger;
+            _context = context;
+        }
 
         public async Task<bool> AddItemAsync(List item)
         {
