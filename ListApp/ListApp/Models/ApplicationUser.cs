@@ -13,12 +13,26 @@ namespace ListApp.Models
         private string refreshToken;
         private bool isLoggedIn;
 
+        public ApplicationUser()
+        {
+            
+        }
+
+        public ApplicationUser(string fullName, string email, string acessToken, string refreshToken, bool isLoggedIn)
+        {
+            FullName = fullName;
+            Email = email;
+            AcessToken = acessToken;
+            RefreshToken = refreshToken;
+            IsLoggedIn = isLoggedIn;
+        }
+
         public string FirstName { get => FullName?.Split(' ').FirstOrDefault() ?? string.Empty; }
-        public string FullName { get => fullName; private set { fullName = value; OnPropertyChanged(); OnPropertyChanged(nameof(FirstName)); } }
-        public string Email { get => email; private set { email = value; OnPropertyChanged(); } }
-        public string AcessToken { get => acessToken; private set { acessToken = value; OnPropertyChanged(); } }
-        public string RefreshToken { get => refreshToken; private set { refreshToken = value; OnPropertyChanged(); } }
-        public bool IsLoggedIn { get => isLoggedIn; private set { isLoggedIn = value; OnPropertyChanged(); } }
+        public string FullName { get => fullName;  set { fullName = value; OnPropertyChanged(); OnPropertyChanged(nameof(FirstName)); } }
+        public string Email { get => email;  set { email = value; OnPropertyChanged(); } }
+        public string AcessToken { get => acessToken;  set { acessToken = value; OnPropertyChanged(); } }
+        public string RefreshToken { get => refreshToken;  set { refreshToken = value; OnPropertyChanged(); } }
+        public bool IsLoggedIn { get => isLoggedIn;  set { isLoggedIn = value; OnPropertyChanged(); } }
 
         public void Set(string fullName, string email, string accessToken, string refreshToken, bool isLoggedIn = true)
         {

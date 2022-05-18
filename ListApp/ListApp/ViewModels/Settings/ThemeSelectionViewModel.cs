@@ -1,6 +1,7 @@
 ﻿using ListApp.Helpers;
 using ListApp.Models;
 using ListApp.Resources;
+using ListApp.Services.Interfaces;
 using ListApp.Themes;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ namespace ListApp.ViewModels.Settings
 {
     public class ThemeSelectionViewModel : BaseViewModel
     {
+        private ILogger _logger = DependencyService.Get<ILogger>();
+
         private Array _themes;
         private Theme _selectedTheme;
 
@@ -38,63 +41,77 @@ namespace ListApp.ViewModels.Settings
 
         public ThemeSelectionViewModel()
         {
-            Themes = Enum.GetValues(typeof(Theme));
-
-            ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
-            if (mergedDictionaries.Count > 0)
+            try
             {
-                var currentTheme = mergedDictionaries.First().GetType();
+                Themes = Enum.GetValues(typeof(Theme));
 
-                if (currentTheme.FullName != null)
+                ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
+                if (mergedDictionaries.Count > 0)
                 {
-                    switch (currentTheme.FullName)
+                    var currentTheme = mergedDictionaries.First().GetType();
+
+                    if (currentTheme.FullName != null)
                     {
-                        case var value when value == typeof(ForestTheme).FullName:
-                            SelectedTheme = Theme.Forest;
-                            break;
-                        case var value when value == typeof(RiverTheme).FullName:
-                            SelectedTheme = Theme.River;
-                            break;
-                        case var value when value == typeof(BeeTheme).FullName:
-                            SelectedTheme = Theme.Bee;
-                            break;
-                        case var value when value == typeof(QuartzoTheme).FullName:
-                            SelectedTheme = Theme.Quartzo;
-                            break;
-                        case var value when value == typeof(NightTheme).FullName:
-                            SelectedTheme = Theme.Night;
-                            break;
-                        case var value when value == typeof(InfernoTheme).FullName:
-                            SelectedTheme = Theme.Inferno;
-                            break;
-                        case var value when value == typeof(LondonTheme).FullName:
-                            SelectedTheme = Theme.London;
-                            break;
-                        default:
-                            SelectedTheme = Theme.Forest;
-                            break;
+                        switch (currentTheme.FullName)
+                        {
+                            case var value when value == typeof(ForestTheme).FullName:
+                                SelectedTheme = Theme.Forest;
+                                break;
+                            case var value when value == typeof(RiverTheme).FullName:
+                                SelectedTheme = Theme.River;
+                                break;
+                            case var value when value == typeof(BeeTheme).FullName:
+                                SelectedTheme = Theme.Bee;
+                                break;
+                            case var value when value == typeof(QuartzoTheme).FullName:
+                                SelectedTheme = Theme.Quartzo;
+                                break;
+                            case var value when value == typeof(NightTheme).FullName:
+                                SelectedTheme = Theme.Night;
+                                break;
+                            case var value when value == typeof(InfernoTheme).FullName:
+                                SelectedTheme = Theme.Inferno;
+                                break;
+                            case var value when value == typeof(LondonTheme).FullName:
+                                SelectedTheme = Theme.London;
+                                break;
+                            default:
+                                SelectedTheme = Theme.Forest;
+                                break;
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
             }
         }
 
         private void UpdateTheme(Theme value)
         {
-            ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
-            if (mergedDictionaries != null)
+            try
             {
-                mergedDictionaries.Clear();
-
-                // Parsing selected theme value
-                if (Enum.TryParse(SelectedTheme.ToString(), out Theme currentThemeEnum))
+                ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
+                if (mergedDictionaries != null)
                 {
-                    // Setting up theme
-                    if (ThemeHelper.SetAppTheme(currentThemeEnum))
+                    mergedDictionaries.Clear();
+
+                    // Parsing selected theme value
+                    if (Enum.TryParse(SelectedTheme.ToString(), out Theme currentThemeEnum))
                     {
-                        // Theme setting successful
-                        Preferences.Set(PreferencesKeys.CurrentAppTheme, SelectedTheme.ToString());
+                        // Setting up theme
+                        if (ThemeHelper.SetAppTheme(currentThemeEnum))
+                        {
+                            // Theme setting successful
+                            Preferences.Set(PreferencesKeys.CurrentAppTheme, SelectedTheme.ToString());
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
             }
         }
     }

@@ -19,6 +19,7 @@ namespace ListApp.ViewModels
         private string _listId;
         private ListItem _selectedItem;
         private List _currentList;
+        private ILogger _logger = DependencyService.Get<ILogger>();
         public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
         public IDialogService DialogService => DependencyService.Get<IDialogService>();
         public ObservableCollection<ListItem> Items { get; }
@@ -105,7 +106,7 @@ namespace ListApp.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                _logger.TrackError(ex);
             }
             finally
             {
@@ -119,9 +120,6 @@ namespace ListApp.ViewModels
         {
             for (int i = 0; i < Items.Count; i++)
                 Items[i].Index = i;
-
-            //for (int i = 0; i < _currentList.ListItems.Count; i++)
-            //    _currentList.ListItems[i].Index = i;
         }
 
         private async void OnAddItem()
@@ -129,142 +127,195 @@ namespace ListApp.ViewModels
             if (string.IsNullOrEmpty(NewItemText))
                 return;
 
-            int nextIndex = Items.Any()
-                            ? Items.Max(i => i.Index) + 1
-                            : 1;
-
-            ListItem listItem = new ListItem()
+            try
             {
-                ListId = _currentList.ListId,
-                Id = Guid.NewGuid().ToString(),
-                Text = NewItemText,
-                Index = nextIndex
-            };
+                int nextIndex = Items.Any()
+                                    ? Items.Max(i => i.Index) + 1
+                                    : 1;
 
-            Items.Add(listItem);
+                ListItem listItem = new ListItem()
+                {
+                    ListId = _currentList.ListId,
+                    Id = Guid.NewGuid().ToString(),
+                    Text = NewItemText,
+                    Index = nextIndex
+                };
 
-            _currentList.ListItems.Add(listItem);
-            await DataStore.UpdateItemAsync(_currentList);
+                Items.Add(listItem);
 
-            NewItemText = string.Empty;
+                _currentList.ListItems.Add(listItem);
+                await DataStore.UpdateItemAsync(_currentList);
+
+                NewItemText = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
+            }
         }
 
         private async void OnDeleteItem(object id)
         {
-            ListItem listITem = _currentList.ListItems.FirstOrDefault(x => x.Id == id.ToString());
-
-            if (listITem == null) return;
-
-            _currentList.ListItems.Remove(listITem);
-            await DataStore.UpdateItemAsync(_currentList);
-            Items.Remove(Items.First(i => i.Id == id.ToString()));
-            UpdateListItemsIndexes();
+            if (_currentList.ListItems.FirstOrDefault(x => x.Id == id.ToString()) is ListItem listITem)
+            {
+                try
+                {
+                    _currentList.ListItems.Remove(listITem);
+                    await DataStore.UpdateItemAsync(_currentList);
+                    Items.Remove(Items.First(i => i.Id == id.ToString()));
+                    UpdateListItemsIndexes();
+                }
+                catch (Exception ex)
+                {
+                    _logger.TrackError(ex);
+                }
+            }
         }
 
         private async void OnDeleteList()
         {
-            Task dialogTask = Task.FromResult(true);
-            if (_currentList.IsDeleted)
+            try
             {
-                bool deleteList = await DialogService.DisplayAlert($"Delete list {_currentList.Name}?", "This action cannot be undone.", "Yes", "No");
-
-                if (deleteList)
+                Task dialogTask = Task.FromResult(true);
+                if (_currentList.IsDeleted)
                 {
-                    await DataStore.DeleteItemAsync(_currentList.ListId);
-                    dialogTask =DialogService.DisplayToastAsync("List deleted.");
-                }
-            }
-            else
-            {
-                _currentList.IsDeleted = true;
-                await DataStore.UpdateItemAsync(_currentList);
-                dialogTask = DialogService.DisplayToastAsync("List moved to trash.");
-            }
+                    bool deleteList = await DialogService.DisplayAlert($"Delete list {_currentList.Name}?", "This action cannot be undone.", "Yes", "No");
 
-            await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
-            await dialogTask;
+                    if (deleteList)
+                    {
+                        await DataStore.DeleteItemAsync(_currentList.ListId);
+                        dialogTask = DialogService.DisplayToastAsync("List deleted.");
+                    }
+                }
+                else
+                {
+                    _currentList.IsDeleted = true;
+                    await DataStore.UpdateItemAsync(_currentList);
+                    dialogTask = DialogService.DisplayToastAsync("List moved to trash.");
+                }
+
+                await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+                await dialogTask;
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
+            }
         }
 
         private async void OnCompletionButtonClicked(string Id)
         {
-            var item = Items.FirstOrDefault(x => x.Id == Id);
-            if (item != null)
+            try
             {
-                item.Checked = !item.Checked;
-                // Move the item to the bottom of the list
-                if (item.Checked)
+                var item = Items.FirstOrDefault(x => x.Id == Id);
+                if (item != null)
                 {
-                    Items.Remove(item);
-                    Items.Add(item);
+                    item.Checked = !item.Checked;
+                    // Move the item to the bottom of the list
+                    if (item.Checked)
+                    {
+                        Items.Remove(item);
+                        Items.Add(item);
+                    }
+
+                    OnPropertyChanged(nameof(Items));
+
+                    UpdateListItemsIndexes();
+                    await DataStore.UpdateItemAsync(_currentList);
                 }
-
-                OnPropertyChanged(nameof(Items));
-
-                UpdateListItemsIndexes();
-                await DataStore.UpdateItemAsync(_currentList);
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
             }
         }
 
         private void OnAddItemCompletedCommand(object obj)
         {
-            Entry entry = obj as Entry;
-
-            if (entry == null) return;
-
-            entry.Focus();
+            if (obj as Entry is Entry entry)
+                entry.Focus();
         }
 
         private async void OnItemDragAndDropFinishedCommand()
         {
-            UpdateListItemsIndexes();
-            await DataStore.UpdateItemAsync(_currentList);
+            try
+            {
+                UpdateListItemsIndexes();
+                await DataStore.UpdateItemAsync(_currentList);
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
+            }
         }
 
         private async void OnShareListCommand(object obj)
         {
-            if (Items.Count == 0)
+            try
             {
-                await DialogService.DisplayAlert("Nothing to share", "The current list is empty.", "OK");
-                return;
-            }
+                if (Items.Count == 0)
+                {
+                    await DialogService.DisplayAlert("Nothing to share", "The current list is empty.", "OK");
+                    return;
+                }
 
-            StringBuilder listAsTextStringBuilder = new StringBuilder();
-            listAsTextStringBuilder.Append(_currentList.Name);
-            foreach (var item in Items)
+                StringBuilder listAsTextStringBuilder = new StringBuilder();
+                listAsTextStringBuilder.Append(_currentList.Name);
+                foreach (var item in Items)
+                {
+                    listAsTextStringBuilder.Append($"\n - {item.Text}");
+                }
+
+                await Share.RequestAsync(listAsTextStringBuilder.ToString(), _currentList.Name);
+            }
+            catch (Exception ex)
             {
-                listAsTextStringBuilder.Append($"\n - {item.Text}");
+                _logger.TrackError(ex);
             }
-
-            await Share.RequestAsync(listAsTextStringBuilder.ToString(), _currentList.Name);
         }
 
         private async void OnCompletedListItemEntryCommand(ListItem listItem)
         {
-            ListItem newListItem = new ListItem()
+            try
             {
-                ListId = _currentList.ListId,
-                Id = Guid.NewGuid().ToString(),
-                Text = listItem.Text
-            };
+                ListItem newListItem = new ListItem()
+                {
+                    ListId = _currentList.ListId,
+                    Id = Guid.NewGuid().ToString(),
+                    Text = listItem.Text
+                };
 
-            if (Items.Count == listItem.Index)
-                Items.Add(newListItem);
-            else
-                Items.Insert(listItem.Index, newListItem);
+                if (Items.Count == listItem.Index)
+                    Items.Add(newListItem);
+                else
+                    Items.Insert(listItem.Index, newListItem);
 
-            listItem.Text = string.Empty;
+                listItem.Text = string.Empty;
 
-            UpdateListItemsIndexes();
+                UpdateListItemsIndexes();
 
-            _currentList.ListItems.Add(newListItem);
-            await DataStore.UpdateItemAsync(_currentList);
+                _currentList.ListItems.Add(newListItem);
+                await DataStore.UpdateItemAsync(_currentList);
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
+            }
         }
 
         private async void OnRestoreListFromTrashBin()
         {
-            _currentList.IsDeleted = false;
-            await DataStore.UpdateItemAsync(_currentList);
-            await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+            try
+            {
+                _currentList.IsDeleted = false;
+                await DataStore.UpdateItemAsync(_currentList);
+                await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }

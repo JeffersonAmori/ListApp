@@ -20,6 +20,9 @@ namespace ListApp.ViewModels
         private bool _shouldRefresh;
         private bool _isDeleted;
         private List<IListVisualItem> _listVisualItemCollection;
+        private ILogger _logger = DependencyService.Get<ILogger>();
+        public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
+        public IDialogService DialogService => DependencyService.Get<IDialogService>();
 
         public ObservableCollection<List> ListCollection { get; }
         public List<IListVisualItem> ListVisualItemCollection
@@ -31,9 +34,6 @@ namespace ListApp.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        public IDataStore<List> DataStore => DependencyService.Get<IDataStore<List>>();
-        public IDialogService DialogService => DependencyService.Get<IDialogService>();
         public ICommand LoadListsCommand { get; }
         public ICommand ListTappedCommand { get; }
         public ICommand AddListCommand { get; }
@@ -47,7 +47,7 @@ namespace ListApp.ViewModels
             {
                 SetProperty(ref _selectedList, value);
                 OnPropertyChanged(nameof(SelectedList));
-                OnListSelected(value);
+                new Action(async () => await OnListSelected(value))();
             }
         }
 
@@ -100,48 +100,68 @@ namespace ListApp.ViewModels
 
         async private Task OnListSelected(List list)
         {
-            if (list == null)
-                return;
+            try
+            {
+                if (list == null) return;
 
-            await Shell.Current.GoToAsync($"{nameof(ItemsPage)}?{nameof(ItemsViewModel.ListId)}={list.ListId}");
+                await Shell.Current.GoToAsync($"{nameof(ItemsPage)}?{nameof(ItemsViewModel.ListId)}={list.ListId}");
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
+            }
         }
 
         private async Task OnDeleteList(string listId)
         {
-            var currentList = ListCollection.FirstOrDefault(l => l.ListId == listId);
-
-            if (currentList == null) return;
-
-            bool deleteList = await DialogService.DisplayAlert($"Delete list {currentList.Name}?", "This action cannot be undone.", "Yes", "No");
-
-            if (deleteList)
+            try
             {
-                await DataStore.DeleteItemAsync(currentList.ListId);
-                await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+                var currentList = ListCollection.FirstOrDefault(l => l.ListId == listId);
+
+                if (currentList == null) return;
+
+                bool deleteList = await DialogService.DisplayAlert($"Delete list {currentList.Name}?", "This action cannot be undone.", "Yes", "No");
+
+                if (deleteList)
+                {
+                    await DataStore.DeleteItemAsync(currentList.ListId);
+                    await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
             }
         }
 
         private async Task AddToListCollection()
         {
-            string newListName = await DialogService.DisplayPromptAsync("New list", String.Empty);
-
-            if (string.IsNullOrEmpty(newListName))
-                return;
-
-            int nextIndex = ListCollection.Any()
-                            ? ListCollection.Max(l => l.Index) + 1
-                            : 1;
-
-            List list = new List()
+            try
             {
-                ListId = Guid.NewGuid().ToString(),
-                Name = newListName,
-                Index = nextIndex
-            };
+                string newListName = await DialogService.DisplayPromptAsync("New list", String.Empty);
 
-            await DataStore.AddItemAsync(list);
+                if (string.IsNullOrEmpty(newListName))
+                    return;
 
-            ListCollection.Add(list);
+                int nextIndex = ListCollection.Any()
+                                ? ListCollection.Max(l => l.Index) + 1
+                                : 1;
+
+                List list = new List()
+                {
+                    ListId = Guid.NewGuid().ToString(),
+                    Name = newListName,
+                    Index = nextIndex
+                };
+
+                await DataStore.AddItemAsync(list);
+
+                ListCollection.Add(list);
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
+            }
         }
 
         private async Task ExecuteLoadListsCommand()
@@ -170,7 +190,7 @@ namespace ListApp.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                _logger.TrackError(ex);
             }
             finally
             {
@@ -180,10 +200,15 @@ namespace ListApp.ViewModels
 
         private async Task OnListDragAndDropFinishedCommand()
         {
-            UpdateListIndexes();
-            foreach (var list in ListCollection)
+            try
             {
-                await DataStore.UpdateItemAsync(list);
+                UpdateListIndexes();
+                foreach (var list in ListCollection)
+                    await DataStore.UpdateItemAsync(list);
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
             }
         }
 

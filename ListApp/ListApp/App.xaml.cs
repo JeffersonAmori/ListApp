@@ -9,6 +9,7 @@ using System;
 using System.Text.Json;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using ListApp.Services.Interfaces;
 
 namespace ListApp
 {
@@ -17,24 +18,33 @@ namespace ListApp
 
         public App()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
 
-            Sharpnado.CollectionView.Initializer.Initialize(true, false);
+                DependencyService.RegisterSingleton(new AppCenterLogger());
+                DependencyService.RegisterSingleton(new DialogService());
+                DependencyService.Register<EfListDataStore>();
+                DependencyService.Register<EfListItemDataStore>();
 
-            DependencyService.Register<EfListDataStore>();
-            DependencyService.Register<EfListItemDataStore>();
-            DependencyService.RegisterSingleton(new DialogService());
+                Sharpnado.CollectionView.Initializer.Initialize(true, false);
 
-            ((JsonSerializerOptions)typeof(JsonSerializerOptions)
-                .GetField("s_defaultOptions",
-                    System.Reflection.BindingFlags.Static |
-                    System.Reflection.BindingFlags.NonPublic).GetValue(null))
-                .PropertyNameCaseInsensitive = true;
+                ((JsonSerializerOptions)typeof(JsonSerializerOptions)
+                    .GetField("s_defaultOptions",
+                        System.Reflection.BindingFlags.Static |
+                        System.Reflection.BindingFlags.NonPublic).GetValue(null))
+                    .PropertyNameCaseInsensitive = true;
 
-            MainPage = new AppShell();
+                MainPage = new AppShell();
 
-            SetupCurrentTheme();
-            SetupCurrentUser();
+                SetupCurrentTheme();
+                SetupCurrentUser();
+            }
+            catch (Exception ex)
+            {
+                var logger = DependencyService.Get<ILogger>();
+                logger.TrackError(ex);
+            }
         }
 
         protected override void OnStart()
@@ -63,15 +73,9 @@ namespace ListApp
         /// </summary>
         public void SetupCurrentTheme()
         {
-            try
-            {
                 if (Preferences.Get(PreferencesKeys.CurrentAppTheme, null) is string currentTheme)
                     if (Enum.TryParse(currentTheme, out Theme currentThemeEnum))
                         ThemeHelper.SetAppTheme(currentThemeEnum);
-            }
-            catch (Exception ex)
-            {
-            }
         }
 
         /// <summary>
@@ -80,9 +84,9 @@ namespace ListApp
         /// <exception cref="NotImplementedException"></exception>
         private void SetupCurrentUser()
         {
-            if (Preferences.Get(PreferencesKeys.ApplicationUserInfo, null) is string user)
-                ApplicationUser.Current.Set(
-                    JsonSerializer.Deserialize<ApplicationUser>(user));
+                if (Preferences.Get(PreferencesKeys.ApplicationUserInfo, null) is string user)
+                    ApplicationUser.Current.Set(
+                        JsonSerializer.Deserialize<ApplicationUser>(user));
         }
     }
 }

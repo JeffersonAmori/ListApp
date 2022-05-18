@@ -20,7 +20,8 @@ namespace ListApp.ViewModels.Settings
 {
     public class AccountManagementViewModel : BaseViewModel
     {
-        private IDataStore<List> DataStore = DependencyService.Get<IDataStore<List>>(); 
+        private ILogger _logger = DependencyService.Get<ILogger>();
+        private IDataStore<List> DataStore = DependencyService.Get<IDataStore<List>>();
         public IDialogService DialogService => DependencyService.Get<IDialogService>();
         public ICommand LoginWithGoogleCommand { get; }
         public ICommand SyncCommand { get; }
@@ -62,7 +63,10 @@ namespace ListApp.ViewModels.Settings
                 ApplicationUser.Current.Set(fullName, email, accessToken, refreshToken);
                 Preferences.Set(PreferencesKeys.ApplicationUserInfo, JsonSerializer.Serialize(ApplicationUser.Current));
             }
-            catch (Exception) { }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
+            }
         }
 
         private async void OnSyncCommand()
@@ -190,9 +194,16 @@ namespace ListApp.ViewModels.Settings
 
         private async void OnSignOutCommand()
         {
-            ApplicationUser.Current.Unset();
-            Preferences.Remove(PreferencesKeys.ApplicationUserInfo);
-            await DialogService.DisplayToastAsync("Signed out");
+            try
+            {
+                ApplicationUser.Current.Unset();
+                Preferences.Remove(PreferencesKeys.ApplicationUserInfo);
+                await DialogService.DisplayToastAsync("Signed out");
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+            }
         }
     }
 }
