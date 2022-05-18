@@ -16,10 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Fonts\Font-Awesome-6-Brands-Regular-400.otf" />
     <None Remove="Resources\Fonts\Font-Awesome-6-Free-Solid-900.otf" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\Font-Awesome-6-Brands-Regular-400.otf" />
     <EmbeddedResource Include="Resources\Fonts\Font-Awesome-6-Free-Solid-900.otf" />
   </ItemGroup>
 

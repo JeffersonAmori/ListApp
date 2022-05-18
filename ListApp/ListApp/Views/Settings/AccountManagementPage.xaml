@@ -21,8 +21,9 @@
                     Style="{StaticResource ButtonStyle}"
                     Command="{Binding LoginWithGoogleCommand}" >
                     <Button.ImageSource>
-                        <FontImageSource FontFamily="FA"
-                                     Glyph="{x:Static fonts:FontAwesome6SolidIcons.Gopuram}"/>
+                        <FontImageSource FontFamily="FA-Brands"
+                                         Glyph="{x:Static fonts:FontAwesome6SolidBrands.Google}"
+                                         Color="{DynamicResource PrimaryTextColor}"/>
                     </Button.ImageSource>
                 </Button>
                 <Label Text="{Binding FirstName, Source={x:Static models:ApplicationUser.Current}}"

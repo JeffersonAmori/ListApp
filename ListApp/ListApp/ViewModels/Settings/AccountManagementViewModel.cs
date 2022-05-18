@@ -2,6 +2,7 @@
 using ListApp.Models;
 using ListApp.Resources;
 using ListApp.Services.Interfaces;
+using Microsoft.AppCenter.Crashes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,118 +67,125 @@ namespace ListApp.ViewModels.Settings
 
         private async void OnSyncCommand()
         {
-            var syncStartedDialogTask = DialogService.DisplayToastAsync("Syncing...");
-
-            HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = Secrets.ListFreakApiEndpoint;
-
-            var allBackedupListsForCurrentUserRequest = await httpClient.GetAsync($"lists/ownerEmail/{ApplicationUser.Current.Email}");
-            var allBackedupListsForCurrentUser = await JsonSerializer.DeserializeAsync<List<ApiModel.List>>(await allBackedupListsForCurrentUserRequest.Content.ReadAsStreamAsync());
-
-            var localLists = await DataStore.GetItemsAsync();
-
-            foreach (var cloudList in allBackedupListsForCurrentUser)
+            try
             {
-                if (localLists.FirstOrDefault(x => x.ListId == cloudList.Guid) is List localList)
-                {
-                    // Update the list on the cloud.
-                    cloudList.Name = localList.Name;
-                    cloudList.IsDeleted = localList.IsDeleted;
-                    cloudList.Index = localList.Index;
-                    cloudList.LastChangedDate = DateTime.UtcNow;
+                var syncStartedDialogTask = DialogService.DisplayToastAsync("Syncing...");
 
-                    foreach (var localListItem in localList.ListItems)
+                HttpClient httpClient = new HttpClient();
+                httpClient.BaseAddress = Secrets.ListFreakApiEndpoint;
+
+                var allBackedupListsForCurrentUserRequest = await httpClient.GetAsync($"lists/ownerEmail/{ApplicationUser.Current.Email}");
+                var allBackedupListsForCurrentUser = await JsonSerializer.DeserializeAsync<List<ApiModel.List>>(await allBackedupListsForCurrentUserRequest.Content.ReadAsStreamAsync());
+
+                var localLists = await DataStore.GetItemsAsync();
+
+                foreach (var cloudList in allBackedupListsForCurrentUser)
+                {
+                    if (localLists.FirstOrDefault(x => x.ListId == cloudList.Guid) is List localList)
                     {
-                        if (cloudList.ListItems.FirstOrDefault(x => x.Guid == localListItem.Id) is ApiModel.ListItem cloudListItem)
+                        // Update the list on the cloud.
+                        cloudList.Name = localList.Name;
+                        cloudList.IsDeleted = localList.IsDeleted;
+                        cloudList.Index = localList.Index;
+                        cloudList.LastChangedDate = DateTime.UtcNow;
+
+                        foreach (var localListItem in localList.ListItems)
                         {
-                            cloudListItem.IsDeleted = localListItem.IsDeleted;
+                            if (cloudList.ListItems.FirstOrDefault(x => x.Guid == localListItem.Id) is ApiModel.ListItem cloudListItem)
+                            {
+                                cloudListItem.IsDeleted = localListItem.IsDeleted;
+                                cloudListItem.Text = localListItem.Text;
+                                cloudListItem.Checked = localListItem.Checked;
+                                cloudListItem.Description = localListItem.Description;
+                                cloudListItem.Index = localListItem.Index;
+                                cloudListItem.LastChangedDate = DateTime.UtcNow;
+                            }
+                            else
+                            {
+                                var listItem = new ApiModel.ListItem();
+                                listItem.ListId = cloudList.Id;
+                                listItem.Guid = localListItem.Id;
+                                listItem.Text = localListItem.Text;
+                                listItem.Description = localListItem.Description;
+                                listItem.Index = localListItem.Index;
+                                listItem.IsDeleted = localListItem.IsDeleted;
+                                listItem.Checked = localListItem.Checked;
+                                listItem.CreationDate = localListItem.CreationDate;
+                                listItem.LastChangedDate = DateTime.UtcNow;
+                                cloudList.ListItems.Add(listItem);
+                            }
+                        }
+
+                        string jsonContent = JsonSerializer.Serialize(cloudList);
+                        var response = await httpClient.PutAsync($"lists/{cloudList.Id}", new StringContent(jsonContent, Encoding.UTF8, "application/json"));
+                    }
+                    else
+                    {
+                        // Insert the list from the cloud into the local DB.
+                        var list = new List();
+                        list.ListId = cloudList.Guid;
+                        list.Name = cloudList.Name;
+                        list.IsDeleted = cloudList.IsDeleted;
+                        list.Index = cloudList.Index;
+                        list.CreationDate = cloudList.CreationDate;
+                        list.LastChangedDate = DateTime.UtcNow;
+
+                        foreach (var cloudListItem in cloudList.ListItems)
+                        {
+                            var localListItem = new ListItem();
+                            localListItem.Id = cloudListItem.Guid;
+                            localListItem.Text = cloudListItem.Text;
+                            localListItem.Description = cloudListItem.Description;
+                            localListItem.Index = cloudListItem.Index;
+                            localListItem.IsDeleted = cloudListItem.IsDeleted;
+                            localListItem.Checked = cloudListItem.Checked;
+                            localListItem.CreationDate = cloudListItem.CreationDate;
+                            localListItem.LastChangedDate = DateTime.UtcNow;
+                            list.ListItems.Add(localListItem);
+                        }
+
+                        await DataStore.AddItemAsync(list);
+                    }
+                }
+
+                foreach (var localList in localLists)
+                {
+                    if (!allBackedupListsForCurrentUser.Any(x => x.Guid == localList.ListId))
+                    {
+                        var cloudList = new ApiModel.List();
+                        cloudList.Guid = localList.ListId;
+                        cloudList.Name = localList.Name;
+                        cloudList.IsDeleted = localList.IsDeleted;
+                        cloudList.Index = localList.Index;
+                        cloudList.OwnerEmail = ApplicationUser.Current.Email;
+                        cloudList.CreationDate = localList.CreationDate;
+                        cloudList.LastChangedDate = DateTime.UtcNow;
+
+                        foreach (var localListItem in localList.ListItems)
+                        {
+                            var cloudListItem = new ApiModel.ListItem();
+                            cloudListItem.Guid = localListItem.Id;
                             cloudListItem.Text = localListItem.Text;
-                            cloudListItem.Checked = localListItem.Checked;
                             cloudListItem.Description = localListItem.Description;
                             cloudListItem.Index = localListItem.Index;
+                            cloudListItem.IsDeleted = localListItem.IsDeleted;
+                            cloudListItem.Checked = localListItem.Checked;
+                            cloudListItem.CreationDate = localListItem.CreationDate;
                             cloudListItem.LastChangedDate = DateTime.UtcNow;
                         }
-                        else
-                        {
-                            var listItem = new ApiModel.ListItem();
-                            listItem.ListId = cloudList.Id;
-                            listItem.Guid = localListItem.Id;
-                            listItem.Text = localListItem.Text;
-                            listItem.Description = localListItem.Description;
-                            listItem.Index = localListItem.Index;
-                            listItem.IsDeleted = localListItem.IsDeleted;
-                            listItem.Checked = localListItem.Checked;
-                            listItem.CreationDate = localListItem.CreationDate;
-                            listItem.LastChangedDate = DateTime.UtcNow;
-                            cloudList.ListItems.Add(listItem);
-                        }
+
+                        var response = await httpClient.PostAsync($"lists", new StringContent(JsonSerializer.Serialize(cloudList), Encoding.UTF8, "application/json"));
                     }
-
-                    string jsonContent = JsonSerializer.Serialize(cloudList);
-                    var response = await httpClient.PutAsync($"lists/{cloudList.Id}", new StringContent(jsonContent, Encoding.UTF8, "application/json"));
                 }
-                else
-                {
-                    // Insert the list from the cloud into the local DB.
-                    var list = new List();
-                    list.ListId = cloudList.Guid;
-                    list.Name = cloudList.Name;
-                    list.IsDeleted = cloudList.IsDeleted;
-                    list.Index = cloudList.Index;
-                    list.CreationDate = cloudList.CreationDate;
-                    list.LastChangedDate = DateTime.UtcNow;
 
-                    foreach (var cloudListItem in cloudList.ListItems)
-                    {
-                        var localListItem = new ListItem();
-                        localListItem.Id = cloudListItem.Guid;
-                        localListItem.Text = cloudListItem.Text;
-                        localListItem.Description = cloudListItem.Description;
-                        localListItem.Index = cloudListItem.Index;
-                        localListItem.IsDeleted = cloudListItem.IsDeleted;
-                        localListItem.Checked = cloudListItem.Checked;
-                        localListItem.CreationDate = cloudListItem.CreationDate;
-                        localListItem.LastChangedDate = DateTime.UtcNow;
-                        list.ListItems.Add(localListItem);
-                    }
+                var syncFinishedDialogTask = DialogService.DisplayToastAsync("Synced!");
 
-                    await DataStore.AddItemAsync(list);
-                }
+                await Task.WhenAll(syncStartedDialogTask, syncFinishedDialogTask);
             }
-
-            foreach (var localList in localLists)
+            catch (Exception ex)
             {
-                if (!allBackedupListsForCurrentUser.Any(x => x.Guid == localList.ListId))
-                {
-                    var cloudList = new ApiModel.List();
-                    cloudList.Guid = localList.ListId;
-                    cloudList.Name = localList.Name;
-                    cloudList.IsDeleted = localList.IsDeleted;
-                    cloudList.Index = localList.Index;
-                    cloudList.OwnerEmail = ApplicationUser.Current.Email;
-                    cloudList.CreationDate = localList.CreationDate;
-                    cloudList.LastChangedDate = DateTime.UtcNow;
-
-                    foreach (var localListItem in localList.ListItems)
-                    {
-                        var cloudListItem = new ApiModel.ListItem();
-                        cloudListItem.Guid = localListItem.Id;
-                        cloudListItem.Text = localListItem.Text;
-                        cloudListItem.Description = localListItem.Description;
-                        cloudListItem.Index = localListItem.Index;
-                        cloudListItem.IsDeleted = localListItem.IsDeleted;
-                        cloudListItem.Checked = localListItem.Checked;
-                        cloudListItem.CreationDate = localListItem.CreationDate;
-                        cloudListItem.LastChangedDate = DateTime.UtcNow;
-                    }
-
-                    var response = await httpClient.PostAsync($"lists", new StringContent(JsonSerializer.Serialize(cloudList), Encoding.UTF8, "application/json"));
-                }
+                Crashes.TrackError(ex);
             }
-
-            var syncFinishedDialogTask = DialogService.DisplayToastAsync("Synced!");
-
-            await Task.WhenAll(syncStartedDialogTask, syncFinishedDialogTask);
         }
 
         private async void OnSignOutCommand()

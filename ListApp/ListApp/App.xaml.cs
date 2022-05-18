@@ -39,8 +39,15 @@ namespace ListApp
 
         protected override void OnStart()
         {
+
             AppCenter.Start($"android={Secrets.AppCenterAndroidAppSecret};",
                      typeof(Analytics), typeof(Crashes));
+
+#if DEBUG
+            AppCenter.SetEnabledAsync(false);
+#endif
+
+            Analytics.TrackEvent("App start");
         }
 
         protected override void OnSleep()
@@ -73,7 +80,7 @@ namespace ListApp
         /// <exception cref="NotImplementedException"></exception>
         private void SetupCurrentUser()
         {
-            if(Preferences.Get(PreferencesKeys.ApplicationUserInfo, null) is string user)
+            if (Preferences.Get(PreferencesKeys.ApplicationUserInfo, null) is string user)
                 ApplicationUser.Current.Set(
                     JsonSerializer.Deserialize<ApplicationUser>(
                         user));
