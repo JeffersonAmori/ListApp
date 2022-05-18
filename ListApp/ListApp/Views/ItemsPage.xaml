@@ -103,7 +103,7 @@
                                         IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=IsDeletedList, Converter={StaticResource InvertedBoolConverter}}"
                                         FontFamily="FA"
                                         Text="{x:Static fonts:FontAwesome6SolidIcons.Trash}"
-                                        TextColor="{DynamicResource PrimaryTextColor}"
+                                        TextColor="{DynamicResource PrimaryColor}"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ItemsViewModel}}, Path=DeleteItemCommand}"
                                         CommandParameter="{Binding Source={x:Reference LabelId}, Path=Text}"
                                         Margin="0">
@@ -117,19 +117,21 @@
                 </sho:CollectionView.ItemTemplate>
             </sho:CollectionView>
         </ScrollView>
+        <StackLayout BackgroundColor="{DynamicResource SecondaryColor}">
         <Button Text="Restore list"
                 TextColor="{DynamicResource PrimaryTextColor}"
                 IsVisible="{Binding IsDeletedList}"
                 Margin="20"
                 CornerRadius="50"
-                BackgroundColor="{DynamicResource SecondaryColor}"
+                BackgroundColor="{DynamicResource PrimaryColor}"
                 Command="{Binding RestoreListFromTrashBin}" >
             <Button.ImageSource>
                 <FontImageSource FontFamily="FA"
+                                 Color="{DynamicResource PrimaryTextColor}"
                                  Glyph="{x:Static fonts:FontAwesome6SolidIcons.ArrowRotateLeft}"
                                  Size="Medium"/>
             </Button.ImageSource>
         </Button>
-
+        </StackLayout>
     </StackLayout>
 </ContentPage>
