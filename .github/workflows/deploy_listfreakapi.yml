@@ -1,12 +1,12 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: ListFreakAuthServer - Build and deploy ASP.Net Core app to Azure Web App
+name: ListFreakApi - Build and deploy ASP.Net Core app to Azure Web App
 
 on:
   push:
     branches:
-      - deploy/authserver
+      - deploy/listapi
   workflow_dispatch:
 
 jobs:
@@ -23,10 +23,10 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build ListApp.AuthServer --configuration Release
+        run: dotnet build ListApp.Api --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish ListApp.AuthServer -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish ListApp.Api -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -51,7 +51,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'ListFreakAuthServer'
+          app-name: 'ListFreakApi'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DBCD1F25B7D54A49A330DDD0F9069DC9 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7B083D8078E5476AA521EF5800338E23 }}
           package: .
