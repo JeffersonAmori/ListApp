@@ -17,9 +17,9 @@
             <StackLayout BackgroundColor="{DynamicResource SecondaryColor}"
                          Padding="10">
                 <Button Text="Login with Google"
-                    IsVisible="{Binding IsLoggedIn, Source={x:Static models:ApplicationUser.Current}, Converter={StaticResource InvertedBoolConverter}}"
-                    Style="{StaticResource ButtonStyle}"
-                    Command="{Binding LoginWithGoogleCommand}" >
+                        IsVisible="{Binding IsLoggedIn, Source={x:Static models:ApplicationUser.Current}, Converter={StaticResource InvertedBoolConverter}}"
+                        Style="{StaticResource ButtonStyle}"
+                        Command="{Binding LoginWithGoogleCommand}" >
                     <Button.ImageSource>
                         <FontImageSource FontFamily="FA-Brands"
                                          Glyph="{x:Static fonts:FontAwesome6SolidBrands.Google}"
@@ -27,18 +27,21 @@
                     </Button.ImageSource>
                 </Button>
                 <Label Text="{Binding FirstName, Source={x:Static models:ApplicationUser.Current}}"
-                   FontSize="Title"
-                   IsVisible="{Binding IsLoggedIn, Source={x:Static models:ApplicationUser.Current}}"/>
+                       FontSize="Title"
+                       IsVisible="{Binding IsLoggedIn, Source={x:Static models:ApplicationUser.Current}}"/>
                 <Label Text="{Binding Email, Source={x:Static models:ApplicationUser.Current}}"
-                   FontSize="Subtitle"
-                   IsVisible="{Binding IsLoggedIn, Source={x:Static models:ApplicationUser.Current}}"/>
+                       FontSize="Subtitle"
+                       IsVisible="{Binding IsLoggedIn, Source={x:Static models:ApplicationUser.Current}}"/>
             </StackLayout>
 
             <StackLayout VerticalOptions="CenterAndExpand">
                 <Button Text="Sync with cloud"
-                    Style="{StaticResource ButtonStyle}"
-                    IsVisible="{Binding IsLoggedIn, Source={x:Static models:ApplicationUser.Current}}"
-                    Command="{Binding SyncCommand}" />
+                        Style="{StaticResource ButtonStyle}"
+                        IsVisible="{Binding IsLoggedIn, Source={x:Static models:ApplicationUser.Current}}"
+                        Command="{Binding SyncCommand}"
+                        IsEnabled="{Binding IsSyncing, Converter={StaticResource InvertedBoolConverter}}"/>
+                <ActivityIndicator IsRunning="{Binding IsSyncing}"
+                                   Color="{DynamicResource PrimaryColor}"/>
             </StackLayout>
             
             <Button Text="Sign out"
