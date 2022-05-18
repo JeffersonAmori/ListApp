@@ -118,20 +118,20 @@
             </sho:CollectionView>
         </ScrollView>
         <StackLayout BackgroundColor="{DynamicResource SecondaryColor}">
-        <Button Text="Restore list"
-                TextColor="{DynamicResource PrimaryTextColor}"
-                IsVisible="{Binding IsDeletedList}"
-                Margin="20"
-                CornerRadius="50"
-                BackgroundColor="{DynamicResource PrimaryColor}"
-                Command="{Binding RestoreListFromTrashBin}" >
-            <Button.ImageSource>
-                <FontImageSource FontFamily="FA"
-                                 Color="{DynamicResource PrimaryTextColor}"
-                                 Glyph="{x:Static fonts:FontAwesome6SolidIcons.ArrowRotateLeft}"
-                                 Size="Medium"/>
-            </Button.ImageSource>
-        </Button>
+            <Button Text="Restore list"
+                    TextColor="{DynamicResource PrimaryTextColor}"
+                    IsVisible="{Binding IsDeletedList}"
+                    Margin="20"
+                    CornerRadius="50"
+                    BackgroundColor="{DynamicResource PrimaryColor}"
+                    Command="{Binding RestoreListFromTrashBin}" >
+                <Button.ImageSource>
+                    <FontImageSource FontFamily="FA"
+                                     Color="{DynamicResource PrimaryTextColor}"
+                                     Glyph="{x:Static fonts:FontAwesome6SolidIcons.ArrowRotateLeft}"
+                                     Size="Medium"/>
+                </Button.ImageSource>
+            </Button>
         </StackLayout>
     </StackLayout>
 </ContentPage>
