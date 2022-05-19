@@ -6,9 +6,9 @@ using System;
 namespace ListApp.UnitTests.DataTtributes
 {
     [AttributeUsage(AttributeTargets.Method)]
-    internal class BaseDataAttribute : AutoDataAttribute
+    internal class BaseAutoDataAttribute : AutoDataAttribute
     {
-        public BaseDataAttribute() : base(() => CreateFixture()) { }
+        public BaseAutoDataAttribute() : base(() => CreateFixture()) { }
 
         private static IFixture CreateFixture()
         {
