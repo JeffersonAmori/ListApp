@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xamarin
 
 trigger:
-- master
+- deploy/ListApp
 
 pool:
   vmImage: 'windows-2022'
@@ -13,13 +13,23 @@ variables:
   buildConfiguration: 'Release'
   outputDirectory: '$(build.binariesDirectory)/$(buildConfiguration)'
 
+name: '$(Date:yyyyMMdd)$(Rev:r)'
+
 steps:
-    
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '**/*.sln'
+    
+- task: Android-Manifest-Version@1
+  inputs:
+    sourcePath: 'ListApp/ListApp.Android/Properties/AndroidManifest.xml'
+    versionCodeOption: 'buildid'
+    versionCode: '$(Date:yyyyMMdd)'
+    versionName: '1.4.$(Build.BuildId)'
+    printFile: true
 
 - task: XamarinAndroid@1
   inputs:
