@@ -27,7 +27,7 @@ steps:
   inputs:
     sourcePath: 'ListApp/ListApp.Android/Properties/AndroidManifest.xml'
     versionCodeOption: 'buildid'
-    versionCode: '$(Date:yyyyMMdd)$(Rev:.r)'
+    versionCode: '$(Date:yyyyMMdd)$(Rev:r)'
     versionName: '1.4.$(Build.BuildId)'
     printFile: true
 
