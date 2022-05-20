@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
   outputDirectory: '$(build.binariesDirectory)/$(buildConfiguration)'
 
-name: $(Date:yyyyMMdd)$(Rev:.r)
+name: '$(Date:yyyyMMdd)$(Rev:r)'
 
 steps:
 
@@ -27,7 +27,7 @@ steps:
   inputs:
     sourcePath: 'ListApp/ListApp.Android/Properties/AndroidManifest.xml'
     versionCodeOption: 'buildid'
-    versionCode: '$(Date:yyyyMMdd)$(Rev:r)'
+    versionCode: '$(Date:yyyyMMdd)'
     versionName: '1.4.$(Build.BuildId)'
     printFile: true
 
