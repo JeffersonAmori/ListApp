@@ -22,6 +22,7 @@ namespace ListApp.ViewModels
         private ILogger _logger;
         private IDataStore<List> _dataStore;
         private IDialogService _dialogService;
+        private INavigationService _navigationService;
 
         public ObservableCollection<List> ListCollection { get; }
         public List<IListVisualItem> ListVisualItemCollection
@@ -36,7 +37,6 @@ namespace ListApp.ViewModels
         public ICommand LoadListsCommand { get; }
         public ICommand ListTappedCommand { get; }
         public ICommand AddListCommand { get; }
-        public ICommand DeleteList { get; }
         public ICommand ListDragAndDropFinishedCommand { get; }
 
         public List SelectedList
@@ -77,7 +77,7 @@ namespace ListApp.ViewModels
             set { _isDeleted = value; }
         }
 
-        public ListViewModel(ILogger logger, IDataStore<List> dataStore, IDialogService dialogService)
+        public ListViewModel(ILogger logger, IDataStore<List> dataStore, IDialogService dialogService, INavigationService navigationService)
         {
             Title = IsDeleted ? "Recycle bin" : "List Freak";
 
@@ -87,14 +87,14 @@ namespace ListApp.ViewModels
             LoadListsCommand = new Command(async () => await ExecuteLoadListsCommand());
             ListTappedCommand = new Command<List>(async (list) => await OnListSelected(list));
             AddListCommand = new Command(async () => await AddToListCollection());
-            DeleteList = new Command<string>(async (listId) => await OnDeleteList(listId));
             ListDragAndDropFinishedCommand = new Command(async () => await OnListDragAndDropFinishedCommand());
 
-            IsDeleted = Shell.Current.CurrentItem.CurrentItem.Route == "IMPL_RecycleBin";
+            IsDeleted = (Shell.Current?.CurrentItem?.CurrentItem?.Route ?? string.Empty) == "IMPL_RecycleBin";
 
             _logger = logger;
             _dataStore = dataStore;
             _dialogService = dialogService;
+            _navigationService = navigationService;
         }
 
         public void OnAppearing()
@@ -108,29 +108,7 @@ namespace ListApp.ViewModels
             {
                 if (list == null) return;
 
-                await Shell.Current.GoToAsync($"{nameof(ItemsPage)}?{nameof(ItemsViewModel.ListId)}={list.ListId}");
-            }
-            catch (Exception ex)
-            {
-                _logger.TrackError(ex);
-            }
-        }
-
-        private async Task OnDeleteList(string listId)
-        {
-            try
-            {
-                var currentList = ListCollection.FirstOrDefault(l => l.ListId == listId);
-
-                if (currentList == null) return;
-
-                bool deleteList = await _dialogService.DisplayAlert($"Delete list {currentList.Name}?", "This action cannot be undone.", "Yes", "No");
-
-                if (deleteList)
-                {
-                    await _dataStore.DeleteItemAsync(currentList.ListId);
-                    await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
-                }
+                await _navigationService.GoToAsync($"{nameof(ItemsPage)}?{nameof(ItemsViewModel.ListId)}={list.ListId}");
             }
             catch (Exception ex)
             {

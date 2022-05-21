@@ -49,7 +49,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ListApp.Abstractions\ListApp.Abstractions.csproj" />
     <ProjectReference Include="..\..\ListApp.Api.Models\ListApp.Api.Models.csproj" />
   </ItemGroup>
 

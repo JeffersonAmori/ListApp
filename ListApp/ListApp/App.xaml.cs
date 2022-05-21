@@ -77,6 +77,7 @@ namespace ListApp
             services.AddTransient<IDialogService, DialogService>();
             services.AddTransient<IDataStore<List>, EfListDataStore>();
             services.AddTransient<IDataStore<ListItem>, EfListItemDataStore>();
+            services.AddTransient<INavigationService, NavigationService>();
             services.AddTransient<ListContext>();
             services.AddTransient<ItemsViewModel>();
             services.AddTransient<ListViewModel>();
