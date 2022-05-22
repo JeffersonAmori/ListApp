@@ -2,12 +2,10 @@
 using ListApp.Services.Interfaces;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ListApp.ViewModels
@@ -19,9 +17,11 @@ namespace ListApp.ViewModels
         private string _listId;
         private ListItem _selectedItem;
         private List _currentList;
-        private ILogger _logger;
-        private IDataStore<List> _dataStore;
-        private IDialogService _dialogService;
+        private readonly ILogger _logger;
+        private readonly IDataStore<List> _dataStore;
+        private readonly IDialogService _dialogService;
+        private readonly INavigationService _navigationService;
+        private readonly IShareService _shareService;
 
         public ObservableCollection<ListItem> Items { get; }
         public ICommand LoadItemsCommand { get; }
@@ -45,19 +45,19 @@ namespace ListApp.ViewModels
             set
             {
                 _listId = value;
-                _currentList = _dataStore.GetItemAsync(value).Result;
+                CurrentList = _dataStore.GetItemAsync(value).Result;
                 new Action(async () => await ExecuteLoadItemsCommand())();
                 OnPropertyChanged(nameof(IsDeletedList));
-                Title = _currentList.Name;
+                Title = CurrentList.Name;
             }
         }
 
         public bool IsDeletedList
         {
-            get => _currentList?.IsDeleted ?? false;
+            get => CurrentList?.IsDeleted ?? false;
         }
 
-        public ItemsViewModel(ILogger logger, IDataStore<List> dataStore, IDialogService dialogService)
+        public ItemsViewModel(ILogger logger, IDataStore<List> dataStore, IDialogService dialogService, INavigationService navigationService, IShareService shareService)
         {
             Items = new ObservableCollection<ListItem>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
@@ -73,6 +73,8 @@ namespace ListApp.ViewModels
             _logger = logger;
             _dataStore = dataStore;
             _dialogService = dialogService;
+            _navigationService = navigationService;
+            _shareService = shareService;
         }
 
         public ListItem SelectedItem
@@ -94,16 +96,18 @@ namespace ListApp.ViewModels
             }
         }
 
+        public List CurrentList { get => _currentList; set => _currentList = value; }
+
         private async Task ExecuteLoadItemsCommand()
         {
             IsBusy = true;
 
             try
             {
-                if (_currentList is null) return;
+                if (CurrentList is null) return;
 
                 Items.Clear();
-                foreach (var item in _currentList.ListItems.OrderBy(li => li.Index))
+                foreach (var item in CurrentList.ListItems.OrderBy(li => li.Index))
                 {
                     Items.Add(item);
                 }
@@ -139,7 +143,7 @@ namespace ListApp.ViewModels
 
                 ListItem listItem = new ListItem()
                 {
-                    ListId = _currentList.ListId,
+                    ListId = CurrentList.ListId,
                     Id = Guid.NewGuid().ToString(),
                     Text = NewItemText,
                     Index = nextIndex
@@ -147,8 +151,8 @@ namespace ListApp.ViewModels
 
                 Items.Add(listItem);
 
-                _currentList.ListItems.Add(listItem);
-                await _dataStore.UpdateItemAsync(_currentList);
+                CurrentList.ListItems.Add(listItem);
+                await _dataStore.UpdateItemAsync(CurrentList);
 
                 NewItemText = string.Empty;
             }
@@ -160,12 +164,12 @@ namespace ListApp.ViewModels
 
         private async void OnDeleteItem(object id)
         {
-            if (_currentList.ListItems.FirstOrDefault(x => x.Id == id.ToString()) is ListItem listITem)
+            if (CurrentList.ListItems.FirstOrDefault(x => x.Id == id.ToString()) is ListItem listItem)
             {
                 try
                 {
-                    _currentList.ListItems.Remove(listITem);
-                    await _dataStore.UpdateItemAsync(_currentList);
+                    CurrentList.ListItems.Remove(listItem);
+                    await _dataStore.UpdateItemAsync(CurrentList);
                     Items.Remove(Items.First(i => i.Id == id.ToString()));
                     UpdateListItemsIndexes();
                 }
@@ -181,24 +185,24 @@ namespace ListApp.ViewModels
             try
             {
                 Task dialogTask = Task.FromResult(true);
-                if (_currentList.IsDeleted)
+                if (CurrentList.IsDeleted)
                 {
-                    bool deleteList = await _dialogService.DisplayAlert($"Delete list {_currentList.Name}?", "This action cannot be undone.", "Yes", "No");
+                    bool deleteList = await _dialogService.DisplayAlert($"Delete list {CurrentList.Name}?", "This action cannot be undone.", "Yes", "No");
 
                     if (deleteList)
                     {
-                        await _dataStore.DeleteItemAsync(_currentList.ListId);
+                        await _dataStore.DeleteItemAsync(CurrentList.ListId);
                         dialogTask = _dialogService.DisplayToastAsync("List deleted.");
                     }
                 }
                 else
                 {
-                    _currentList.IsDeleted = true;
-                    await _dataStore.UpdateItemAsync(_currentList);
+                    CurrentList.IsDeleted = true;
+                    await _dataStore.UpdateItemAsync(CurrentList);
                     dialogTask = _dialogService.DisplayToastAsync("List moved to trash.");
                 }
 
-                await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+                await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
                 await dialogTask;
             }
             catch (Exception ex)
@@ -225,7 +229,7 @@ namespace ListApp.ViewModels
                     OnPropertyChanged(nameof(Items));
 
                     UpdateListItemsIndexes();
-                    await _dataStore.UpdateItemAsync(_currentList);
+                    await _dataStore.UpdateItemAsync(CurrentList);
                 }
             }
             catch (Exception ex)
@@ -245,7 +249,7 @@ namespace ListApp.ViewModels
             try
             {
                 UpdateListItemsIndexes();
-                await _dataStore.UpdateItemAsync(_currentList);
+                await _dataStore.UpdateItemAsync(CurrentList);
             }
             catch (Exception ex)
             {
@@ -264,13 +268,13 @@ namespace ListApp.ViewModels
                 }
 
                 StringBuilder listAsTextStringBuilder = new StringBuilder();
-                listAsTextStringBuilder.Append(_currentList.Name);
+                listAsTextStringBuilder.Append(CurrentList.Name);
                 foreach (var item in Items)
                 {
                     listAsTextStringBuilder.Append($"\n - {item.Text}");
                 }
 
-                await Share.RequestAsync(listAsTextStringBuilder.ToString(), _currentList.Name);
+                await _shareService.RequestAsync(listAsTextStringBuilder.ToString(), CurrentList.Name);
             }
             catch (Exception ex)
             {
@@ -284,7 +288,7 @@ namespace ListApp.ViewModels
             {
                 ListItem newListItem = new ListItem()
                 {
-                    ListId = _currentList.ListId,
+                    ListId = CurrentList.ListId,
                     Id = Guid.NewGuid().ToString(),
                     Text = listItem.Text
                 };
@@ -298,8 +302,8 @@ namespace ListApp.ViewModels
 
                 UpdateListItemsIndexes();
 
-                _currentList.ListItems.Add(newListItem);
-                await _dataStore.UpdateItemAsync(_currentList);
+                CurrentList.ListItems.Add(newListItem);
+                await _dataStore.UpdateItemAsync(CurrentList);
             }
             catch (Exception ex)
             {
@@ -311,14 +315,13 @@ namespace ListApp.ViewModels
         {
             try
             {
-                _currentList.IsDeleted = false;
-                await _dataStore.UpdateItemAsync(_currentList);
-                await Shell.Current.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+                CurrentList.IsDeleted = false;
+                await _dataStore.UpdateItemAsync(CurrentList);
+                await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
             }
             catch (Exception ex)
             {
-
-                throw;
+                _logger.TrackError(ex);
             }
         }
     }
