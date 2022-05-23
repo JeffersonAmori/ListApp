@@ -84,6 +84,7 @@ namespace ListApp.UITests
             {
                 app.Tap(x => x.Text($"Item {i - 1}"));
                 app.PressEnter();
+                app.WaitForElement(x => x.Text($"Item {i - 1}"));
                 app.EnterText($"Item {i}");
                 results.Add(app.WaitForElement($"Item {i}"));
             }

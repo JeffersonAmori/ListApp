@@ -10,7 +10,6 @@ namespace ListApp.UITests
             {
                 return ConfigureApp
                             .Android
-                            .EnableLocalScreenshots()
                             .InstalledApp("com.deviance.listfreak")
                             .StartApp();
             }

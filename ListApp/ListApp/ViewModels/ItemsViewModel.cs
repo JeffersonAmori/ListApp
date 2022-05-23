@@ -294,7 +294,10 @@ namespace ListApp.ViewModels
                     Checked = listItem.Checked
                 };
 
-                Items.Insert(listItem.Index, newListItem);
+                if (Items.Count == 1)
+                    Items.Insert(0, newListItem);
+                else
+                    Items.Insert(listItem.Index, newListItem);
 
                 listItem.Text = string.Empty;
                 listItem.Checked = false;
