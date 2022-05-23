@@ -290,15 +290,14 @@ namespace ListApp.ViewModels
                 {
                     ListId = CurrentList.ListId,
                     Id = Guid.NewGuid().ToString(),
-                    Text = listItem.Text
+                    Text = listItem.Text,
+                    Checked = listItem.Checked
                 };
 
-                if (Items.Count == listItem.Index)
-                    Items.Add(newListItem);
-                else
-                    Items.Insert(listItem.Index, newListItem);
+                Items.Insert(listItem.Index, newListItem);
 
                 listItem.Text = string.Empty;
+                listItem.Checked = false;
 
                 UpdateListItemsIndexes();
 
