@@ -94,5 +94,30 @@ namespace ListApp.UITests
 
             results.Should().AllSatisfy(x => x.Any());
         }
+
+        [Test]
+        public void ThemesPages_ShowsThemes()
+        {
+            // Navigate to the themes page.
+            app.WaitForElement(x => x.Text("List Freak"));
+            app.TapCoordinates(30, 100);
+            app.WaitForElement(x => x.Text("Settings"));
+            app.Tap(x => x.Text("Settings"));
+            app.WaitForElement(x => x.Text("Themes"));
+            app.Tap(x => x.Text("Themes"));
+
+            // Find all themes on screen.
+            List<AppResult[]> results = new List<AppResult[]>();
+            results.Add(app.WaitForElement(x => x.Text("Forest")));
+            results.Add(app.WaitForElement(x => x.Text("River")));
+            results.Add(app.WaitForElement(x => x.Text("Bee")));
+            results.Add(app.WaitForElement(x => x.Text("Quartzo")));
+            results.Add(app.WaitForElement(x => x.Text("Night")));
+            results.Add(app.WaitForElement(x => x.Text("Inferno")));
+            results.Add(app.WaitForElement(x => x.Text("London")));
+
+            // Check if the themes are displayed correctly.
+            results.Should().AllSatisfy(x => x.Any());
+        }
     }
 }

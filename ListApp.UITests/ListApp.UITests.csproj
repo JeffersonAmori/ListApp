@@ -37,8 +37,6 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
   </ItemGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Helpers\CommonTasks.cs" />
     <Compile Include="Tests.cs" />
     <Compile Include="AppInitializer.cs" />
