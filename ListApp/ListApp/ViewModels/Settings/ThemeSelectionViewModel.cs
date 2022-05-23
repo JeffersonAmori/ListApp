@@ -33,7 +33,7 @@ namespace ListApp.ViewModels.Settings
             set
             {
                 _selectedTheme = value;
-                UpdateTheme(value);
+                UpdateTheme();
                 OnPropertyChanged();
             }
         }
@@ -89,26 +89,22 @@ namespace ListApp.ViewModels.Settings
             }
         }
 
-        private void UpdateTheme(Theme value)
+        private void UpdateTheme()
         {
             try
             {
                 ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
-                if (mergedDictionaries != null)
-                {
-                    mergedDictionaries.Clear();
 
-                    // Parsing selected theme value
-                    if (Enum.TryParse(SelectedTheme.ToString(), out Theme currentThemeEnum))
-                    {
-                        // Setting up theme
-                        if (ThemeHelper.SetAppTheme(currentThemeEnum))
-                        {
-                            // Theme setting successful
-                            Preferences.Set(PreferencesKeys.CurrentAppTheme, SelectedTheme.ToString());
-                        }
-                    }
-                }
+                if (mergedDictionaries == null)
+                    return;
+
+                mergedDictionaries.Clear();
+
+                if (!Enum.TryParse(SelectedTheme.ToString(), out Theme currentThemeEnum))
+                    return;
+
+                if (ThemeHelper.SetAppTheme(currentThemeEnum))
+                    Preferences.Set(PreferencesKeys.CurrentAppTheme, SelectedTheme.ToString());
             }
             catch (Exception ex)
             {

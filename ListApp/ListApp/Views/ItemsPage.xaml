@@ -37,6 +37,7 @@
     </ContentPage.Resources>
     <StackLayout VerticalOptions="FillAndExpand">
         <Entry x:Name="NewList"
+               AutomationId="TypeHereEntry"
                Placeholder="Type here..."
                ReturnType="Done"
                Keyboard="Chat"

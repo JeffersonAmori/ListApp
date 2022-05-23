@@ -66,6 +66,7 @@
         </sho:CollectionView>
         <Button RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Constant=-60}"
                 RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Constant=-60}"
+                AutomationId="NewListFloatActionButton"
                 Text="+"
                 FontSize="Large"
                 CornerRadius="50"
