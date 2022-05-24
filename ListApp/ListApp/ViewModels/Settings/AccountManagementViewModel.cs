@@ -3,7 +3,6 @@ using ListApp.Models;
 using ListApp.Models.Extensions;
 using ListApp.Resources;
 using ListApp.Services.Interfaces;
-using Microsoft.AppCenter.Crashes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,6 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using ApiModel = ListApp.Api.Models;
 
@@ -20,9 +18,12 @@ namespace ListApp.ViewModels.Settings
 {
     public class AccountManagementViewModel : BaseViewModel
     {
-        private ILogger _logger;
-        private IDataStore<List> _dataStore;
-        private IDialogService _dialogService;
+        private readonly ILogger _logger;
+        private readonly IDataStore<List> _dataStore;
+        private readonly IDialogService _dialogService;
+        private readonly IHttpClientService _httpClientService;
+        private readonly IWebAuthenticatorService _webAuthenticatorService;
+        private readonly IPreferencesService _preferencesService;
         private bool _isSyncing;
 
         public ICommand LoginWithGoogleCommand { get; }
@@ -39,21 +40,34 @@ namespace ListApp.ViewModels.Settings
             }
         }
 
-        public AccountManagementViewModel(IDataStore<List> dataStore, IDialogService dialogService)
+        public AccountManagementViewModel(
+            IDataStore<List> dataStore,
+            IDialogService dialogService,
+            ILogger logger,
+            IHttpClientService httpClientService,
+            IWebAuthenticatorService webAuthenticatorService,
+            IPreferencesService preferencesService)
         {
             Title = "Account";
             LoginWithGoogleCommand = new Command(OnLoginWithGoogleCommand);
             SyncCommand = new Command(OnSyncCommand);
             SignOutCommand = new Command(OnSignOutCommand);
+
             _dataStore = dataStore;
             _dialogService = dialogService;
+            _logger = logger;
+            _httpClientService = httpClientService;
+            _webAuthenticatorService = webAuthenticatorService;
+            _preferencesService = preferencesService;
+
+            _httpClientService.SetBaseAddress(Secrets.ListFreakApiEndpoint);
         }
 
         private async void OnLoginWithGoogleCommand()
         {
             try
             {
-                var authResult = await WebAuthenticator.AuthenticateAsync(
+                var authResult = await _webAuthenticatorService.AuthenticateAsync(
                     new Uri(Secrets.ListFreakAuthServerEndpoint.ToString() + "mobileauth/Google"),
                     new Uri("listfreak://"));
 
@@ -63,7 +77,7 @@ namespace ListApp.ViewModels.Settings
                 var refreshToken = authResult?.RefreshToken;
 
                 ApplicationUser.Current.Set(fullName, email, accessToken, refreshToken);
-                Preferences.Set(PreferencesKeys.ApplicationUserInfo, JsonSerializer.Serialize(ApplicationUser.Current));
+                _preferencesService.Set(PreferencesKeys.ApplicationUserInfo, JsonSerializer.Serialize(ApplicationUser.Current));
             }
             catch (Exception ex)
             {
@@ -77,13 +91,10 @@ namespace ListApp.ViewModels.Settings
 
             try
             {
-                var syncStartedDialogTask = _dialogService.DisplayToastAsync("Syncing...");
+                _ = _dialogService.DisplayToastAsync("Syncing...");
 
-                HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = Secrets.ListFreakApiEndpoint;
-
-                // Start 2 tasks: 1) to retrieve data from local DB and 2) to request the online lists to the API
-                var allBackedupListsForCurrentUserRequestTask = httpClient.GetAsync($"lists/ownerEmail/{ApplicationUser.Current.Email}");
+                // Start 2 tasks: 1) to retrieve data from local DB and 2) to request the online lists to the API.
+                var allBackedupListsForCurrentUserRequestTask = _httpClientService.GetAsync(string.Format(ListApiEndPoints.GetListsByOwnerEmail, ApplicationUser.Current.Email));
                 var localListsTask = _dataStore.GetItemsAsync();
 
                 var localLists = await localListsTask;
@@ -99,7 +110,7 @@ namespace ListApp.ViewModels.Settings
                         cloudList.LastChangedDate = DateTime.UtcNow;
 
                         string jsonContent = JsonSerializer.Serialize(cloudList);
-                        var response = await httpClient.PutAsync($"lists/{cloudList.Id}", new StringContent(jsonContent, Encoding.UTF8, "application/json"));
+                        var response = await _httpClientService.PutAsync(string.Format(ListApiEndPoints.PutList, cloudList.Id), new StringContent(jsonContent, Encoding.UTF8, "application/json"));
                     }
                     else
                     {
@@ -113,15 +124,16 @@ namespace ListApp.ViewModels.Settings
                     if (!allBackedupListsForCurrentUser.Any(x => x.Guid == localList.ListId))
                     {
                         var cloudList = localList.ToApiModel();
-                        var response = await httpClient.PostAsync($"lists", new StringContent(JsonSerializer.Serialize(cloudList), Encoding.UTF8, "application/json"));
+                        var response = await _httpClientService.PostAsync(ListApiEndPoints.PostList, new StringContent(JsonSerializer.Serialize(cloudList), Encoding.UTF8, "application/json"));
                     }
                 }
 
-                var syncFinishedDialogTask = _dialogService.DisplayToastAsync("Synced!");
+                _ = _dialogService.DisplayToastAsync("Synced!");
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                _ = _dialogService.DisplayToastAsync("Something went wrong.");
+                _logger.TrackError(ex);
             }
             finally
             {
@@ -134,12 +146,12 @@ namespace ListApp.ViewModels.Settings
             try
             {
                 ApplicationUser.Current.Unset();
-                Preferences.Remove(PreferencesKeys.ApplicationUserInfo);
+                _preferencesService.Remove(PreferencesKeys.ApplicationUserInfo);
                 await _dialogService.DisplayToastAsync("Signed out");
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                _logger.TrackError(ex);
             }
         }
     }

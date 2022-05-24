@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ListApp.UnitTests.DataTtributes
+namespace ListApp.UnitTests.DataTtributes.Base
 {
     public class BaseInlineAutoDataAttribute : InlineAutoDataAttribute
     {

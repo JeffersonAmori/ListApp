@@ -73,17 +73,21 @@ namespace ListApp
         {
             var services = new ServiceCollection();
 
-            services.AddTransient<ILogger, AppCenterLogger>();
-            services.AddTransient<IDialogService, DialogService>();
-            services.AddTransient<IDataStore<List>, EfListDataStore>();
-            services.AddTransient<IDataStore<ListItem>, EfListItemDataStore>();
-            services.AddTransient<INavigationService, NavigationService>();
-            services.AddTransient<IShareService, ShareService>();
-            services.AddTransient<ListContext>();
-            services.AddTransient<ItemsViewModel>();
-            services.AddTransient<ListViewModel>();
-            services.AddTransient<AccountManagementViewModel>();
-            services.AddTransient<ThemeSelectionViewModel>();
+            services
+                .AddTransient<ILogger, AppCenterLogger>()
+                .AddTransient<IDialogService, DialogService>()
+                .AddTransient<IDataStore<List>, EfListDataStore>()
+                .AddTransient<IDataStore<ListItem>, EfListItemDataStore>()
+                .AddTransient<INavigationService, NavigationService>()
+                .AddTransient<IShareService, ShareService>()
+                .AddSingleton<IHttpClientService>(new HttpClientService())
+                .AddTransient<IWebAuthenticatorService, WebAuthenticatorService>()
+                .AddTransient<IPreferencesService, PreferencesService>()
+                .AddTransient<ListContext>()
+                .AddTransient<ItemsViewModel>()
+                .AddTransient<ListViewModel>()
+                .AddTransient<AccountManagementViewModel>()
+                .AddTransient<ThemeSelectionViewModel>();
 
             ServiceProvider = services.BuildServiceProvider();
         }

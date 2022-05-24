@@ -1,7 +1,8 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using ListApp.Services.Interfaces;
-using ListApp.UnitTests.DataTtributes;
+using ListApp.UnitTests.Base;
+using ListApp.UnitTests.DataTtributes.Base;
 using ListApp.ViewModels;
 using Moq;
 using NUnit.Framework;
@@ -15,7 +16,7 @@ using AppModel = ListApp.Models;
 namespace ListApp.UnitTests.ViewModels
 {
     [TestFixture]
-    public class ItemsViewModelTests
+    public class ItemsViewModelTests : BaseTest
     {
         [Test, BaseAutoData]
         public async Task LoadItemsCommand_Should_PopulateItemsCollection(

@@ -53,6 +53,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\ListApiEndPoints.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ListApiEndPoints.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Preferences.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -81,12 +86,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\ListApiEndPoints.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ListApiEndPoints.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Preferences.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Preferences.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\PreferencesKeys.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PreferencesKeys.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Themes\BeeTheme.xaml">

@@ -1,7 +1,8 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using ListApp.Services.Interfaces;
-using ListApp.UnitTests.DataTtributes;
+using ListApp.UnitTests.Base;
+using ListApp.UnitTests.DataTtributes.Base;
 using ListApp.ViewModels;
 using ListApp.Views;
 using Moq;
@@ -16,7 +17,7 @@ using AppModel = ListApp.Models;
 namespace ListApp.UnitTests.ViewModels
 {
     [TestFixture]
-    public class ListViewModelTests
+    public class ListViewModelTests : BaseTest
     {
         [Test, BaseAutoData]
         public async Task LoadListsCommand_Should_PopulateListCollection(
@@ -48,7 +49,7 @@ namespace ListApp.UnitTests.ViewModels
             sut.LoadListsCommand.Execute(null);
 
             // Assert
-            logger.Verify(logger => logger.TrackError(It.IsAny<Exception>(), It.IsAny < Dictionary<string, string>>()), Times.Once);
+            logger.Verify(logger => logger.TrackError(It.IsAny<Exception>(), It.IsAny<Dictionary<string, string>>()), Times.Once);
         }
 
         [Test, BaseAutoData]

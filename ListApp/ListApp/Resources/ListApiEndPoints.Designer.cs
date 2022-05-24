@@ -22,14 +22,14 @@ namespace ListApp.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class PreferencesKeys {
+    public class ListApiEndPoints {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal PreferencesKeys() {
+        internal ListApiEndPoints() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace ListApp.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ListApp.Resources.PreferencesKeys", typeof(PreferencesKeys).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ListApp.Resources.ListApiEndPoints", typeof(ListApiEndPoints).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +61,29 @@ namespace ListApp.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ApplicationUserInfo.
+        ///   Looks up a localized string similar to lists/ownerEmail/{0}.
         /// </summary>
-        public static string ApplicationUserInfo {
+        public static string GetListsByOwnerEmail {
             get {
-                return ResourceManager.GetString("ApplicationUserInfo", resourceCulture);
+                return ResourceManager.GetString("GetListsByOwnerEmail", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CurrentAppTheme.
+        ///   Looks up a localized string similar to lists.
         /// </summary>
-        public static string CurrentAppTheme {
+        public static string PostList {
             get {
-                return ResourceManager.GetString("CurrentAppTheme", resourceCulture);
+                return ResourceManager.GetString("PostList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to lists/{0}.
+        /// </summary>
+        public static string PutList {
+            get {
+                return ResourceManager.GetString("PutList", resourceCulture);
             }
         }
     }

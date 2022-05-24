@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Equivalency;
 using ListApp.Models.Extensions;
-using ListApp.UnitTests.DataTtributes;
+using ListApp.UnitTests.Base;
+using ListApp.UnitTests.DataTtributes.Base;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using LocalModel = ListApp.Models;
 namespace ListApp.UnitTests
 {
     [TestFixture]
-    public class ModelExtensionsTests
+    public class ModelExtensionsTests : BaseTest
     {
         [Test, BaseAutoData]
         public void MethodToLocalModel_Should_ReturnEquivalentLocalList(ApiModel.List cloudList)
@@ -98,35 +99,35 @@ namespace ListApp.UnitTests
         [Test, BaseAutoData, Ignore("Could not implement ContainEquivalentOf yet.")]
         public void MethodCopyFrom_Should_ReturnObjectWithCopiedValues(ApiModel.List cloudList, LocalModel.List localList)
         {
-            // Arrange
-            Func<EquivalencyAssertionOptions<LocalModel.List>, EquivalencyAssertionOptions<LocalModel.List>> listEquivalencyAssertionOptions = (config) =>
-                config
-                    .ExcludingMissingMembers()
-                    .Excluding(list => list.CreationDate)
-                    .Excluding(list => list.LastChangedDate)
-                    .Excluding(list => list.ListItems);
-
-            Func<EquivalencyAssertionOptions<List<LocalModel.ListItem>>, EquivalencyAssertionOptions<List<LocalModel.ListItem>>> listItemEquivalencyAssertionOptions = 
-                (config) => 
-                    config
-                        .Excluding(listItem => listItem.Path.Contains("Id"))
-                        .Excluding(listItem => listItem.Path.Contains("Guid"))
-                        .Excluding(listItem => listItem.Path.Contains("ListId"))
-                        .Excluding(listItem => listItem.Path.Contains("LastChangedDate"))
-                        .WithTracing();
-            //Func<EquivalencyAssertionOptions<IEnumerable<ApiModel.ListItem>>, EquivalencyAssertionOptions<IEnumerable<ApiModel.ListItem>>> listItemEquivalencyAssertionOptions = (config) =>
+            //// Arrange
+            //Func<EquivalencyAssertionOptions<LocalModel.List>, EquivalencyAssertionOptions<LocalModel.List>> listEquivalencyAssertionOptions = (config) =>
             //    config
-            //        .WithMapping<LocalModel.ListItem>(t => t.Guid, s => s.Id)
             //        .ExcludingMissingMembers()
             //        .Excluding(list => list.CreationDate)
             //        .Excluding(list => list.LastChangedDate)
+            //        .Excluding(list => list.ListItems);
 
-            // Act
-            cloudList.CopyFrom(localList);
+            //Func<EquivalencyAssertionOptions<List<LocalModel.ListItem>>, EquivalencyAssertionOptions<List<LocalModel.ListItem>>> listItemEquivalencyAssertionOptions =
+            //    (config) =>
+            //        config
+            //            .Excluding(listItem => listItem.Path.Contains("Id"))
+            //            .Excluding(listItem => listItem.Path.Contains("Guid"))
+            //            .Excluding(listItem => listItem.Path.Contains("ListId"))
+            //            .Excluding(listItem => listItem.Path.Contains("LastChangedDate"))
+            //            .WithTracing();
+            ////Func<EquivalencyAssertionOptions<IEnumerable<ApiModel.ListItem>>, EquivalencyAssertionOptions<IEnumerable<ApiModel.ListItem>>> listItemEquivalencyAssertionOptions = (config) =>
+            ////    config
+            ////        .WithMapping<LocalModel.ListItem>(t => t.Guid, s => s.Id)
+            ////        .ExcludingMissingMembers()
+            ////        .Excluding(list => list.CreationDate)
+            ////        .Excluding(list => list.LastChangedDate)
 
-            // Assert
-            cloudList.Should().BeEquivalentTo(localList, listEquivalencyAssertionOptions);
-            cloudList.ListItems.Should().ContainEquivalentOf(localList.ListItems, listItemEquivalencyAssertionOptions);
+            //// Act
+            //cloudList.CopyFrom(localList);
+
+            //// Assert
+            //cloudList.Should().BeEquivalentTo(localList, listEquivalencyAssertionOptions);
+            //cloudList.ListItems.Should().ContainEquivalentOf(localList.ListItems, listItemEquivalencyAssertionOptions);
         }
     }
 }
