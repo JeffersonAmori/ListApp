@@ -69,7 +69,7 @@ namespace ListApp
         /// <summary>
         /// Set up the services used by the app.
         /// </summary>
-        void SetupServices()
+        private void SetupServices()
         {
             var services = new ServiceCollection();
 

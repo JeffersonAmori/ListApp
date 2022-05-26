@@ -6,14 +6,14 @@ using ListApp.Themes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ListApp.ViewModels.Settings
 {
     public class ThemeSelectionViewModel : BaseViewModel
     {
-        private ILogger _logger;
+        private readonly IPreferencesService _preferenceService;
+        private readonly ILogger _logger;
         private Array _themes;
         private Theme _selectedTheme;
 
@@ -38,8 +38,9 @@ namespace ListApp.ViewModels.Settings
             }
         }
 
-        public ThemeSelectionViewModel(ILogger logger)
+        public ThemeSelectionViewModel(IPreferencesService preferenceService, ILogger logger)
         {
+            _preferenceService = preferenceService;
             _logger = logger;
 
             try
@@ -104,7 +105,7 @@ namespace ListApp.ViewModels.Settings
                     return;
 
                 if (ThemeHelper.SetAppTheme(currentThemeEnum))
-                    Preferences.Set(PreferencesKeys.CurrentAppTheme, SelectedTheme.ToString());
+                    _preferenceService.Set(PreferencesKeys.CurrentAppTheme, SelectedTheme.ToString());
             }
             catch (Exception ex)
             {
