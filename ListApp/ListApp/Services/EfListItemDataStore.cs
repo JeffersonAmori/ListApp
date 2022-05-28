@@ -72,7 +72,7 @@ namespace ListApp.Services
         {
             try
             {
-                return await _context.ListItems.ToListAsync();
+                return await _context.ListItems.AsNoTracking().ToListAsync();
             }
             catch (Exception ex)
             {

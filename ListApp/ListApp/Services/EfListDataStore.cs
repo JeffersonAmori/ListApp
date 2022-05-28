@@ -76,6 +76,7 @@ namespace ListApp.Services
             {
                 return await _context.Lists
                     .Include(x => x.ListItems)
+                    .AsNoTracking()
                     .ToListAsync();
             }
             catch (Exception ex)

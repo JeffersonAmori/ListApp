@@ -185,7 +185,6 @@ namespace ListApp.ViewModels
         {
             try
             {
-                Task dialogTask = Task.FromResult(true);
                 if (CurrentList.IsDeleted)
                 {
                     bool deleteList = await _dialogService.DisplayAlert(string.Format(LocalizedResources.PageListItemsPermanentlyDeleteMessageTitle, CurrentList.Name),
@@ -194,18 +193,17 @@ namespace ListApp.ViewModels
                     if (deleteList)
                     {
                         await _dataStore.DeleteItemAsync(CurrentList.ListId);
-                        dialogTask = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsDeletedListMessage);
+                        _ = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsDeletedListMessage);
+                        await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
                     }
                 }
                 else
                 {
                     CurrentList.IsDeleted = true;
                     await _dataStore.UpdateItemAsync(CurrentList);
-                    dialogTask = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsMovedListToTrash);
+                    _ = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsMovedListToTrash);
+                    await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
                 }
-
-                await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
-                await dialogTask;
             }
             catch (Exception ex)
             {
@@ -323,6 +321,7 @@ namespace ListApp.ViewModels
                 CurrentList.IsDeleted = false;
                 await _dataStore.UpdateItemAsync(CurrentList);
                 await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+                _ = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsPageRestoredMessage);
             }
             catch (Exception ex)
             {

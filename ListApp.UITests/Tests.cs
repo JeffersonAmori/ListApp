@@ -1,11 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading;
-using FluentAssertions;
+﻿using FluentAssertions;
 using ListApp.UITests.Helpers;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 using Xamarin.UITest;
 using Xamarin.UITest.Queries;
 
@@ -51,7 +48,7 @@ namespace ListApp.UITests
                 app.Tap("TypeHereEntry");
                 app.EnterText($"Item {i}");
                 app.PressEnter();
-                results.Add(app.WaitForElement($"Item {i}")); 
+                results.Add(app.WaitForElement($"Item {i}"));
             }
 
             results.Should().AllSatisfy(x => x.Any());

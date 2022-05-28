@@ -180,6 +180,9 @@
   <data name="PageListItemsNothingToShareMessageTitle" xml:space="preserve">
     <value>Nothing to share</value>
   </data>
+  <data name="PageListItemsPageRestoredMessage" xml:space="preserve">
+    <value>List restored.</value>
+  </data>
   <data name="PageListItemsPermanentlyDeleteMessageBody" xml:space="preserve">
     <value>This action cannot be undone.</value>
   </data>

@@ -250,6 +250,15 @@ namespace ListApp.Resources.Internationalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List restored..
+        /// </summary>
+        public static string PageListItemsPageRestoredMessage {
+            get {
+                return ResourceManager.GetString("PageListItemsPageRestoredMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This action cannot be undone..
         /// </summary>
         public static string PageListItemsPermanentlyDeleteMessageBody {

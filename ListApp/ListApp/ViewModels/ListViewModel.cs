@@ -80,8 +80,6 @@ namespace ListApp.ViewModels
 
         public ListViewModel(ILogger logger, IDataStore<List> dataStore, IDialogService dialogService, INavigationService navigationService)
         {
-            Title = IsDeleted ? LocalizedResources.MenuRecycleBin : "List Freak";
-
             ListCollection = new ObservableCollection<List>();
             ListVisualItemCollection = new List<IListVisualItem>();
 
@@ -100,6 +98,7 @@ namespace ListApp.ViewModels
 
         public void OnAppearing()
         {
+            Title = IsDeleted ? LocalizedResources.MenuRecycleBin : "List Freak";
             new Action(async () => await ExecuteLoadListsCommand())();
         }
 
