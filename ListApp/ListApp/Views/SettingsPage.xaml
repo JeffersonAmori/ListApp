@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ListApp.ViewModels"
              xmlns:fonts="clr-namespace:ListApp.Resources.Fonts" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="ListApp.Views.SettingsPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              Title="Settings">
@@ -23,7 +24,8 @@
                               ColumnDefinitions="Auto, *">
                             <Image Grid.Row="0"
                                    Grid.Column="0"
-                                   Grid.RowSpan="2">
+                                   Grid.RowSpan="2"
+                                   Margin="5">
                                 <Image.Source>
                                     <FontImageSource FontFamily="FA"
                                                      Glyph="{x:Static fonts:FontAwesome6SolidIcons.User}"
@@ -32,13 +34,13 @@
                             </Image>
                             <Label Grid.Row="0"
                                    Grid.Column="1"
-                                   Text="Account"
+                                   Text="{xct:Translate SettingsAccountTitle}"
                                    TextColor="{DynamicResource SecondaryTextColor}"
                                    FontSize="Title"
                                    FontAttributes="Bold"/>
                             <Label Grid.Row="1"
                                    Grid.Column="1"
-                                   Text="Manage your account."
+                                   Text="{xct:Translate SettingsAccountDescription}"
                                    TextColor="{DynamicResource SecondaryTextColor}"
                                    FontSize="Subtitle"/>
                             <Grid.GestureRecognizers>
@@ -53,7 +55,8 @@
                               ColumnDefinitions="Auto, *">
                             <Image Grid.Row="0"
                                    Grid.Column="0"
-                                   Grid.RowSpan="2">
+                                   Grid.RowSpan="2"
+                                   Margin="5">
                                 <Image.Source>
                                     <FontImageSource FontFamily="FA"
                                                      Glyph="{x:Static fonts:FontAwesome6SolidIcons.Palette}"
@@ -62,19 +65,50 @@
                             </Image>
                             <Label Grid.Row="0"
                                    Grid.Column="1"
-                                   Text="Themes"
+                                   Text="{xct:Translate SettingsThemeTitle}"
                                    TextColor="{DynamicResource SecondaryTextColor}"
                                    FontSize="Title"
                                    FontAttributes="Bold"/>
                             <Label Grid.Row="1"
                                    Grid.Column="1"
-                                   Text="Pick an awesome new theme for the app."
+                                   Text="{xct:Translate SettingsThemeDescription}"
                                    TextColor="{DynamicResource SecondaryTextColor}"
                                    FontSize="Subtitle"/>
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="1"
                                                       Command="{Binding NavigateToCommand}"
                                                       CommandParameter="ThemeSelectionPage"/>
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </ViewCell>
+                    <ViewCell>
+                        <Grid RowDefinitions="Auto, *"
+                              ColumnDefinitions="Auto, *">
+                            <Image Grid.Row="0"
+                                   Grid.Column="0"
+                                   Grid.RowSpan="2"
+                                   Margin="5">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="FA"
+                                                     Glyph="{x:Static fonts:FontAwesome6SolidIcons.Language}"
+                                                     Color="{DynamicResource PrimaryColor}"/>
+                                </Image.Source>
+                            </Image>
+                            <Label Grid.Row="0"
+                                   Grid.Column="1"
+                                   Text="{xct:Translate SettingsLanguageTitle}"
+                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                   FontSize="Title"
+                                   FontAttributes="Bold"/>
+                            <Label Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{xct:Translate SettingsLanguageDescription}"
+                                   TextColor="{DynamicResource SecondaryTextColor}"
+                                   FontSize="Subtitle"/>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1"
+                                                      Command="{Binding NavigateToCommand}"
+                                                      CommandParameter="LanguageSelectionPage"/>
                             </Grid.GestureRecognizers>
                         </Grid>
                     </ViewCell>

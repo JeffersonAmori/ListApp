@@ -91,7 +91,7 @@ namespace ListApp.ViewModels.Settings
 
             try
             {
-                _ = _dialogService.DisplayToastAsync("Syncing...");
+                _ = _dialogService.DisplayToastAsync( "Syncing...");
 
                 // Start 2 tasks: 1) to retrieve data from local DB and 2) to request the online lists to the API.
                 var allBackedupListsForCurrentUserRequestTask = _httpClientService.GetAsync(string.Format(ListApiEndPoints.GetListsByOwnerEmail, ApplicationUser.Current.Email));

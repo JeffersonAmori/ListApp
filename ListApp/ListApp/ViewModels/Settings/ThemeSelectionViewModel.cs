@@ -20,11 +20,7 @@ namespace ListApp.ViewModels.Settings
         public Array Themes
         {
             get => _themes;
-            set
-            {
-                _themes = value;
-                OnPropertyChanged();
-            }
+            set=> SetProperty(ref _themes, value);
         }
 
         public Theme SelectedTheme

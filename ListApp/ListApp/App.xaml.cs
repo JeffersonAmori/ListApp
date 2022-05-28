@@ -13,6 +13,9 @@ using ListApp.Services.Interfaces;
 using ListApp.ViewModels.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using ListApp.ViewModels;
+using Xamarin.CommunityToolkit.Helpers;
+using ListApp.Resources.Internationalization;
+using System.Globalization;
 
 namespace ListApp
 {
@@ -31,18 +34,28 @@ namespace ListApp
 
                 Sharpnado.CollectionView.Initializer.Initialize(true, false);
 
+                LocalizationResourceManager.Current.PropertyChanged += (sender, e) => LocalizedResources.Culture = LocalizationResourceManager.Current.CurrentCulture;
+                LocalizationResourceManager.Current.Init(LocalizedResources.ResourceManager);
+                LocalizationResourceManager.Current.CurrentCulture = new CultureInfo("en");
+
                 MainPage = new AppShell();
 
                 SetupServices();
                 SetupJsonSerializer();
                 SetupCurrentTheme();
                 SetupCurrentUser();
+                SetupCurrentCulture();
             }
             catch (Exception ex)
             {
                 var logger = ServiceProvider.GetRequiredService<ILogger>() ?? new AppCenterLogger();
                 logger.TrackError(ex);
             }
+        }
+
+        private void SetupCurrentCulture()
+        {
+            LocalizationResourceManager.Current.CurrentCulture = CultureInfo.GetCultureInfo(Preferences.Get(PreferencesKeys.CurrentAppCulture, "en"));
         }
 
         protected override void OnStart()
@@ -87,7 +100,9 @@ namespace ListApp
                 .AddTransient<ItemsViewModel>()
                 .AddTransient<ListViewModel>()
                 .AddTransient<AccountManagementViewModel>()
-                .AddTransient<ThemeSelectionViewModel>();
+                .AddTransient<ThemeSelectionViewModel>()
+                .AddTransient<LanguageSelectionViewModel>();
+            
 
             ServiceProvider = services.BuildServiceProvider();
         }

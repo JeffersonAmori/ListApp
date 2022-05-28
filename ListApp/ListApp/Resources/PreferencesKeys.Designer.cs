@@ -70,6 +70,15 @@ namespace ListApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CurrentAppCulture.
+        /// </summary>
+        public static string CurrentAppCulture {
+            get {
+                return ResourceManager.GetString("CurrentAppCulture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CurrentAppTheme.
         /// </summary>
         public static string CurrentAppTheme {

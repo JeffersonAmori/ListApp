@@ -117,13 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApplicationUserInfo" xml:space="preserve">
-    <value>ApplicationUserInfo</value>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
   </data>
-  <data name="CurrentAppCulture" xml:space="preserve">
-    <value>CurrentAppCulture</value>
+  <data name="Portuguese" xml:space="preserve">
+    <value>Portuguese</value>
   </data>
-  <data name="CurrentAppTheme" xml:space="preserve">
-    <value>CurrentAppTheme</value>
+  <data name="SettingsAccountDescription" xml:space="preserve">
+    <value>Manage your account.</value>
+  </data>
+  <data name="SettingsAccountTitle" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="SettingsLanguageDescription" xml:space="preserve">
+    <value>Pick a new language.</value>
+  </data>
+  <data name="SettingsLanguageTitle" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="SettingsThemeDescription" xml:space="preserve">
+    <value>Pick an awesome new theme for the app.</value>
+  </data>
+  <data name="SettingsThemeTitle" xml:space="preserve">
+    <value>Themes</value>
+  </data>
+  <data name="SyncOnError" xml:space="preserve">
+    <value>Something went wrong.</value>
+  </data>
+  <data name="SyncStarted" xml:space="preserve">
+    <value>Syncing...</value>
+  </data>
+  <data name="SyncSuccessful" xml:space="preserve">
+    <value>Synced!</value>
   </data>
 </root>

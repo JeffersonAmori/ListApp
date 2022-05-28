@@ -1,7 +1,4 @@
 ﻿using ListApp.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Essentials;
 
 namespace ListApp.Services
@@ -13,5 +10,8 @@ namespace ListApp.Services
 
         public void Remove(string key) =>
             Preferences.Remove(key);
+
+        public string Get(string key, string defaultValue) =>
+            Preferences.Get(key, defaultValue);
     }
 }

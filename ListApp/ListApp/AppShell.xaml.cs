@@ -11,6 +11,7 @@ namespace ListApp
             InitializeComponent();
             Routing.RegisterRoute(nameof(ItemsPage), typeof(ItemsPage));
             Routing.RegisterRoute(nameof(ThemeSelectionPage), typeof(ThemeSelectionPage));
+            Routing.RegisterRoute(nameof(LanguageSelectionPage), typeof(LanguageSelectionPage));
             Routing.RegisterRoute(nameof(AccountManagementPage), typeof(AccountManagementPage));
         }
     }
