@@ -3,6 +3,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:views="clr-namespace:ListApp.Views" 
        xmlns:fonts="clr-namespace:ListApp.Resources.Fonts"
+       xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
        x:Class="ListApp.AppShell"
        TitleColor="{DynamicResource PrimaryTextColor}"
        BackgroundColor="{DynamicResource PrimaryColor}"
@@ -10,7 +11,7 @@
        FlyoutBackgroundColor="{DynamicResource PrimaryColor}"
        FlyoutBackdrop="{DynamicResource SecondaryColor}">
 
-    <FlyoutItem Title="Home">
+    <FlyoutItem Title="{xct:Translate MenuHome}">
         <FlyoutItem.Icon>
             <FontImageSource FontFamily="FA"
                              Glyph="{x:Static fonts:FontAwesome6SolidIcons.HouseChimney}"
@@ -18,7 +19,7 @@
         </FlyoutItem.Icon>
         <ShellContent Route="ListPage" ContentTemplate="{DataTemplate views:ListPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Recycle bin">
+    <FlyoutItem Title="{xct:Translate MenuRecycleBin}">
         <FlyoutItem.Icon>
             <FontImageSource FontFamily="FA"
                              Glyph="{x:Static fonts:FontAwesome6SolidIcons.Recycle}"
@@ -26,7 +27,7 @@
         </FlyoutItem.Icon>
         <ShellContent Route="RecycleBin" ContentTemplate="{DataTemplate views:ListPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Settings">
+    <FlyoutItem Title="{xct:Translate MenuSettings}">
         <FlyoutItem.Icon>
             <FontImageSource FontFamily="FA"
                              Glyph="{x:Static fonts:FontAwesome6SolidIcons.Gear}"
@@ -34,7 +35,7 @@
         </FlyoutItem.Icon>
         <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate views:SettingsPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="About">
+    <FlyoutItem Title="{xct:Translate MenuAbout}">
         <FlyoutItem.Icon>
             <FontImageSource FontFamily="FA"
                              Glyph="{x:Static fonts:FontAwesome6SolidIcons.CircleInfo}"

@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using ListApp.Models;
+﻿using ListApp.Models;
 using ListApp.Resources;
-using ListApp.Resources.Internationalization;
 using ListApp.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Xamarin.CommunityToolkit.Helpers;
 
 namespace ListApp.ViewModels.Settings
@@ -14,6 +14,7 @@ namespace ListApp.ViewModels.Settings
         private IList<Language> _languages;
         private Language _selectedLanguaged;
         private readonly IPreferencesService _preferenceService;
+        private readonly ILogger _logger;
 
         public IList<Language> Languages
         {
@@ -32,29 +33,51 @@ namespace ListApp.ViewModels.Settings
             }
         }
 
-        public LanguageSelectionViewModel(IPreferencesService preferenceService)
+        public LanguageSelectionViewModel(IPreferencesService preferenceService, ILogger logger)
         {
             _preferenceService = preferenceService;
+            _logger = logger;
 
-            LoadLanguages();
-            string currentCI = _preferenceService.Get(PreferencesKeys.CurrentAppCulture, "en");
-            SelectedLanguage = Languages.First(x => x.CI == currentCI);
+            try
+            {
+                LoadLanguages();
+                string currentCI = _preferenceService.Get(PreferencesKeys.CurrentAppCulture, "en");
+                SelectedLanguage = Languages.First(x => x.CI == currentCI);
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
+            }
         }
 
         private void LoadLanguages()
         {
-            Languages = new List<Language>()
+            try
             {
-                { new Language("English", "en") },
-                { new Language("Português", "pt") }
-            };
-            SelectedLanguage = Languages.First(x => x.CI == LocalizationResourceManager.Current.CurrentCulture.TwoLetterISOLanguageName);
+                Languages = new List<Language>()
+                {
+                    { new Language("English", "en") },
+                    { new Language("Português", "pt") }
+                };
+                SelectedLanguage = Languages.First(x => x.CI == LocalizationResourceManager.Current.CurrentCulture.TwoLetterISOLanguageName);
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
+            }
         }
 
         private void UpdateLanguage()
         {
-            _preferenceService.Set(PreferencesKeys.CurrentAppCulture, SelectedLanguage.CI);
-            LocalizationResourceManager.Current.CurrentCulture = CultureInfo.GetCultureInfo(SelectedLanguage.CI);
+            try
+            {
+                _preferenceService.Set(PreferencesKeys.CurrentAppCulture, SelectedLanguage.CI);
+                LocalizationResourceManager.Current.CurrentCulture = CultureInfo.GetCultureInfo(SelectedLanguage.CI);
+            }
+            catch (Exception ex)
+            {
+                _logger.TrackError(ex);
+            }
         }
     }
 }
