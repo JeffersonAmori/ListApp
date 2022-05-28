@@ -205,19 +205,19 @@
     <value>Portuguese</value>
   </data>
   <data name="SettingsAccountDescription" xml:space="preserve">
-    <value>Manage your account.</value>
+    <value>Manage your account</value>
   </data>
   <data name="SettingsAccountTitle" xml:space="preserve">
     <value>Account</value>
   </data>
   <data name="SettingsLanguageDescription" xml:space="preserve">
-    <value>Pick a new language.</value>
+    <value>Pick a new language</value>
   </data>
   <data name="SettingsLanguageTitle" xml:space="preserve">
     <value>Language</value>
   </data>
   <data name="SettingsThemeDescription" xml:space="preserve">
-    <value>Pick an awesome new theme for the app.</value>
+    <value>Pick an awesome new theme for the app</value>
   </data>
   <data name="SettingsThemeTitle" xml:space="preserve">
     <value>Themes</value>

@@ -1,6 +1,8 @@
-﻿namespace ListApp.Models
+﻿using System.Collections.Generic;
+
+namespace ListApp.Models
 {
-	public readonly struct Language
+	public class Language
 	{
 		public Language(string name, string ci)
 		{
@@ -11,5 +13,11 @@
 		public string Name { get; }
 
 		public string CI { get; }
+
+		public readonly static IReadOnlyList<Language> KnownLanguages = new List<Language>()
+			{
+				{ new Language("English", "en") },
+				{ new Language("Português", "pt") }
+			};
 	}
 }

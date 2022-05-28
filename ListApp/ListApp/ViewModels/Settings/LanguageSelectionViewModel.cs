@@ -54,11 +54,7 @@ namespace ListApp.ViewModels.Settings
         {
             try
             {
-                Languages = new List<Language>()
-                {
-                    { new Language("English", "en") },
-                    { new Language("Português", "pt") }
-                };
+                Languages = Language.KnownLanguages.ToList();
                 SelectedLanguage = Languages.First(x => x.CI == LocalizationResourceManager.Current.CurrentCulture.TwoLetterISOLanguageName);
             }
             catch (Exception ex)

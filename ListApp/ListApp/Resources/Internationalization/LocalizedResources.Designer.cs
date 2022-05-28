@@ -322,7 +322,7 @@ namespace ListApp.Resources.Internationalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage your account..
+        ///   Looks up a localized string similar to Manage your account.
         /// </summary>
         public static string SettingsAccountDescription {
             get {
@@ -340,7 +340,7 @@ namespace ListApp.Resources.Internationalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pick a new language..
+        ///   Looks up a localized string similar to Pick a new language.
         /// </summary>
         public static string SettingsLanguageDescription {
             get {
@@ -358,7 +358,7 @@ namespace ListApp.Resources.Internationalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pick an awesome new theme for the app..
+        ///   Looks up a localized string similar to Pick an awesome new theme for the app.
         /// </summary>
         public static string SettingsThemeDescription {
             get {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AppCenter;
+﻿using System.Linq;
+using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using ListApp.Helpers;
@@ -56,6 +57,8 @@ namespace ListApp
         private void SetupCurrentCulture()
         {
             LocalizationResourceManager.Current.CurrentCulture = CultureInfo.GetCultureInfo(Preferences.Get(PreferencesKeys.CurrentAppCulture, CultureInfo.CurrentUICulture.TwoLetterISOLanguageName));
+            if (!Language.KnownLanguages.Any(x => x.CI == LocalizationResourceManager.Current.CurrentCulture.TwoLetterISOLanguageName))
+                LocalizationResourceManager.Current.CurrentCulture = CultureInfo.GetCultureInfo("en");
         }
 
         protected override void OnStart()

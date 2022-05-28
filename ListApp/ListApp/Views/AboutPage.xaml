@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="ListApp.Views.AboutPage"
-             Title="About">
+             Title="{xct:Translate MenuAbout}">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="{xct:Translate PageAboutMessage}"

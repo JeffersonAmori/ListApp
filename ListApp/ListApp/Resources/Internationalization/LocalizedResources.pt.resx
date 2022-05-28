@@ -178,7 +178,7 @@
     <value>A lista atual está vazia.</value>
   </data>
   <data name="PageListItemsNothingToShareMessageTitle" xml:space="preserve">
-    <value>Nada pra compartilhar</value>
+    <value>Nada para compartilhar</value>
   </data>
   <data name="PageListItemsPermanentlyDeleteMessageBody" xml:space="preserve">
     <value>Esta ação não pode ser desfeita.</value>
@@ -205,19 +205,19 @@
     <value>Português</value>
   </data>
   <data name="SettingsAccountDescription" xml:space="preserve">
-    <value>Gerencie sua conta.</value>
+    <value>Gerencie sua conta</value>
   </data>
   <data name="SettingsAccountTitle" xml:space="preserve">
     <value>Conta</value>
   </data>
   <data name="SettingsLanguageDescription" xml:space="preserve">
-    <value>Escolha um novo idioma.</value>
+    <value>Escolha um novo idioma</value>
   </data>
   <data name="SettingsLanguageTitle" xml:space="preserve">
     <value>Idioma</value>
   </data>
   <data name="SettingsThemeDescription" xml:space="preserve">
-    <value>Escolha um novo tema.</value>
+    <value>Escolha um novo tema</value>
   </data>
   <data name="SettingsThemeTitle" xml:space="preserve">
     <value>Temas</value>
