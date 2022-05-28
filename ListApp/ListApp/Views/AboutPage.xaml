@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="ListApp.Views.AboutPage"
              Title="About">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Made with ♥ by Jefferson Rocha &amp; Carla Marcondes"
+            <Label Text="{xct:Translate PageAboutMessage}"
                    Style="{StaticResource SecondaryLabel}"
                    VerticalOptions="CenterAndExpand" 
                    HorizontalOptions="CenterAndExpand" />

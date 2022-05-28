@@ -106,6 +106,96 @@ namespace ListApp.Resources.Internationalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Made with ♥ by Jefferson Rocha &amp; Carla Marcondes.
+        /// </summary>
+        public static string PageAboutMessage {
+            get {
+                return ResourceManager.GetString("PageAboutMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login with Google.
+        /// </summary>
+        public static string PageAccountLoginWithGoogle {
+            get {
+                return ResourceManager.GetString("PageAccountLoginWithGoogle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Signed out.
+        /// </summary>
+        public static string PageAccountSignedOut {
+            get {
+                return ResourceManager.GetString("PageAccountSignedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign out.
+        /// </summary>
+        public static string PageAccountSignOut {
+            get {
+                return ResourceManager.GetString("PageAccountSignOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong..
+        /// </summary>
+        public static string PageAccountSyncOnError {
+            get {
+                return ResourceManager.GetString("PageAccountSyncOnError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Syncing....
+        /// </summary>
+        public static string PageAccountSyncStarted {
+            get {
+                return ResourceManager.GetString("PageAccountSyncStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synced!.
+        /// </summary>
+        public static string PageAccountSyncSuccessful {
+            get {
+                return ResourceManager.GetString("PageAccountSyncSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sync with cloud.
+        /// </summary>
+        public static string PageAccountSyncWithCloud {
+            get {
+                return ResourceManager.GetString("PageAccountSyncWithCloud", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string PageAccountTitle {
+            get {
+                return ResourceManager.GetString("PageAccountTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string PageSettingsTitle {
+            get {
+                return ResourceManager.GetString("PageSettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Portuguese.
         /// </summary>
         public static string Portuguese {
@@ -165,33 +255,6 @@ namespace ListApp.Resources.Internationalization {
         public static string SettingsThemeTitle {
             get {
                 return ResourceManager.GetString("SettingsThemeTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Something went wrong..
-        /// </summary>
-        public static string SyncOnError {
-            get {
-                return ResourceManager.GetString("SyncOnError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Syncing....
-        /// </summary>
-        public static string SyncStarted {
-            get {
-                return ResourceManager.GetString("SyncStarted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Synced!.
-        /// </summary>
-        public static string SyncSuccessful {
-            get {
-                return ResourceManager.GetString("SyncSuccessful", resourceCulture);
             }
         }
     }

@@ -2,6 +2,7 @@
 using ListApp.Models;
 using ListApp.Models.Extensions;
 using ListApp.Resources;
+using ListApp.Resources.Internationalization;
 using ListApp.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,6 @@ namespace ListApp.ViewModels.Settings
             IWebAuthenticatorService webAuthenticatorService,
             IPreferencesService preferencesService)
         {
-            Title = "Account";
             LoginWithGoogleCommand = new Command(OnLoginWithGoogleCommand);
             SyncCommand = new Command(OnSyncCommand);
             SignOutCommand = new Command(OnSignOutCommand);
@@ -91,7 +91,7 @@ namespace ListApp.ViewModels.Settings
 
             try
             {
-                _ = _dialogService.DisplayToastAsync( "Syncing...");
+                _ = _dialogService.DisplayToastAsync(LocalizedResources.PageAccountSyncStarted);
 
                 // Start 2 tasks: 1) to retrieve data from local DB and 2) to request the online lists to the API.
                 var allBackedupListsForCurrentUserRequestTask = _httpClientService.GetAsync(string.Format(ListApiEndPoints.GetListsByOwnerEmail, ApplicationUser.Current.Email));
@@ -128,11 +128,11 @@ namespace ListApp.ViewModels.Settings
                     }
                 }
 
-                _ = _dialogService.DisplayToastAsync("Synced!");
+                _ = _dialogService.DisplayToastAsync(LocalizedResources.PageAccountSyncSuccessful);
             }
             catch (Exception ex)
             {
-                _ = _dialogService.DisplayToastAsync("Something went wrong.");
+                _ = _dialogService.DisplayToastAsync(LocalizedResources.PageAccountSyncOnError);
                 _logger.TrackError(ex);
             }
             finally
@@ -147,7 +147,7 @@ namespace ListApp.ViewModels.Settings
             {
                 ApplicationUser.Current.Unset();
                 _preferencesService.Remove(PreferencesKeys.ApplicationUserInfo);
-                await _dialogService.DisplayToastAsync("Signed out");
+                await _dialogService.DisplayToastAsync(LocalizedResources.PageAccountSignedOut);
             }
             catch (Exception ex)
             {

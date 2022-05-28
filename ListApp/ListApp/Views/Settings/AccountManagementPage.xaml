@@ -3,15 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:ListApp.Models"
              xmlns:fonts="clr-namespace:ListApp.Resources.Fonts"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="ListApp.Views.Settings.AccountManagementPage"
-             Title="{Binding Title}"
+             Title="{xct:Translate PageAccountTitle}"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
     
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand" >
             <StackLayout BackgroundColor="{DynamicResource SecondaryColor}"
                          Padding="10">
-                <Button Text="Login with Google"
+                <Button Text="{xct:Translate PageAccountLoginWithGoogle}"
                         IsVisible="{Binding IsLoggedIn, Source={x:Static models:ApplicationUser.Current}, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource ButtonStyle}"
                         Command="{Binding LoginWithGoogleCommand}" >
@@ -30,7 +31,7 @@
             </StackLayout>
 
             <StackLayout VerticalOptions="CenterAndExpand">
-                <Button Text="Sync with cloud"
+                <Button Text="{xct:Translate PageAccountSyncWithCloud}"
                         Style="{StaticResource ButtonStyle}"
                         IsVisible="{Binding IsLoggedIn, Source={x:Static models:ApplicationUser.Current}}"
                         Command="{Binding SyncCommand}"
@@ -38,8 +39,8 @@
                 <ActivityIndicator IsRunning="{Binding IsSyncing}"
                                    Color="{DynamicResource PrimaryColor}"/>
             </StackLayout>
-            
-            <Button Text="Sign out"
+
+            <Button Text="{xct:Translate PageAccountSignOut}"
                     Style="{StaticResource ButtonStyle}"
                     BackgroundColor="Transparent"
                     TextColor="{DynamicResource PrimaryColor}"

@@ -6,7 +6,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="ListApp.Views.SettingsPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
-             Title="Settings">
+             Title="{xct:Translate PageSettingsTitle}">
 
     <ContentPage.BindingContext>
         <vm:SettingsViewModel></vm:SettingsViewModel>

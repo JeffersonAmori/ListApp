@@ -1,4 +1,5 @@
 ﻿using ListApp.Models;
+using ListApp.Resources.Internationalization;
 using ListApp.Services.Interfaces;
 using ListApp.Views;
 using System;
@@ -79,7 +80,7 @@ namespace ListApp.ViewModels
 
         public ListViewModel(ILogger logger, IDataStore<List> dataStore, IDialogService dialogService, INavigationService navigationService)
         {
-            Title = IsDeleted ? "Recycle bin" : "List Freak";
+            Title = IsDeleted ? LocalizedResources.MenuRecycleBin : "List Freak";
 
             ListCollection = new ObservableCollection<List>();
             ListVisualItemCollection = new List<IListVisualItem>();
