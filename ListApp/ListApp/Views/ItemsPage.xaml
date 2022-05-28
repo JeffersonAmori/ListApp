@@ -7,6 +7,7 @@
              xmlns:converters="clr-namespace:ListApp.Converters"
              xmlns:sho="http://sharpnado.com"
              xmlns:fonts="clr-namespace:ListApp.Resources.Fonts"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="ListApp.Views.ItemsPage"
              x:DataType="vm:ItemsViewModel"
              Title="{Binding Title}"
@@ -38,7 +39,7 @@
     <StackLayout VerticalOptions="FillAndExpand">
         <Entry x:Name="NewList"
                AutomationId="TypeHereEntry"
-               Placeholder="Type here..."
+               Placeholder="{xct:Translate PageListItemsTopEntryPlaceholder}"
                ReturnType="Done"
                Keyboard="Chat"
                IsEnabled="{Binding IsDeletedList, Converter={StaticResource InvertedBoolConverter}}"
@@ -119,7 +120,7 @@
             </sho:CollectionView>
         </ScrollView>
         <StackLayout BackgroundColor="{DynamicResource SecondaryColor}">
-            <Button Text="Restore list"
+            <Button Text="{xct:Translate PageListItemsRestoreButtonText}"
                     TextColor="{DynamicResource PrimaryTextColor}"
                     IsVisible="{Binding IsDeletedList}"
                     Margin="20"

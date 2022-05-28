@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="English" xml:space="preserve">
     <value>English</value>
   </data>
@@ -131,6 +134,12 @@
   </data>
   <data name="MenuSettings" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="PageAboutMessage" xml:space="preserve">
     <value>Made with ♥ by Jefferson Rocha &amp; Carla Marcondes</value>
@@ -159,6 +168,36 @@
   <data name="PageAccountTitle" xml:space="preserve">
     <value>Account</value>
   </data>
+  <data name="PageListItemsDeletedListMessage" xml:space="preserve">
+    <value>List deleted.</value>
+  </data>
+  <data name="PageListItemsMovedListToTrash" xml:space="preserve">
+    <value>List moved to trash.</value>
+  </data>
+  <data name="PageListItemsNothingToShareMessageBody" xml:space="preserve">
+    <value>The current list is empty.</value>
+  </data>
+  <data name="PageListItemsNothingToShareMessageTitle" xml:space="preserve">
+    <value>Nothing to share</value>
+  </data>
+  <data name="PageListItemsPermanentlyDeleteMessageBody" xml:space="preserve">
+    <value>This action cannot be undone.</value>
+  </data>
+  <data name="PageListItemsPermanentlyDeleteMessageTitle" xml:space="preserve">
+    <value>Delete list {0}?</value>
+  </data>
+  <data name="PageListItemsRestoreButtonText" xml:space="preserve">
+    <value>Restore list</value>
+  </data>
+  <data name="PageListItemsTopEntryPlaceholder" xml:space="preserve">
+    <value>Type here...</value>
+  </data>
+  <data name="PageListsNewListTitle" xml:space="preserve">
+    <value>New list</value>
+  </data>
+  <data name="PageListsRecycleBinTitle" xml:space="preserve">
+    <value>Recycle bin</value>
+  </data>
   <data name="PageSettingsTitle" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -182,5 +221,8 @@
   </data>
   <data name="SettingsThemeTitle" xml:space="preserve">
     <value>Themes</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

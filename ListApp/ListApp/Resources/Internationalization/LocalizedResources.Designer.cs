@@ -61,6 +61,15 @@ namespace ListApp.Resources.Internationalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to English.
         /// </summary>
         public static string English {
@@ -102,6 +111,24 @@ namespace ListApp.Resources.Internationalization {
         public static string MenuSettings {
             get {
                 return ResourceManager.GetString("MenuSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string Ok {
+            get {
+                return ResourceManager.GetString("Ok", resourceCulture);
             }
         }
         
@@ -187,6 +214,96 @@ namespace ListApp.Resources.Internationalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List deleted..
+        /// </summary>
+        public static string PageListItemsDeletedListMessage {
+            get {
+                return ResourceManager.GetString("PageListItemsDeletedListMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List moved to trash..
+        /// </summary>
+        public static string PageListItemsMovedListToTrash {
+            get {
+                return ResourceManager.GetString("PageListItemsMovedListToTrash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The current list is empty..
+        /// </summary>
+        public static string PageListItemsNothingToShareMessageBody {
+            get {
+                return ResourceManager.GetString("PageListItemsNothingToShareMessageBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing to share.
+        /// </summary>
+        public static string PageListItemsNothingToShareMessageTitle {
+            get {
+                return ResourceManager.GetString("PageListItemsNothingToShareMessageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action cannot be undone..
+        /// </summary>
+        public static string PageListItemsPermanentlyDeleteMessageBody {
+            get {
+                return ResourceManager.GetString("PageListItemsPermanentlyDeleteMessageBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete list {0}?.
+        /// </summary>
+        public static string PageListItemsPermanentlyDeleteMessageTitle {
+            get {
+                return ResourceManager.GetString("PageListItemsPermanentlyDeleteMessageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore list.
+        /// </summary>
+        public static string PageListItemsRestoreButtonText {
+            get {
+                return ResourceManager.GetString("PageListItemsRestoreButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type here....
+        /// </summary>
+        public static string PageListItemsTopEntryPlaceholder {
+            get {
+                return ResourceManager.GetString("PageListItemsTopEntryPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New list.
+        /// </summary>
+        public static string PageListsNewListTitle {
+            get {
+                return ResourceManager.GetString("PageListsNewListTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recycle bin.
+        /// </summary>
+        public static string PageListsRecycleBinTitle {
+            get {
+                return ResourceManager.GetString("PageListsRecycleBinTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string PageSettingsTitle {
@@ -255,6 +372,15 @@ namespace ListApp.Resources.Internationalization {
         public static string SettingsThemeTitle {
             get {
                 return ResourceManager.GetString("SettingsThemeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

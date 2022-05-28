@@ -55,7 +55,7 @@ namespace ListApp
 
         private void SetupCurrentCulture()
         {
-            LocalizationResourceManager.Current.CurrentCulture = CultureInfo.GetCultureInfo(Preferences.Get(PreferencesKeys.CurrentAppCulture, "en"));
+            LocalizationResourceManager.Current.CurrentCulture = CultureInfo.GetCultureInfo(Preferences.Get(PreferencesKeys.CurrentAppCulture, CultureInfo.CurrentUICulture.TwoLetterISOLanguageName));
         }
 
         protected override void OnStart()

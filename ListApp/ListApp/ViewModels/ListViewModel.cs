@@ -121,7 +121,7 @@ namespace ListApp.ViewModels
         {
             try
             {
-                string newListName = await _dialogService.DisplayPromptAsync("New list", String.Empty);
+                string newListName = await _dialogService.DisplayPromptAsync(LocalizedResources.PageListsNewListTitle, string.Empty, LocalizedResources.Ok, LocalizedResources.Cancel);
 
                 if (string.IsNullOrEmpty(newListName))
                     return;

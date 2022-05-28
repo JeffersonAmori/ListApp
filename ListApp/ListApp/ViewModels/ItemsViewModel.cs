@@ -1,4 +1,5 @@
 ﻿using ListApp.Models;
+using ListApp.Resources.Internationalization;
 using ListApp.Services.Interfaces;
 using System;
 using System.Collections.ObjectModel;
@@ -187,19 +188,20 @@ namespace ListApp.ViewModels
                 Task dialogTask = Task.FromResult(true);
                 if (CurrentList.IsDeleted)
                 {
-                    bool deleteList = await _dialogService.DisplayAlert($"Delete list {CurrentList.Name}?", "This action cannot be undone.", "Yes", "No");
+                    bool deleteList = await _dialogService.DisplayAlert(string.Format(LocalizedResources.PageListItemsPermanentlyDeleteMessageTitle, CurrentList.Name),
+                                                                LocalizedResources.PageListItemsPermanentlyDeleteMessageBody, LocalizedResources.Yes, LocalizedResources.No);
 
                     if (deleteList)
                     {
                         await _dataStore.DeleteItemAsync(CurrentList.ListId);
-                        dialogTask = _dialogService.DisplayToastAsync("List deleted.");
+                        dialogTask = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsDeletedListMessage);
                     }
                 }
                 else
                 {
                     CurrentList.IsDeleted = true;
                     await _dataStore.UpdateItemAsync(CurrentList);
-                    dialogTask = _dialogService.DisplayToastAsync("List moved to trash.");
+                    dialogTask = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsMovedListToTrash);
                 }
 
                 await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
@@ -263,7 +265,8 @@ namespace ListApp.ViewModels
             {
                 if (Items.Count == 0)
                 {
-                    await _dialogService.DisplayAlert("Nothing to share", "The current list is empty.", "OK");
+                    await _dialogService.DisplayAlert(LocalizedResources.PageListItemsNothingToShareMessageTitle,
+                        LocalizedResources.PageListItemsNothingToShareMessageBody, LocalizedResources.Ok);
                     return;
                 }
 
