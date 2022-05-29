@@ -31,13 +31,12 @@ namespace ListApp
         {
             try
             {
+                SetupAnalytics();
+                SetupCurrentCulture();
+
                 InitializeComponent();
 
                 Sharpnado.CollectionView.Initializer.Initialize(true, false);
-
-                LocalizationResourceManager.Current.PropertyChanged += (sender, e) => LocalizedResources.Culture = LocalizationResourceManager.Current.CurrentCulture;
-                LocalizationResourceManager.Current.Init(LocalizedResources.ResourceManager);
-                LocalizationResourceManager.Current.CurrentCulture = new CultureInfo("en");
 
                 MainPage = new AppShell();
 
@@ -45,7 +44,6 @@ namespace ListApp
                 SetupJsonSerializer();
                 SetupCurrentTheme();
                 SetupCurrentUser();
-                SetupCurrentCulture();
             }
             catch (Exception ex)
             {
@@ -54,8 +52,17 @@ namespace ListApp
             }
         }
 
+        private static void SetupAnalytics()
+        {
+            AppCenter.Start($"android={Secrets.AppCenterAndroidAppSecret};",
+                                     typeof(Analytics), typeof(Crashes));
+        }
+
         private void SetupCurrentCulture()
         {
+            LocalizationResourceManager.Current.PropertyChanged += (sender, e) => LocalizedResources.Culture = LocalizationResourceManager.Current.CurrentCulture;
+            LocalizationResourceManager.Current.Init(LocalizedResources.ResourceManager);
+
             LocalizationResourceManager.Current.CurrentCulture = CultureInfo.GetCultureInfo(Preferences.Get(PreferencesKeys.CurrentAppCulture, CultureInfo.CurrentUICulture.TwoLetterISOLanguageName));
             if (!Language.KnownLanguages.Any(x => x.CI == LocalizationResourceManager.Current.CurrentCulture.TwoLetterISOLanguageName))
                 LocalizationResourceManager.Current.CurrentCulture = CultureInfo.GetCultureInfo("en");
@@ -63,9 +70,6 @@ namespace ListApp
 
         protected override void OnStart()
         {
-
-            AppCenter.Start($"android={Secrets.AppCenterAndroidAppSecret};",
-                     typeof(Analytics), typeof(Crashes));
 
 #if DEBUG
             AppCenter.SetEnabledAsync(false);
