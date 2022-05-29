@@ -5,4 +5,5 @@
   <color name="colorPrimaryDark">#000000</color>
   <color name="colorAccent">#484848</color>
   <color name="colorListViewHighlighted">#cfcfcf</color>
+  <color name="splash_background">#484848</color>
 </resources>
