@@ -100,7 +100,7 @@ namespace ListApp
                 .AddTransient<IDataStore<ListItem>, EfListItemDataStore>()
                 .AddTransient<INavigationService, NavigationService>()
                 .AddTransient<IShareService, ShareService>()
-                .AddSingleton<IHttpClientService>(new HttpClientService())
+                .AddTransient<IHttpClientService, HttpClientService>()
                 .AddTransient<IWebAuthenticatorService, WebAuthenticatorService>()
                 .AddTransient<IPreferencesService, PreferencesService>()
                 .AddTransient<ListContext>()

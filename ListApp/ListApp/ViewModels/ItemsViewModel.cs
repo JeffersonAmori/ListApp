@@ -192,7 +192,8 @@ namespace ListApp.ViewModels
 
                     if (deleteList)
                     {
-                        await _dataStore.DeleteItemAsync(CurrentList.ListId);
+                        CurrentList.IsPermanentlyDeleted = true;
+                        _ = _dataStore.UpdateItemAsync(CurrentList);    
                         _ = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsDeletedListMessage);
                         await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
                     }
@@ -200,7 +201,7 @@ namespace ListApp.ViewModels
                 else
                 {
                     CurrentList.IsDeleted = true;
-                    await _dataStore.UpdateItemAsync(CurrentList);
+                    _ = _dataStore.UpdateItemAsync(CurrentList);
                     _ = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsMovedListToTrash);
                     await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
                 }

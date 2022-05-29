@@ -153,7 +153,7 @@ namespace ListApp.ViewModels
             try
             {
                 ListCollection.Clear();
-                var items = (await _dataStore.GetItemsAsync(true)).Where(list => list.IsDeleted == IsDeleted);
+                var items = (await _dataStore.GetItemsAsync(true)).Where(list => list.IsDeleted == IsDeleted && !list.IsPermanentlyDeleted);
                 foreach (var item in items.OrderBy(list => list.Index))
                 {
                     ListCollection.Add(item);

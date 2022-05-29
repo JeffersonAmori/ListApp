@@ -7,7 +7,7 @@ namespace ListApp.Services
 {
     public class HttpClientService : IHttpClientService
     {
-        private static HttpClient _httpClient = new HttpClient();
+        private HttpClient _httpClient = new HttpClient();
 
         public async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
@@ -18,9 +18,15 @@ namespace ListApp.Services
         {
             return await _httpClient.PutAsync(requestUri, content);
         }
+
         public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
         {
             return await _httpClient.PostAsync(requestUri, content);
+        }
+
+        public async Task<HttpResponseMessage> DeleteAsync(string requestUri)
+        {
+            return await _httpClient.DeleteAsync(requestUri);
         }
 
         public void SetBaseAddress(Uri baseAddress)

@@ -14,6 +14,7 @@ namespace ListApp.Models
         public int Index { get; set; }
         public string Name { get; set; }
         public bool IsDeleted { get; set; }
+        public bool IsPermanentlyDeleted { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastChangedDate { get; set; }
         public List<ListItem> ListItems { get; set; } = new List<ListItem>();

@@ -110,21 +110,31 @@ namespace ListApp.ViewModels.Settings
                         cloudList.LastChangedDate = DateTime.UtcNow;
 
                         string jsonContent = JsonSerializer.Serialize(cloudList);
-                        var response = await _httpClientService.PutAsync(string.Format(ListApiEndPoints.PutList, cloudList.Id), new StringContent(jsonContent, Encoding.UTF8, "application/json"));
+                        _ = _httpClientService.PutAsync(string.Format(ListApiEndPoints.PutList, cloudList.Id), new StringContent(jsonContent, Encoding.UTF8, "application/json"));
                     }
                     else
                     {
                         // Insert the list from the cloud into the local DB.
-                        await _dataStore.AddItemAsync(cloudList.ToLocalModel());
+                        _ = _dataStore.AddItemAsync(cloudList.ToLocalModel());
                     }
                 }
 
-                foreach (var localList in localLists)
+                foreach (var permanentlyDeleted in localLists.Where(x => x.IsPermanentlyDeleted))
+                {
+                    if (allBackedupListsForCurrentUser.FirstOrDefault(x => x.Guid == permanentlyDeleted.ListId) is ApiModel.List cloudList)
+                    {
+                        _ = _httpClientService.DeleteAsync(string.Format(ListApiEndPoints.DeleteList, cloudList.Id));
+                        _ = _dataStore.DeleteItemAsync(permanentlyDeleted.ListId);
+                    }
+
+                }
+
+                foreach (var localList in localLists.Where(x => !x.IsPermanentlyDeleted))
                 {
                     if (!allBackedupListsForCurrentUser.Any(x => x.Guid == localList.ListId))
                     {
                         var cloudList = localList.ToApiModel();
-                        var response = await _httpClientService.PostAsync(ListApiEndPoints.PostList, new StringContent(JsonSerializer.Serialize(cloudList), Encoding.UTF8, "application/json"));
+                        _ = _httpClientService.PostAsync(ListApiEndPoints.PostList, new StringContent(JsonSerializer.Serialize(cloudList), Encoding.UTF8, "application/json"));
                     }
                 }
 

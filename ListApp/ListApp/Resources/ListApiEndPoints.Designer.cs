@@ -61,6 +61,15 @@ namespace ListApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to lists/{0}.
+        /// </summary>
+        public static string DeleteList {
+            get {
+                return ResourceManager.GetString("DeleteList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to lists/ownerEmail/{0}.
         /// </summary>
         public static string GetListsByOwnerEmail {

@@ -9,6 +9,7 @@ namespace ListApp.Services.Interfaces
         Task<HttpResponseMessage> GetAsync(string requestUri);
         Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content);
         Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content);
+        Task<HttpResponseMessage> DeleteAsync(string requestUri);
         void SetBaseAddress(Uri baseAddress);
     }
 }

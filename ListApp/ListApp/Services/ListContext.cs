@@ -13,7 +13,12 @@ namespace ListApp.Services
         public DbSet<List> Lists { get; set; }
         public DbSet<ListItem> ListItems { get; set; }
 
-        public ListContext(ILogger logger)
+        public ListContext()
+        {
+
+        }
+
+        public ListContext(ILogger logger) : base()
         {
             _logger = logger;
 
