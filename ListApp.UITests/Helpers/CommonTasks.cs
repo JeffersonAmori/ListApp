@@ -19,7 +19,7 @@ namespace ListApp.UITests.Helpers
         /// <param name="takeScreenshots">Should this method take screenshots?</param>
         internal static void CreateNewList(IApp app, string listName, bool takeScreenshots = false)
         {
-            app.WaitForElement(x => x.Text("+"));
+            app.WaitForElement("NewListFloatActionButton");
             app.Tap("NewListFloatActionButton");
 
             app.WaitForElement(textInputInsidePopup);

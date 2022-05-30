@@ -1,4 +1,5 @@
 ﻿using ListApp.Models;
+using ListApp.Resources;
 using ListApp.Resources.Internationalization;
 using ListApp.Services.Interfaces;
 using System;
@@ -196,6 +197,7 @@ namespace ListApp.ViewModels
                         _ = _dataStore.UpdateItemAsync(CurrentList);    
                         _ = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsDeletedListMessage);
                         await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+                        _logger.TrackEvent(Events.ListPermanentlyDeleted);
                     }
                 }
                 else
@@ -204,6 +206,7 @@ namespace ListApp.ViewModels
                     _ = _dataStore.UpdateItemAsync(CurrentList);
                     _ = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsMovedListToTrash);
                     await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+                    _logger.TrackEvent(Events.ListDeleted);
                 }
             }
             catch (Exception ex)
@@ -277,6 +280,7 @@ namespace ListApp.ViewModels
                 }
 
                 await _shareService.RequestAsync(listAsTextStringBuilder.ToString(), CurrentList.Name);
+                _logger.TrackEvent(Events.ListShared);
             }
             catch (Exception ex)
             {
@@ -320,9 +324,10 @@ namespace ListApp.ViewModels
             try
             {
                 CurrentList.IsDeleted = false;
-                await _dataStore.UpdateItemAsync(CurrentList);
-                await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+                _ = _dataStore.UpdateItemAsync(CurrentList);
                 _ = _dialogService.DisplayToastAsync(LocalizedResources.PageListItemsPageRestoredMessage);
+                await _navigationService.GoToAsync($"..?{nameof(ListViewModel.ShouldRefresh)}={true}");
+                _logger.TrackEvent(Events.ListRestored);   
             }
             catch (Exception ex)
             {

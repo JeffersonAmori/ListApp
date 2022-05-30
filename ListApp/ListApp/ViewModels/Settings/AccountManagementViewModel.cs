@@ -78,6 +78,7 @@ namespace ListApp.ViewModels.Settings
 
                 ApplicationUser.Current.Set(fullName, email, accessToken, refreshToken);
                 _preferencesService.Set(PreferencesKeys.ApplicationUserInfo, JsonSerializer.Serialize(ApplicationUser.Current));
+                _logger.TrackEvent(Events.LoggedInWithGoogle);
             }
             catch (Exception ex)
             {
@@ -139,6 +140,7 @@ namespace ListApp.ViewModels.Settings
                 }
 
                 _ = _dialogService.DisplayToastAsync(LocalizedResources.PageAccountSyncSuccessful);
+                _logger.TrackEvent(Events.ListsSynced);
             }
             catch (Exception ex)
             {
@@ -158,6 +160,7 @@ namespace ListApp.ViewModels.Settings
                 ApplicationUser.Current.Unset();
                 _preferencesService.Remove(PreferencesKeys.ApplicationUserInfo);
                 await _dialogService.DisplayToastAsync(LocalizedResources.PageAccountSignedOut);
+                _logger.TrackEvent(Events.UserSignedOut);
             }
             catch (Exception ex)
             {

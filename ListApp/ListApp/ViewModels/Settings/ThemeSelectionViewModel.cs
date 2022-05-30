@@ -29,6 +29,7 @@ namespace ListApp.ViewModels.Settings
             set
             {
                 _selectedTheme = value;
+                _logger.TrackEvent(Events.ThemeChanged);
                 UpdateTheme();
                 OnPropertyChanged();
             }

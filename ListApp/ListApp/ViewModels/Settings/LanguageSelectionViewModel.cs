@@ -28,6 +28,7 @@ namespace ListApp.ViewModels.Settings
             set
             {
                 _selectedLanguaged = value;
+                _logger.TrackEvent(Events.LanguageChanged);
                 UpdateLanguage();
                 OnPropertyChanged();
             }

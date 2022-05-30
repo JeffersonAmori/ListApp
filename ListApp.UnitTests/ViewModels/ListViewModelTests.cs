@@ -26,7 +26,7 @@ namespace ListApp.UnitTests.ViewModels
         {
             // Arrange
             sut.IsDeleted = false;
-            var listsThatShouldBeAdded = (await mockIDataStore.Object.GetItemsAsync()).Where(x => !x.IsDeleted);
+            var listsThatShouldBeAdded = (await mockIDataStore.Object.GetItemsAsync()).Where(x => !x.IsDeleted && !x.IsPermanentlyDeleted);
 
             // Act
             sut.LoadListsCommand.Execute(null);

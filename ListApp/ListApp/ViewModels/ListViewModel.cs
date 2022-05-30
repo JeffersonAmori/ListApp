@@ -1,4 +1,5 @@
 ﻿using ListApp.Models;
+using ListApp.Resources;
 using ListApp.Resources.Internationalization;
 using ListApp.Services.Interfaces;
 using ListApp.Views;
@@ -136,9 +137,10 @@ namespace ListApp.ViewModels
                     Index = nextIndex
                 };
 
-                await _dataStore.AddItemAsync(list);
+                _ = _dataStore.AddItemAsync(list);
 
                 ListCollection.Add(list);
+                _logger.TrackEvent(Events.ListCreated);
             }
             catch (Exception ex)
             {

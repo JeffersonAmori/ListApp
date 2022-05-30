@@ -53,6 +53,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Events.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Events.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Internationalization\LocalizedResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -91,6 +96,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Events.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Events.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Internationalization\LocalizedResources.pt.resx">
       <Generator></Generator>
     </EmbeddedResource>

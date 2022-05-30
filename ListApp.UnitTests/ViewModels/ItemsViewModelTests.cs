@@ -87,18 +87,19 @@ namespace ListApp.UnitTests.ViewModels
         }
 
         [Test, BaseAutoData]
-        public void CompletionItemButtonCommand_Should_MarkItemAsCompleted(
-            ItemsViewModel sut)
+        public void CompletionItemButtonCommand_Should_MarkItemAsCompleted(ItemsViewModel sut)
         {
             // Arrange
-            string itemId = sut.Items.First().Id;
+            var listItem = sut.Items.First();
+            string itemId = listItem.Id;
+            bool listItemIsChecked = listItem.Checked;
 
             // Act
             sut.CompletionItemButtonCommand.Execute(itemId);
 
             // Assert
             var itemChecked = sut.Items.First(x => x.Id == itemId);
-            itemChecked.Checked.Should().BeTrue();
+            itemChecked.Checked.Should().Be(!listItemIsChecked);
             itemChecked.Index.Should().Be(sut.Items.IndexOf(itemChecked));
         }
 
@@ -249,7 +250,6 @@ namespace ListApp.UnitTests.ViewModels
         [Test, BaseAutoData]
         public void DeleteListCommand_Should_PermanentlyDeleteList_When_ItIsFlaggedAsDeleted(
             [Frozen] Mock<IDialogService> dialogService,
-            [Frozen] Mock<IDataStore<AppModel.List>> mockIDataStore,
             ItemsViewModel sut)
         {
             // Arrange
@@ -262,7 +262,7 @@ namespace ListApp.UnitTests.ViewModels
             sut.DeleteListCommand.Execute(null);
 
             // Assert
-            mockIDataStore.Verify(x => x.DeleteItemAsync(It.Is<string>(x => x == sut.CurrentList.ListId)));
+            sut.CurrentList.IsPermanentlyDeleted.Should().BeTrue();
         }
 
         [Test, BaseAutoData]
