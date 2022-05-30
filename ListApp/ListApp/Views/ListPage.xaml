@@ -4,6 +4,7 @@
              xmlns:model="clr-namespace:ListApp.Models"
              xmlns:vm="clr-namespace:ListApp.ViewModels" 
              xmlns:sho="http://sharpnado.com" 
+             xmlns:fonts="clr-namespace:ListApp.Resources.Fonts"
              xmlns:templateselectors="clr-namespace:ListApp.Views.TemplateSelectors"
              x:Class="ListApp.Views.ListPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}"
@@ -67,14 +68,19 @@
         <Button RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Constant=-60}"
                 RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Constant=-60}"
                 AutomationId="NewListFloatActionButton"
-                Text="+"
-                FontSize="Large"
                 CornerRadius="50"
                 WidthRequest="50"
                 HeightRequest="50"
                 IsVisible="{Binding IsDeleted, Converter={StaticResource InvertedBoolConverter}}"
                 Command="{Binding AddListCommand}"
                 TextColor="{DynamicResource PrimaryTextColor}"
-                BackgroundColor="{DynamicResource PrimaryColor}"/>
+                BackgroundColor="{DynamicResource PrimaryColor}">
+            <Button.ImageSource>
+                <FontImageSource FontFamily="FA"
+                                 Glyph="{x:Static fonts:FontAwesome6SolidIcons.Plus}"
+                                 Color="{DynamicResource PrimaryTextColor}"
+                                 Size="Medium"/>
+            </Button.ImageSource>
+        </Button>
     </RelativeLayout>
 </ContentPage>
