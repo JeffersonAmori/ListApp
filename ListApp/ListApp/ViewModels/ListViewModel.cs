@@ -120,7 +120,7 @@ namespace ListApp.ViewModels
         {
             try
             {
-                string newListName = await _dialogService.DisplayPromptAsync(LocalizedResources.PageListsNewListTitle, string.Empty, LocalizedResources.Ok, LocalizedResources.Cancel);
+                string newListName = await _dialogService.DisplayPromptAsync(LocalizedResources.PageListsNewListTitle, string.Empty, LocalizedResources.Ok, LocalizedResources.Cancel, keyboard: Keyboard.Chat);
 
                 if (string.IsNullOrEmpty(newListName))
                     return;
