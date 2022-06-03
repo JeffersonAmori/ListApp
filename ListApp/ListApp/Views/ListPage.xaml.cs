@@ -1,4 +1,5 @@
 ﻿using ListApp.ViewModels;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace ListApp.Views
@@ -29,16 +30,20 @@ namespace ListApp.Views
             //    await viewCell.View.RotateTo(0);
             //};
 
+            int delay = 0;
+
             ListCollectionView.PreRevealAnimationAsync = async (viewCell) =>
             {
                 viewCell.View.Opacity = 0;
-                viewCell.View.RotationX = 90;
+                viewCell.View.Scale = 0;
             };
 
             ListCollectionView.RevealAnimationAsync = async (viewCell) =>
             {
-                await viewCell.View.FadeTo(1);
-                await viewCell.View.RotateXTo(0);
+                await Task.Delay(delay += 75);
+                await Task.WhenAll(
+                    viewCell.View.FadeTo(1),
+                    viewCell.View.ScaleTo(1));
             };
         }
     }
